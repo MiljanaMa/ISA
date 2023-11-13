@@ -1,0 +1,37 @@
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-table{
+    max-width: 400px;
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid #3498db;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+  }
+
+  .profile-table label{
+    width: 100%;
+    flex: content;
+    margin-bottom: 10px;
+  }
+
+  .profile-table h1{
+    text-align: center;
+    color:  #3498db;
+  }
+
+  .info {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    margin: 15px 0;
+    min-width: 100px;
+  }
