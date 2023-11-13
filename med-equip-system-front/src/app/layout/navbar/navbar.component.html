@@ -1,0 +1,28 @@
+<div>
+    <span>Title</span>
+</div>
+<nav>
+    <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Login</a></li>
+    <li><a href="#">Sign in</a></li>
+    </ul>
+</nav>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let u of users">
+            <td><p>{{u.id}}</p></td>
+            <td><p>{{u.firstName}}</p></td>
+            <td><p>{{u.lastName}}</p></td>
+        </tr>
+    </tbody>
+</table>
+
