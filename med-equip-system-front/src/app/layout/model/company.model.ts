@@ -1,3 +1,4 @@
+import { Location } from './location.model';
 export interface Company {
     id: number;
     name: string;

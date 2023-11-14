@@ -1,7 +1,7 @@
-export interface Locaton {
+export interface Location {
     id: number;
     street: string;
-    number: string;
+    streetNumber: string;
     city: string;
     country: string;
     postcode: number;
