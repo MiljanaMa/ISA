@@ -1,0 +1,40 @@
+/* Styling for the search input and filter dropdown */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Styling for the results list */
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #f7f7f7;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 18px;
+  }
+  
+  /* Hover effect for result items */
+  li:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
