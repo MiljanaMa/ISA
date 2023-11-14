@@ -1,20 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../model/user.model';
-import { LayoutService } from '../layout.service';
+import { Component } from '@angular/core';
+
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent{
 
-  users: User[] = [];
-
-  constructor(private layoutService: LayoutService){}
-
-  ngOnInit(): void {
-
-  }
+  constructor(){}
 
 }

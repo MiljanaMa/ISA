@@ -1,12 +1,7 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.User;
-import medequipsystem.enums.UserType;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import medequipsystem.domain.enums.UserType;
 
 public class UserDTO {
 

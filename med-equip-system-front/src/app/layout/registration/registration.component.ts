@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { User, UserType } from '../model/user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutService } from '../layout.service';
@@ -15,44 +15,59 @@ export class RegistrationComponent {
   public user: User | undefined;
   public userForm: FormGroup;
 
+  public notEmptyString: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
+    const value = control.value;
+    if (value === null || value === undefined || value === '') {
+      return { 'notEmptyString': true };
+    }
+    return null;
+  };
+
   constructor(private layoutService: LayoutService, private router: Router)
   {
     this.userForm = new FormGroup({
-      id: new FormControl(0, [Validators.required]),
-      email: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-      passwordCheck: new FormControl('', [Validators.required]),
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      city: new FormControl('', [Validators.required]),
-      country: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required]),
-      jobTitle: new FormControl('', [Validators.required]),
-      companyInformation: new FormControl('', [Validators.required]),
+      id: new FormControl(-1, [Validators.required]),
+      email: new FormControl('', [Validators.required, this.notEmptyString]),
+      password: new FormControl('', [Validators.required, this.notEmptyString]),
+      passwordCheck: new FormControl('', [Validators.required, this.notEmptyString]),
+      firstName: new FormControl('', [Validators.required, this.notEmptyString]),
+      lastName: new FormControl('', [Validators.required, this.notEmptyString]),
+      city: new FormControl('', [Validators.required, this.notEmptyString]),
+      country: new FormControl('', [Validators.required, this.notEmptyString]),
+      phoneNumber: new FormControl('', [Validators.required, this.notEmptyString]),
+      jobTitle: new FormControl('', [Validators.required, this.notEmptyString]),
+      companyInformation: new FormControl('', [Validators.required, this.notEmptyString]),
       userType: new FormControl(UserType.CUSTOMER, [Validators.required])
     });
   }
 
   register(): void{
-    let  user: User = {
-      id: 0,
-      email: this.userForm.value.email,
-      password: this.userForm.value.password,
-      firstName: this.userForm.value.firstName,
-      lastName: this.userForm.value.lastName,
-      city: this.userForm.value.city,
-      country: this.userForm.value.country,
-      phoneNumber: this.userForm.value.phoneNumber,
-      jobTitle: this.userForm.value.jobTitle,
-      companyInformation: this.userForm.value.companyInformation,
-      userType: UserType.CUSTOMER
-    }
-
-    this.layoutService.addUser(user).subscribe({
-      next: (user) => { 
-        window.alert("You have been successfully registered.");
-        this.router.navigate(['/profile', user.id]);
+    if (!this.userForm.valid) {
+      window.alert("All fields are required.");
+    }else if(this.userForm.value.password !== this.userForm.value.passwordCheck){
+      window.alert("Passwords don't match.");
+    }else{
+      let  user: User = {
+        id: 0,
+        email: this.userForm.value.email,
+        password: this.userForm.value.password,
+        firstName: this.userForm.value.firstName,
+        lastName: this.userForm.value.lastName,
+        city: this.userForm.value.city,
+        country: this.userForm.value.country,
+        phoneNumber: this.userForm.value.phoneNumber,
+        jobTitle: this.userForm.value.jobTitle,
+        companyInformation: this.userForm.value.companyInformation,
+        userType: UserType.CUSTOMER
       }
-    });
+      
+      this.layoutService.addUser(user).subscribe({
+        next: (user) => { 
+          window.alert("You have been successfully registered.");
+          this.router.navigate(['/profile', user.id]);
+        }
+      });
+    }
+    
   }
 }

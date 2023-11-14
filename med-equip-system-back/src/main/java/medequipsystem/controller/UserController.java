@@ -2,9 +2,8 @@ package medequipsystem.controller;
 
 import medequipsystem.domain.User;
 import medequipsystem.dto.UserDTO;
-import medequipsystem.enums.UserType;
+import medequipsystem.domain.enums.UserType;
 import medequipsystem.service.UserService;
-import org.hibernate.query.QueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +30,13 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> getAll(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
         UserDTO userDTO = new UserDTO(userService.getById(id));
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-
         User user = new User();
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());

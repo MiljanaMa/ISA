@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../layout.service';
-import { User, UserType } from '../model/user.model';
+import { User } from '../model/user.model';
 import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({

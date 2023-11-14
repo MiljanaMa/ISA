@@ -1,6 +1,6 @@
 package medequipsystem.domain;
 
-import medequipsystem.enums.UserType;
+import medequipsystem.domain.enums.UserType;
 
 import javax.persistence.*;
 

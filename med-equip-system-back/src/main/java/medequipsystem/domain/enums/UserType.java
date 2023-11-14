@@ -1,4 +1,4 @@
-package medequipsystem.enums;
+package medequipsystem.domain.enums;
 
 public enum UserType {
     CUSTOMER,
