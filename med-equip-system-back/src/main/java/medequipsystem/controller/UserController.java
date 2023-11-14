@@ -3,7 +3,10 @@ package medequipsystem.controller;
 import medequipsystem.domain.User;
 import medequipsystem.dto.UserDTO;
 import medequipsystem.domain.enums.UserType;
+import medequipsystem.service.EmailService;
 import medequipsystem.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll() {
@@ -50,6 +56,17 @@ public class UserController {
         user.setUserType(UserType.CUSTOMER);
 
         user = userService.create(user);
+
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            emailService.sendMail(userDTO.getEmail());
+        }catch( Exception e ){
+            logger.info("Error (sanding mail): " + e.getMessage());
+        }
+
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
     }
 }

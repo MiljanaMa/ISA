@@ -23,6 +23,11 @@ public class UserService {
     }
 
     public User create(User user){
+        for(User u: getAll()) {
+            if(user.getEmail().equals(u.getEmail())){
+                return null;
+            }
+        }
         return this.userRepository.save(user);
     }
 
