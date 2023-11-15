@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
       company.averageRate >= this.selectedRating);
 
     if (this.inputSearch !== '') {
-      this.filteredCompanies = this.companies.filter(company =>
+      this.filteredCompanies = this.filteredCompanies.filter(company =>
         company.name.toLowerCase().includes(this.inputSearch.toLowerCase()) ||
         company.location.city.toLowerCase().includes(this.inputSearch.toLowerCase()));
     }
