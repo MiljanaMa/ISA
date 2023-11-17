@@ -14,11 +14,11 @@ public class UserDTO {
     private String country; //change this later (city + country)
     private String phoneNumber;
     private String jobTitle;
-    private String companyInformation;
+    private String hospitalInfo;
     private UserType userType;
 
     public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType) {
+                   String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -28,7 +28,7 @@ public class UserDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.jobTitle = jobTitle;
-        this.companyInformation = companyInformation;
+        this.hospitalInfo = hospitalInfo;
         this.userType = userType;
     }
 
@@ -42,7 +42,7 @@ public class UserDTO {
         this.country = user.getCountry();
         this.phoneNumber = user.getPhoneNumber();
         this.jobTitle = user.getJobTitle();
-        this.companyInformation = user.getCompanyInformation();
+        this.hospitalInfo = user.getHospitalInfo();
         this.userType = user.getUserType();
     }
 
@@ -118,12 +118,12 @@ public class UserDTO {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompanyInformation() {
-        return companyInformation;
+    public String getHospitalInfo() {
+        return hospitalInfo;
     }
 
-    public void setCompanyInformation(String companyInformation) {
-        this.companyInformation = companyInformation;
+    public void setHospitalInfo(String hospitalInfo) {
+        this.hospitalInfo = hospitalInfo;
     }
 
     public UserType getUserType() {

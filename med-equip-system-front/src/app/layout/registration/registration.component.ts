@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { User, UserType } from '../model/user.model';
-import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutService } from '../layout.service';
 import { Router } from '@angular/router';
 
@@ -14,6 +13,9 @@ export class RegistrationComponent {
 
   public user: User | undefined;
   public userForm: FormGroup;
+  public hide: boolean = true;
+  public hideCheck: boolean = true;
+  
 
   public notEmptyString: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
     const value = control.value;
@@ -38,13 +40,15 @@ export class RegistrationComponent {
       country: new FormControl('', [Validators.required, this.notEmptyString]),
       phoneNumber: new FormControl('', [Validators.required, this.notEmptyString]),
       jobTitle: new FormControl('', [Validators.required, this.notEmptyString]),
-      companyInformation: new FormControl('', [Validators.required, this.notEmptyString]),
+      hospitalInfo: new FormControl('', [Validators.required, this.notEmptyString]),
       userType: new FormControl(UserType.CUSTOMER, [Validators.required])
     });
   }
 
   register(): void{
-    if (!this.userForm.valid) {
+    if(this.userForm.get('email')?.invalid){
+      window.alert("Email is not in the correct form.")
+    }else if (!this.userForm.valid) {
       window.alert("All fields are required.");
     }else if(this.userForm.value.password !== this.userForm.value.passwordCheck){
       window.alert("Passwords don't match.");
@@ -59,7 +63,7 @@ export class RegistrationComponent {
         country: this.userForm.value.country,
         phoneNumber: this.userForm.value.phoneNumber,
         jobTitle: this.userForm.value.jobTitle,
-        companyInformation: this.userForm.value.companyInformation,
+        hospitalInfo: this.userForm.value.hospitalInfo,
         userType: UserType.CUSTOMER
       }
       
@@ -73,7 +77,14 @@ export class RegistrationComponent {
         }
         
       });
-    }
-    
+    }  
+  }
+
+  isPasswordVisible(): void{
+    this.hide = !this.hide;
+  }
+
+  isPasswordCheckVisible(): void{
+    this.hideCheck = !this.hideCheck;
   }
 }

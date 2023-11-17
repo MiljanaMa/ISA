@@ -26,14 +26,14 @@ public class User {
     private String phoneNumber;
     @Column(name = "jobTitle", nullable = false)
     private String jobTitle;
-    @Column(name = "companyInformation", nullable = false)
-    private String companyInformation;
+    @Column(name = "hospitalInfo", nullable = false)
+    private String hospitalInfo;
     @Column(name = "userType", nullable = false)
     private UserType userType;
 
     public User() {}
 
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType) {
+    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -42,7 +42,7 @@ public class User {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.jobTitle = jobTitle;
-        this.companyInformation = companyInformation;
+        this.hospitalInfo = hospitalInfo;
         this.userType = userType;
     }
 
@@ -118,12 +118,12 @@ public class User {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompanyInformation() {
-        return companyInformation;
+    public String getHospitalInfo() {
+        return hospitalInfo;
     }
 
-    public void setCompanyInformation(String companyInformation) {
-        this.companyInformation = companyInformation;
+    public void setHospitalInfo(String hospitalInfo) {
+        this.hospitalInfo = hospitalInfo;
     }
 
     public UserType getUserType() {

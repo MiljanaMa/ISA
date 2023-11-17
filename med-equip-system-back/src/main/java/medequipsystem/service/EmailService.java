@@ -21,12 +21,14 @@ public class EmailService {
     }
 
     @Async
-    public void sendMail(String userMail) throws MailException {
+    public void sendMail(User user) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(userMail);
+        mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Registration");
-        mail.setText("You have been successfully registered.");
+        mail.setText("Hey, " + user.getFirstName() + ",\nYou are almost there. " +
+                "Click the link below to confirm your email and finish creating your account: "
+                + "\n http://localhost:4200/profile/" + user.getId());
         javaMailSender.send(mail);
     }
 

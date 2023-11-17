@@ -52,7 +52,7 @@ public class UserController {
         user.setCountry(userDTO.getCountry());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setJobTitle(userDTO.getJobTitle());
-        user.setCompanyInformation(userDTO.getCompanyInformation());
+        user.setHospitalInfo(userDTO.getHospitalInfo());
         user.setUserType(UserType.CUSTOMER);
 
         user = userService.create(user);
@@ -62,7 +62,7 @@ public class UserController {
         }
 
         try {
-            emailService.sendMail(userDTO.getEmail());
+            emailService.sendMail(user);
         }catch( Exception e ){
             logger.info("Error (sanding mail): " + e.getMessage());
         }
