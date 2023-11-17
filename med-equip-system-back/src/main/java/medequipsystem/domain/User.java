@@ -1,5 +1,6 @@
 package medequipsystem.domain;
 
+import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.domain.enums.UserType;
 
 import javax.persistence.*;
@@ -30,10 +31,15 @@ public class User {
     private String companyInformation;
     @Column(name = "userType", nullable = false)
     private UserType userType;
+    @Column(name = "penalPoints", nullable = true)
+    private int penalPoints;
+    @Column(name = "loyaltyType", nullable = true)
+    private LoyaltyType loyaltyType;
 
     public User() {}
 
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType) {
+    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType,
+                int penalPoints, LoyaltyType loyaltyType) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -44,6 +50,24 @@ public class User {
         this.jobTitle = jobTitle;
         this.companyInformation = companyInformation;
         this.userType = userType;
+        this.penalPoints = penalPoints;
+        this.loyaltyType = loyaltyType;
+    }
+
+    public int getPenalPoints() {
+        return penalPoints;
+    }
+
+    public void setPenalPoints(int penalPoints) {
+        this.penalPoints = penalPoints;
+    }
+
+    public LoyaltyType getLoyaltyType() {
+        return loyaltyType;
+    }
+
+    public void setLoyaltyType(LoyaltyType loyaltyType) {
+        this.loyaltyType = loyaltyType;
     }
 
     public Long getId() {

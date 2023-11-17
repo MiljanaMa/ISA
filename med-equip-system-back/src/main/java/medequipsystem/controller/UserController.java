@@ -1,6 +1,7 @@
 package medequipsystem.controller;
 
 import medequipsystem.domain.User;
+import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.dto.UserDTO;
 import medequipsystem.domain.enums.UserType;
 import medequipsystem.service.EmailService;
@@ -54,6 +55,8 @@ public class UserController {
         user.setJobTitle(userDTO.getJobTitle());
         user.setCompanyInformation(userDTO.getCompanyInformation());
         user.setUserType(UserType.CUSTOMER);
+        user.setLoyaltyType(LoyaltyType.NONE);
+        user.setPenalPoints(0);
 
         user = userService.create(user);
 
@@ -68,5 +71,25 @@ public class UserController {
         }
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
+    }
+    @PutMapping
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
+
+        User user = userService.getById(userDTO.getId());
+
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setPassword(userDTO.getPassword());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setCity(userDTO.getCity());
+        user.setCountry(userDTO.getCountry());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setJobTitle(userDTO.getJobTitle());
+
+        user = userService.update(user);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 }

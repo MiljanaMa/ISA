@@ -1,6 +1,7 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.User;
+import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.domain.enums.UserType;
 
 public class UserDTO {
@@ -16,9 +17,12 @@ public class UserDTO {
     private String jobTitle;
     private String companyInformation;
     private UserType userType;
+    private int penalPoints;
+    private LoyaltyType loyaltyType;
 
     public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType) {
+                   String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType,
+                    int penalPoints, LoyaltyType loyaltyType) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -30,6 +34,8 @@ public class UserDTO {
         this.jobTitle = jobTitle;
         this.companyInformation = companyInformation;
         this.userType = userType;
+        this.penalPoints = penalPoints;
+        this.loyaltyType = loyaltyType;
     }
 
     public UserDTO(User user) {
@@ -44,6 +50,24 @@ public class UserDTO {
         this.jobTitle = user.getJobTitle();
         this.companyInformation = user.getCompanyInformation();
         this.userType = user.getUserType();
+        this.penalPoints = user.getPenalPoints();
+        this.loyaltyType = user.getLoyaltyType();
+    }
+
+    public int getPenalPoints() {
+        return penalPoints;
+    }
+
+    public void setPenalPoints(int penalPoints) {
+        this.penalPoints = penalPoints;
+    }
+
+    public LoyaltyType getLoyaltyType() {
+        return loyaltyType;
+    }
+
+    public void setLoyaltyType(LoyaltyType loyaltyType) {
+        this.loyaltyType = loyaltyType;
     }
 
     public Long getId() {

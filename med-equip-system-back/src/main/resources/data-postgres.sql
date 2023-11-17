@@ -1,17 +1,17 @@
 INSERT INTO public.locations (
-    id, city, country, latitude, longitude, "number", postcode, street
+    id, city, country, latitude, longitude, postcode, street_number, street
 ) VALUES (
              1, 'New York', 'USA', 40.7128, -74.0060, 123, '10001', 'Broadway'
          );
 
 INSERT INTO public.locations (
-    id, city, country, latitude, longitude, "number", postcode, street
+    id, city, country, latitude, longitude, postcode, street_number, street
 ) VALUES (
              2, 'London', 'United Kingdom', 51.5074, -0.1278, 456, 'SW1A 1AA', 'Downing Street'
          );
 
 INSERT INTO public.locations (
-    id, city, country, latitude, longitude, "number", postcode, street
+    id, city, country, latitude, longitude, postcode, street_number, street
 ) VALUES (
              3, 'Tokyo', 'Japan', 35.6895, 139.6917, 789, '100-0001', 'Chiyoda');
 

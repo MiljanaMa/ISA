@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { User, UserType } from '../model/user.model';
+import { LoyaltyType, User, UserType } from '../model/user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutService } from '../layout.service';
 import { Router } from '@angular/router';
@@ -60,7 +60,9 @@ export class RegistrationComponent {
         phoneNumber: this.userForm.value.phoneNumber,
         jobTitle: this.userForm.value.jobTitle,
         companyInformation: this.userForm.value.companyInformation,
-        userType: UserType.CUSTOMER
+        userType: UserType.CUSTOMER,
+        loyaltyType: LoyaltyType.NONE,
+        penalPoints: 0
       }
       
       this.layoutService.addUser(user).subscribe({

@@ -25,4 +25,7 @@ export class LayoutService {
   getCompanies(): Observable<Array<Company>>{
     return this.http.get<Array<Company>>(`http://localhost:8092/api/companies/all`);
   }
+  updateUser(user: User): Observable<User>{
+    return this.http.put<User>(`http://localhost:8092/api/users`, user);
+  }
 }
