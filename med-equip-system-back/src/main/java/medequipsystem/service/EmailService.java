@@ -1,6 +1,7 @@
 package medequipsystem.service;
 
 import medequipsystem.domain.User;
+import medequipsystem.token.EmailToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -15,20 +16,21 @@ public class EmailService {
     private Environment env;
 
     @Autowired
-    public EmailService(JavaMailSender mailSenderail, Environment environment) {
-        this.javaMailSender = mailSenderail;
+    public EmailService(JavaMailSender mailSender, Environment environment) {
+        this.javaMailSender = mailSender;
         this.env = environment;
     }
 
     @Async
-    public void sendMail(User user) throws MailException {
+    public void sendMail(EmailToken emailToken ) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(user.getEmail());
+        mail.setTo(emailToken.getUser().getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Registration");
-        mail.setText("Hey, " + user.getFirstName() + ",\nYou are almost there. " +
-                "Click the link below to confirm your email and finish creating your account: "
-                + "\n http://localhost:4200/profile/" + user.getId());
+        mail.setText("Hey, " + emailToken.getUser().getFirstName() + ",\nYou are almost there. "
+                + "Click the link below to confirm your email and finish creating your account:\n"
+                + "http://localhost:8092/api/users/confirm?token=" + emailToken.getToken());
+
         javaMailSender.send(mail);
     }
 

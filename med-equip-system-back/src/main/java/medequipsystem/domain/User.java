@@ -8,7 +8,9 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 11, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column(name = "email", nullable = false)
     private String email;
@@ -30,21 +32,10 @@ public class User {
     private String hospitalInfo;
     @Column(name = "userType", nullable = false)
     private UserType userType;
+    @Column(name = "emailConfirmed", nullable = false)
+    private boolean emailConfirmed;
 
     public User() {}
-
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.hospitalInfo = hospitalInfo;
-        this.userType = userType;
-    }
 
     public Long getId() {
         return id;
@@ -134,7 +125,13 @@ public class User {
         this.userType = userType;
     }
 
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
 
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
 }
 
 

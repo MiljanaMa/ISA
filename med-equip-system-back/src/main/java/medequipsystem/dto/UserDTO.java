@@ -16,21 +16,9 @@ public class UserDTO {
     private String jobTitle;
     private String hospitalInfo;
     private UserType userType;
+    private boolean emailConfirmed;
 
-    public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.hospitalInfo = hospitalInfo;
-        this.userType = userType;
-    }
+    public UserDTO(){}
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -44,6 +32,7 @@ public class UserDTO {
         this.jobTitle = user.getJobTitle();
         this.hospitalInfo = user.getHospitalInfo();
         this.userType = user.getUserType();
+        this.emailConfirmed = user.isEmailConfirmed();
     }
 
     public Long getId() {
@@ -132,5 +121,13 @@ public class UserDTO {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
     }
 }

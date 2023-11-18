@@ -69,8 +69,8 @@ export class RegistrationComponent {
       
       this.layoutService.addUser(user).subscribe({
         next: (user) => { 
-          window.alert("You have been successfully registered.");
-          this.router.navigate(['/profile', user.id]);       
+          window.alert("The activation link has been sent to your email. Please confirm your email address and activate your account.");
+         // this.router.navigate(['/profile', user.id]);       
         },
         error: () => {
           window.alert("The provided email address is already associated with an existing user account.");
