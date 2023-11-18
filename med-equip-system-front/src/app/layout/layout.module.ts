@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
+import { MaterialModule } from '../infrastructure/material/material.module';
 import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
   ],
   imports: [
     CommonModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     MatSliderModule
