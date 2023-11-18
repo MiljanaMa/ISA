@@ -14,23 +14,11 @@ public class UserDTO {
     private String country; //change this later (city + country)
     private String phoneNumber;
     private String jobTitle;
-    private String companyInformation;
+    private String hospitalInfo;
     private UserType userType;
+    private boolean emailConfirmed;
 
-    public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.companyInformation = companyInformation;
-        this.userType = userType;
-    }
+    public UserDTO(){}
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -42,8 +30,9 @@ public class UserDTO {
         this.country = user.getCountry();
         this.phoneNumber = user.getPhoneNumber();
         this.jobTitle = user.getJobTitle();
-        this.companyInformation = user.getCompanyInformation();
+        this.hospitalInfo = user.getHospitalInfo();
         this.userType = user.getUserType();
+        this.emailConfirmed = user.isEmailConfirmed();
     }
 
     public Long getId() {
@@ -118,12 +107,12 @@ public class UserDTO {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompanyInformation() {
-        return companyInformation;
+    public String getHospitalInfo() {
+        return hospitalInfo;
     }
 
-    public void setCompanyInformation(String companyInformation) {
-        this.companyInformation = companyInformation;
+    public void setHospitalInfo(String hospitalInfo) {
+        this.hospitalInfo = hospitalInfo;
     }
 
     public UserType getUserType() {
@@ -132,5 +121,13 @@ public class UserDTO {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
     }
 }

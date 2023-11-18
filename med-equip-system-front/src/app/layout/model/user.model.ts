@@ -14,6 +14,6 @@ export interface User {
     country: string;
     phoneNumber: string;
     jobTitle: string;
-    companyInformation: string;
+    hospitalInfo: string;
     userType: UserType
 }

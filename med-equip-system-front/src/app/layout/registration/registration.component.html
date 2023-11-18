@@ -4,52 +4,57 @@
     <table class="form-table">
         <tr>
             <td><label>Email: </label></td>
-            <td><input type="email" formControlName="email"/></td>
+            <td>
+                <input type="email" formControlName="email" required/>             
+            </td>
+
         </tr>
     
         <tr>
             <td><label>Password: </label></td>
-            <td><input type="text" formControlName="password"/></td>
+            <td><input type="password" formControlName="password" [type]="hide ? 'password' : 'text'" required/></td>
+            <td><mat-icon class="placeholder" (click)="isPasswordVisible()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon></td>
         </tr>
     
         <tr>
             <td><label>Password check: </label></td>
-            <td><input type="text" formControlName="passwordCheck"/></td>
+            <td><input type="password" formControlName="passwordCheck" [type]="hideCheck ? 'password' : 'text'" required/></td>
+            <td><mat-icon class="placeholder" (click)="isPasswordCheckVisible()">{{hideCheck ? 'visibility_off' : 'visibility'}}</mat-icon></td>
         </tr>
     
         <tr>
             <td><label>First name: </label></td>
-            <td><input type="text" formControlName="firstName"/></td>
+            <td><input type="text" formControlName="firstName" required/></td>
         </tr>
     
         <tr>
             <td><label>Last name: </label></td>
-            <td><input type="text" formControlName="lastName"/></td>
+            <td><input type="text" formControlName="lastName" required/></td>
         </tr>
     
         <tr>
             <td><label>City: </label></td>
-            <td><input type="text" formControlName="city"/></td>
+            <td><input type="text" formControlName="city" required/></td>
         </tr>
     
         <tr>
             <td><label>Country: </label></td>
-            <td><input type="text" formControlName="country"/></td>
+            <td><input type="text" formControlName="country" required/></td>
         </tr>
     
         <tr>
             <td><label>Phone number: </label></td>
-            <td><input type="text" formControlName="phoneNumber"/></td>
+            <td><input type="text" formControlName="phoneNumber" required/></td>
         </tr>
     
         <tr>
             <td><label>Job title: </label></td>
-            <td><input type="text" formControlName="jobTitle"/></td>
+            <td><input type="text" formControlName="jobTitle" required/></td>
         </tr>
     
         <tr>
-            <td><label>Company information: </label></td>
-            <td><input type="text" formControlName="companyInformation"/></td>
+            <td><label>Hospital information: </label></td>
+            <td><input type="text" formControlName="hospitalInfo" required/></td>
         </tr>
 
         <tr><input type="submit"/></tr>
