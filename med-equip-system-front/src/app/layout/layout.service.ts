@@ -26,6 +26,9 @@ export class LayoutService {
     return this.http.get<Array<Company>>(`http://localhost:8092/api/companies/all`);
   }
   updateUser(user: User): Observable<User>{
-    return this.http.put<User>(`http://localhost:8092/api/users`, user);
+    return this.http.put<User>(`http://localhost:8092/api/users/update`, user);
+  }
+  updatePassword(userId: number, password: string): Observable<User>{
+    return this.http.put<User>(`http://localhost:8092/api/users/updatePassword/${userId}`, password);
   }
 }

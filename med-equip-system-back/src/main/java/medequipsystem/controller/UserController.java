@@ -72,24 +72,20 @@ public class UserController {
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
     }
-    @PutMapping
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
-
-        User user = userService.getById(userDTO.getId());
-
-        if(user == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        user.setPassword(userDTO.getPassword());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setCity(userDTO.getCity());
-        user.setCountry(userDTO.getCountry());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setJobTitle(userDTO.getJobTitle());
-
+    @PutMapping("/update")
+    public ResponseEntity<UserDTO> update(@RequestBody User user) {
         user = userService.update(user);
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+    @PutMapping("/updatePassword/{userId}")
+    public ResponseEntity<UserDTO> updatePassword(@PathVariable long userId,  @RequestBody String password) {
+        User user = userService.updatePassword(userId, password);
+
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 }

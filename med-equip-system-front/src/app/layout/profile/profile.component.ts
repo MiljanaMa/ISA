@@ -10,25 +10,33 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
 
   public user?: User;
   public userId: number = -1;
   public userForm: FormGroup;
+  public passwordForm: FormGroup;
+  public updateMode: boolean = false;
+  public updatePasswordMode: boolean = false;
 
-  constructor(private layoutService: LayoutService, private currentRoute: ActivatedRoute)
-  {
+  constructor(private layoutService: LayoutService, private currentRoute: ActivatedRoute) {
     this.userForm = new FormGroup({
       id: new FormControl(this.user?.id, [Validators.required]),
-      password: new FormControl('', [Validators.required, this.notEmptyString]),
-      passwordCheck: new FormControl('', [Validators.required, this.notEmptyString]),
       firstName: new FormControl(this.user?.firstName, [Validators.required, this.notEmptyString]),
       lastName: new FormControl(this.user?.lastName, [Validators.required, this.notEmptyString]),
       city: new FormControl(this.user?.city, [Validators.required, this.notEmptyString]),
       country: new FormControl(this.user?.country, [Validators.required, this.notEmptyString]),
       phoneNumber: new FormControl(this.user?.phoneNumber, [Validators.required, this.notEmptyString]),
       jobTitle: new FormControl(this.user?.jobTitle, [Validators.required, this.notEmptyString]),
+      companyInformation: new FormControl(this.user?.companyInformation, [Validators.required, this.notEmptyString]),
     });
+
+    this.passwordForm = new FormGroup({
+      oldPassword: new FormControl('', [Validators.required, this.notEmptyString]),
+      newPassword: new FormControl('', [Validators.required, this.notEmptyString]),
+      passwordCheck: new FormControl('', [Validators.required, this.notEmptyString]),
+    });
+
   }
 
 
@@ -38,70 +46,113 @@ export class ProfileComponent implements OnInit{
     });
 
     this.getById();
-    
+
   }
 
   getById(): void {
     this.layoutService.getUserById(this.userId).subscribe({
-      next: (user) =>  {
+      next: (user) => {
         this.user = user;
 
         this.userForm.patchValue({
           id: this.user.id,
-          password: '',  // You may want to set a default password, or leave it empty
-          passwordCheck: '',  // You may want to set a default password, or leave it empty
           firstName: this.user.firstName,
           lastName: this.user.lastName,
           city: this.user.city,
           country: this.user.country,
           phoneNumber: this.user.phoneNumber,
           jobTitle: this.user.jobTitle,
+          companyInformation: this.user.companyInformation
+        });
+        this.passwordForm.patchValue({
+          oldPassword: '',
+          newPassword: '',
+          passwordCheck: ''
         });
       }
     });
   }
 
-  public notEmptyString: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
+  public notEmptyString: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
     const value = control.value;
     if (value === null || value === undefined || value === '') {
       return { 'notEmptyString': true };
     }
     return null;
   };
+  showUpdateForm(): void {
+    this.updateMode = true;
+  }
+  cancelUpdate(): void {
+    this.updateMode = false;
+    this.updatePasswordMode = false;
+    this.getById();
+  }
+  showPasswordForm(): void {
+    this.updatePasswordMode = true;
+  }
 
-  update(): void{
+  update(): void {
     if (!this.userForm.valid) {
       window.alert("All fields are required.");
-    }else if(this.userForm.value.password !== this.userForm.value.passwordCheck){
+    }
+    else if (this.userForm.value.password !== this.userForm.value.passwordCheck) {
       window.alert("Passwords don't match.");
-    }else{
-      let  user: User = {
+    }
+    else {
+      let user: User = {
         id: this.user?.id,
-        email: "",
-        password: this.userForm.value.password,
+        email: '',
+        password: '',
         firstName: this.userForm.value.firstName,
         lastName: this.userForm.value.lastName,
         city: this.userForm.value.city,
         country: this.userForm.value.country,
         phoneNumber: this.userForm.value.phoneNumber,
         jobTitle: this.userForm.value.jobTitle,
-        companyInformation: "",
+        companyInformation: this.userForm.value.companyInformation,
         userType: UserType.CUSTOMER,
         loyaltyType: LoyaltyType.NONE,
         penalPoints: 0
       }
-      
+
       this.layoutService.updateUser(user).subscribe({
-        next: (user) => { 
+        next: (user) => {
           window.alert("You have been successfully update your profile.");
-          this.getById();     
+          this.getById();
+          this.updateMode = false;
         },
         error: () => {
           window.alert("Something went wrong try again.");
         }
-        
+
       });
     }
   }
+  updatePassword(): void {
+    if (!this.passwordForm.valid) {
+      window.alert("All fields are required.");
+    }
+    else if (this.user?.password !== this.passwordForm.value.oldPassword) {
+      window.alert("Wrong old password.");
+    }
+    else if (this.passwordForm.value.newPassword !== this.passwordForm.value.passwordCheck) {
+      window.alert("Passwords don't match.");
+    }
+    else {
+      this.layoutService.updatePassword(this.user?.id || 0, this.passwordForm.value.newPassword).subscribe({
+        next: (user) => {
+          window.alert("You have been successfully update your profile.");
+          this.getById();
+          this.updatePasswordMode = false;
+        },
+        error: () => {
+          window.alert("Something went wrong try again.");
+        }
 
+      });
+
+    }
+  }
 }
+
