@@ -5,6 +5,7 @@ import { RegistrationComponent } from './layout/registration/registration.compon
 import { ProfileComponent } from './layout/profile/profile.component';
 import { CompanyCreationComponent } from './layout/company-creation/company-creation.component';
 import { EquipmentSearchComponent } from './layout/equipment-search/equipment-search.component';
+import { CompanyAdminCreationComponent } from './layout/company-admin-creation/company-admin-creation.component';
 
 const routes: Routes = [
 
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'companyCreation', component: CompanyCreationComponent},
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
+  {path: 'companyadminCreation', component: CompanyAdminCreationComponent},
   
 ];
 

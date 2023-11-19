@@ -12,13 +12,14 @@ public class CompanyAdminDTO {
     private String city;
     private String country;
     private String phoneNumber;
-    private CompanyDTO companyDTO;
+    //private CompanyDTO companyDTO;
+    private Long companyId;
 
     public CompanyAdminDTO() {
     }
 
     public CompanyAdminDTO(Long id, String email, String password, String firstName, String lastName,
-                           String city, String country, String phoneNumber, CompanyDTO companyDto) {
+                           String city, String country, String phoneNumber, Long companyId) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -27,7 +28,8 @@ public class CompanyAdminDTO {
         this.city = city;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.companyDTO = companyDto;
+        //this.companyDTO = companyDto;
+        this.companyId = companyId;
     }
 
     public CompanyAdminDTO(CompanyAdmin companyAdmin) {
@@ -39,7 +41,8 @@ public class CompanyAdminDTO {
         this.city = companyAdmin.getCity();
         this.country = companyAdmin.getCountry();
         this.phoneNumber = companyAdmin.getPhoneNumber();
-        this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
+        this.companyId = companyAdmin.getCompany().getId();
+        //this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
     }
 
     public Long getId() {
@@ -106,12 +109,20 @@ public class CompanyAdminDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public CompanyDTO getCompanyDTO() {
+    /*public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
 
     public void setCompanyDTO(CompanyDTO companyDTO) {
         this.companyDTO = companyDTO;
+    }*/
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     //TODO: napraviti da radi kako treba aaaaa

@@ -5,6 +5,7 @@ import { User } from './model/user.model';
 import { Company } from './model/company.model';
 import { LoyaltyProgram } from './model/loyaltyProgram';
 import { CompanyEquipment } from './model/equipment.model';
+import { CompanyAdmin } from './model/companyAdmin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class LayoutService {
 
   getEquipments(): Observable<Array<CompanyEquipment>>{
     return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
+  }
+
+  addCompanyAdmin(admin: CompanyAdmin): Observable<CompanyAdmin>{
+    return this.http.post<CompanyAdmin>(`http://localhost:8092/api/companyadmins/create`, admin);
   }
 }

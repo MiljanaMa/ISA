@@ -1,4 +1,6 @@
 package medequipsystem.controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyAdmin;
@@ -50,10 +52,21 @@ public class CompanyAdminController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<CompanyAdminDTO> createCompanyAdmin(@RequestBody CompanyAdminDTO companyAdminDTO) {
+    public ResponseEntity<CompanyAdminDTO> create(@RequestBody CompanyAdminDTO companyAdminDTO) {
         CompanyAdmin companyAdminToCreate = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+        if(companyAdminDTO.getCompanyId() == 0){
+            companyAdminToCreate.setCompany(null);
+        }
         CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
         return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(createdCompanyAdmin), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<CompanyAdminDTO> update(@RequestBody CompanyAdminDTO companyAdminDTO){
+        CompanyAdmin companyAdmin = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+        companyAdmin = companyAdminService.update(companyAdmin);
+        if(companyAdmin == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(companyAdmin), HttpStatus.OK);
     }
 
     /*@GetMapping(value = "/all")

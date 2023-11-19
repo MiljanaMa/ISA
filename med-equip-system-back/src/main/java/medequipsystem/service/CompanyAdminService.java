@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompanyAdminService {
@@ -16,8 +17,21 @@ public class CompanyAdminService {
     public List<CompanyAdmin> getAll() {
         return this.companyAdminRepository.findAll();
     }
+    public CompanyAdmin getById(Long id){
+        Optional<CompanyAdmin> adminOptional = this.companyAdminRepository.findById(id);
+        return adminOptional.orElse(null);
+    }
 
     public CompanyAdmin create(CompanyAdmin companyAdmin){
+        return this.companyAdminRepository.save(companyAdmin);
+    }
+
+    public CompanyAdmin update(CompanyAdmin updatedCompanyAdmin){
+        CompanyAdmin companyAdmin = getById(updatedCompanyAdmin.getId());
+        if(companyAdmin == null) return null;
+
+        companyAdmin.setCompany(updatedCompanyAdmin.getCompany());
+
         return this.companyAdminRepository.save(companyAdmin);
     }
 }
