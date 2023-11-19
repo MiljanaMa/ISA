@@ -53,13 +53,41 @@ public class CompanyAdminController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyAdminDTO> create(@RequestBody CompanyAdminDTO companyAdminDTO) {
-        CompanyAdmin companyAdminToCreate = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+        /*CompanyAdmin companyAdminToCreate = new CompanyAdmin();
         if(companyAdminDTO.getCompanyId() == 0){
+             companyAdminToCreate = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
             companyAdminToCreate.setCompany(null);
+        } else {
+            Company existingCompany = companyService.getById(companyAdminDTO.getCompanyId()); // Replace with your actual service method
+            companyAdminToCreate.setCompany(existingCompany);
         }
         CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
         return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(createdCompanyAdmin), HttpStatus.CREATED);
+        */
+
+        CompanyAdmin companyAdminToCreate = new CompanyAdmin();
+
+        companyAdminToCreate.setEmail(companyAdminDTO.getEmail());
+        companyAdminToCreate.setPassword(companyAdminDTO.getPassword());
+        companyAdminToCreate.setFirstName(companyAdminDTO.getFirstName());
+        companyAdminToCreate.setLastName(companyAdminDTO.getLastName());
+        companyAdminToCreate.setCity(companyAdminDTO.getCity());
+        companyAdminToCreate.setCountry(companyAdminDTO.getCountry());
+        companyAdminToCreate.setPhoneNumber(companyAdminDTO.getPhoneNumber());
+
+        if (companyAdminDTO.getCompanyId() == 0) {
+            companyAdminToCreate.setCompany(null);
+        } else {
+            Company existingCompany = companyService.getById(companyAdminDTO.getCompanyId()); // Replace with your actual service method
+            companyAdminToCreate.setCompany(existingCompany);
+        }
+
+        CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
+        return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(createdCompanyAdmin), HttpStatus.CREATED);
+
+
     }
+
 
     @PutMapping("/update")
     public ResponseEntity<CompanyAdminDTO> update(@RequestBody CompanyAdminDTO companyAdminDTO){

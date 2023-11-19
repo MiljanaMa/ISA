@@ -62,6 +62,7 @@ export class CompanyAdminCreationComponent {
         city: this.adminForm.value.city,
         country: this.adminForm.value.country,
         phoneNumber: this.adminForm.value.phoneNumber,
+        companyId: 0
       }
       
       this.layoutService.addCompanyAdmin(admin).subscribe({
