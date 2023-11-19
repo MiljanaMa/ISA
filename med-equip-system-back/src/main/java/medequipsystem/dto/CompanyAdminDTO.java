@@ -12,7 +12,7 @@ public class CompanyAdminDTO {
     private String city;
     private String country;
     private String phoneNumber;
-    private CompanyDTO companyDTO;
+    //private CompanyDTO companyDTO; stack overflow goes brrr
 
     public CompanyAdminDTO() {
     }
@@ -27,7 +27,7 @@ public class CompanyAdminDTO {
         this.city = city;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.companyDTO = companyDto;
+        //this.companyDTO = companyDto;
     }
 
     public CompanyAdminDTO(CompanyAdmin companyAdmin) {
@@ -39,7 +39,7 @@ public class CompanyAdminDTO {
         this.city = companyAdmin.getCity();
         this.country = companyAdmin.getCountry();
         this.phoneNumber = companyAdmin.getPhoneNumber();
-        this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
+        //this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
     }
 
     public Long getId() {
@@ -106,13 +106,13 @@ public class CompanyAdminDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public CompanyDTO getCompanyDTO() {
+    /*public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
 
     public void setCompanyDTO(CompanyDTO companyDTO) {
         this.companyDTO = companyDTO;
-    }
+    }*/
 
     //TODO: napraviti da radi kako treba aaaaa
     public CompanyAdmin mapDtoToDomain(Company company) {

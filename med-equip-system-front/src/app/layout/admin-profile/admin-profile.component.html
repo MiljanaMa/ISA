@@ -1,0 +1,66 @@
+<div class="center">
+    <div class="profile-table">
+      <h1>Admin Profile</h1>
+  
+      <form *ngIf="admin && !updateMode" [formGroup]="adminForm" class="custom-form">
+        <div class="form-fields">
+          <label>Email:</label>
+          <input type="email" formControlName="email" />
+  
+          <label>Password:</label>
+          <input type="password" formControlName="password" />
+  
+          <label>First Name:</label>
+          <input type="text" formControlName="firstName" />
+  
+          <label>Last Name:</label>
+          <input type="text" formControlName="lastName" />
+  
+          <label>City:</label>
+          <input type="text" formControlName="city" />
+  
+          <label>Country:</label>
+          <input type="text" formControlName="country" />
+  
+          <label>Phone Number:</label>
+          <input type="text" formControlName="phoneNumber" />
+        </div>
+        <div class="form-buttons">
+        <button class="primary" type="button" (click)="showUpdateForm()">Edit Profile</button>
+        </div> 
+      </form>
+  
+      <form *ngIf="updateMode" [formGroup]="adminForm" class="custom-form">
+        <div class="form-fields">
+          <label>Email:</label>
+          <input type="email" formControlName="email" />
+  
+          <label>Password:</label>
+          <input type="password" formControlName="password" />
+  
+          <label>First Name:</label>
+          <input type="text" formControlName="firstName" />
+  
+          <label>Last Name:</label>
+          <input type="text" formControlName="lastName" />
+  
+          <label>City:</label>
+          <input type="text" formControlName="city" />
+  
+          <label>Country:</label>
+          <input type="text" formControlName="country" />
+  
+          <label>Phone Number:</label>
+          <input type="text" formControlName="phoneNumber" />
+        </div>
+  
+        <!-- Add other fields for updating based on your CompanyAdmin interface -->
+  
+        <div class="form-buttons">
+          <button class="primary" type="button" (click)="update()">Update</button>
+          <button class="primary" type="button" (click)="cancelUpdate()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

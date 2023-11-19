@@ -18,6 +18,9 @@ public class CompanyDTO {
         private Set<CompanyAdminDTO> companyAdmins;
         private Set<CompanyEquipmentDTO> equipment;
 
+
+        private Set<AppointmentDTO> appointments;
+
         public  CompanyDTO() {
 
         }
@@ -35,7 +38,8 @@ public class CompanyDTO {
                         .collect(Collectors.toSet());
         }
 
-        public CompanyDTO(Long id, String name, LocationDTO location, String description, Double averageRate, Set<CompanyAdminDTO> companyAdmins, Set<CompanyEquipmentDTO> equipment) {
+        public CompanyDTO(Long id, String name, LocationDTO location, String description, Double averageRate,
+                          Set<CompanyAdminDTO> companyAdmins, Set<CompanyEquipmentDTO> equipment) {
                 this.id = id;
                 this.name = name;
                 this.location = location;
@@ -43,6 +47,24 @@ public class CompanyDTO {
                 this.averageRate = averageRate;
                 this.companyAdmins = companyAdmins;
                 this.equipment = equipment;
+        }
+
+        public CompanyDTO(Company company, Set<AppointmentDTO> appointments){
+
+                id = company.getId();
+                name = company.getName();
+                description = company.getDescription();
+                averageRate = company.getAverageRate();
+                location = new LocationDTO(company.getLocation());
+                companyAdmins = company.getCompanyAdmins().stream()
+                        .map(CompanyAdminDTO::new)
+                        .collect(Collectors.toSet());
+                equipment = company.getEquipment().stream()
+                        .map(CompanyEquipmentDTO::new)
+                        .collect(Collectors.toSet());
+
+                this.appointments = appointments;
+
         }
 
         public Long getId() {
@@ -100,6 +122,15 @@ public class CompanyDTO {
         public void setEquipment(Set<CompanyEquipmentDTO> equipment) {
                 this.equipment = equipment;
         }
+
+        public Set<AppointmentDTO> getAppointments() {
+                return appointments;
+        }
+
+        public void setAppointments(Set<AppointmentDTO> appointments) {
+                this.appointments = appointments;
+        }
+
 
         //TODO: napraviti da radi kako treba aaaaa
         /*private Company mapDtoToDomain(CompanyDTO companyDTO) {

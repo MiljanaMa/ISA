@@ -1,12 +1,13 @@
 package medequipsystem.controller;
-import medequipsystem.domain.Company;
-import medequipsystem.domain.CompanyAdmin;
-import medequipsystem.domain.CompanyEquipment;
-import medequipsystem.domain.Location;
+import medequipsystem.domain.*;
+import medequipsystem.dto.AppointmentDTO;
 import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
+import medequipsystem.repository.AppointmentRepository;
+import medequipsystem.service.AppointmentService;
 import medequipsystem.service.CompanyService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private AppointmentService appointmentService;
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyDTO>> getAll() {
 
@@ -35,6 +39,16 @@ public class CompanyController {
         }
 
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CompanyDTO> getById(@PathVariable Long id){
+        Company c = companyService.getById(id);
+        Set<Appointment> appointments = appointmentService.getByCompany(id);
+
+        CompanyDTO dto = new CompanyDTO(c,appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
+
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
@@ -69,5 +83,12 @@ public class CompanyController {
         }
 
         return company;
+    }
+
+    @PutMapping(value="/update/{id}")
+    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO) {
+
+        Company updatedCompany = companyService.createOrUpdate(companyDTO);
+        return new ResponseEntity<>(new CompanyDTO(updatedCompany), HttpStatus.OK);
     }
 }

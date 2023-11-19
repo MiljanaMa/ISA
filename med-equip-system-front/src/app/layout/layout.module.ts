@@ -9,6 +9,8 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { MatSliderModule } from '@angular/material/slider';
 import { CompanyCreationComponent } from './company-creation/company-creation.component';
 import { CompanyAdminCreationComponent } from './company-admin-creation/company-admin-creation.component';
+import { CompanyMapComponent } from './map/map.component';
+import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { CompanyAdminCreationComponent } from './company-admin-creation/company-
     RegistrationComponent,
     ProfileComponent,
     CompanyCreationComponent,
-    CompanyAdminCreationComponent
+    CompanyAdminCreationComponent,
+    CompanyMapComponent,
+    AdminProfileComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,9 @@ import { CompanyAdminCreationComponent } from './company-admin-creation/company-
   ],
   exports: [
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    CompanyMapComponent, 
+  
   ]
 })
 export class LayoutModule { }

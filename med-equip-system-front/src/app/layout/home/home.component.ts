@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../layout.service';
 import { Company } from '../model/company.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ export class HomeComponent implements OnInit {
   public selectedRating: number = 0;
   public inputSearch: string = '';
 
-  constructor(private layoutService: LayoutService) { }
+  constructor(private layoutService: LayoutService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllCompanies();
@@ -41,6 +42,11 @@ export class HomeComponent implements OnInit {
     this.selectedRating = 0;
     this.inputSearch = '';
     this.filteredCompanies = this.companies;
+  }
+
+  viewCompanyProfile(companyId: number): void {
+   
+    this.router.navigate(['/company-profile', companyId]);
   }
 
 }

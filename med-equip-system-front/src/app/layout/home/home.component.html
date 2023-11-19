@@ -9,7 +9,7 @@
   <button class="primary" type="button" (click)="clearSearch()">Clear</button>
 </div>
 <div class="company-container">
-  <div *ngFor="let company of filteredCompanies" class="company-card">
+  <div *ngFor="let company of filteredCompanies" class="company-card" (click)="viewCompanyProfile(company.id)">
     <h3>{{ company.name }}</h3>
     <p>{{ company.location.street }} {{ company.location.streetNumber }}, {{ company.location.city }}, {{
       company.location.country }}</p>
