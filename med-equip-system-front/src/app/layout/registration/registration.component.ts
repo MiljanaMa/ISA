@@ -64,7 +64,11 @@ export class RegistrationComponent {
         phoneNumber: this.userForm.value.phoneNumber,
         jobTitle: this.userForm.value.jobTitle,
         hospitalInfo: this.userForm.value.hospitalInfo,
-        userType: UserType.CUSTOMER
+        userType: UserType.CUSTOMER,
+        penaltyPoints: 0,
+        points: 0,
+        loyaltyType: 'NONE',
+        discount: 0.0
       }
       
       this.layoutService.addUser(user).subscribe({

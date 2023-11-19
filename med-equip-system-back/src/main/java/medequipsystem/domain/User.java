@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 11, allocationSize = 1)
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 4, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
     @Column(name="id", unique=true, nullable=false)
     private Long id;
@@ -32,11 +32,46 @@ public class User {
     private String hospitalInfo;
     @Column(name = "userType", nullable = false)
     private UserType userType;
+    @Column(name = "penalPoints", nullable = true)
+    private int penaltyPoints;
+    @Column(name = "points", nullable = true)
+    private int points;
     @Column(name = "emailConfirmed", nullable = false)
     private boolean emailConfirmed;
 
     public User() {}
 
+    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
+                int penaltyPoints, int points) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.country = country;
+        this.phoneNumber = phoneNumber;
+        this.jobTitle = jobTitle;
+        this.hospitalInfo = hospitalInfo;
+        this.userType = userType;
+        this.penaltyPoints = penaltyPoints;
+        this.points = points;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(int penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
+    }
     public Long getId() {
         return id;
     }

@@ -4,6 +4,7 @@ import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
 import medequipsystem.repository.CompanyRepository;
+import medequipsystem.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class CompanyService {
 
     @Autowired
     private  CompanyEquipmentService companyEquipmentService;
+    @Autowired
+    private LocationRepository locationRepository;
 
 
     public List<Company> getAll() {
@@ -45,9 +48,11 @@ public class CompanyService {
         company.setAverageRate(companyDTO.getAverageRate());
 
         Location location = companyDTO.getLocation() != null ? companyDTO.getLocation().mapDtoToDomain() : null;
+        locationRepository.save(location);
         company.setLocation(location);
 
-        if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
+
+        /*if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
             Set<CompanyAdmin> companyAdmins = companyDTO.getCompanyAdmins().stream()
                     .map(adminDTO -> {
                         CompanyAdmin admin = adminDTO.mapDtoToDomain(company);
@@ -55,9 +60,9 @@ public class CompanyService {
                     })
                     .collect(Collectors.toSet());
             company.setCompanyAdmins(companyAdmins);
-        }
+        }*/
 
-        if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
+        /*if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
             Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
                     .map(companyEquipmentDTO -> {
                         CompanyEquipment companyEquipment = companyEquipmentDTO.mapDtoToDomain(company);
@@ -65,7 +70,7 @@ public class CompanyService {
                     })
                     .collect(Collectors.toSet());
             company.setEquipment(equipment);
-        }
+        }*/
 
         return companyRepository.save(company);
     }

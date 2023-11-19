@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './model/user.model';
 import { Company } from './model/company.model';
+import { LoyaltyProgram } from './model/loyaltyProgram';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,12 @@ export class LayoutService {
   getCompanies(): Observable<Array<Company>>{
     return this.http.get<Array<Company>>(`http://localhost:8092/api/companies/all`);
   }
-
+  updateUser(user: User): Observable<User>{
+    return this.http.put<User>(`http://localhost:8092/api/users/update`, user);
+  }
+  updatePassword(userId: number, password: string): Observable<User>{
+    return this.http.put<User>(`http://localhost:8092/api/users/updatePassword/${userId}`, password);
+  }
   createCompany(company: Company): Observable<Company> {
     return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
   }

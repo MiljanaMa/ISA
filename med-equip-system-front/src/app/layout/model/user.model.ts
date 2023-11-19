@@ -3,7 +3,6 @@ export enum UserType{
     SYS_ADMIN = 'SYS_ADMIN',
     COMP_ADMIN = 'COMP_ADMIN'
 }
-
 export interface User {
     id?: number;
     email: string;
@@ -15,5 +14,9 @@ export interface User {
     phoneNumber: string;
     jobTitle: string;
     hospitalInfo: string;
-    userType: UserType
+    userType: UserType;
+    penaltyPoints: number;
+    points: number;
+    loyaltyType: string;
+    discount: number;
 }

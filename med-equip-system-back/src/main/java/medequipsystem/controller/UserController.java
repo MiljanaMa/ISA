@@ -1,9 +1,11 @@
 package medequipsystem.controller;
 
+import medequipsystem.domain.LoyaltyProgram;
 import medequipsystem.domain.User;
 import medequipsystem.dto.UserDTO;
 import medequipsystem.domain.enums.UserType;
 import medequipsystem.service.EmailService;
+import medequipsystem.service.LoyaltyProgramService;
 import medequipsystem.service.EmailTokenService;
 import medequipsystem.service.UserService;
 import medequipsystem.token.EmailToken;
@@ -26,6 +28,8 @@ public class UserController {
     @Autowired
     private EmailService emailService;
     @Autowired
+    private LoyaltyProgramService loyaltyService;
+    @Autowired
     EmailTokenService emailTokenService;
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -42,10 +46,18 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
         UserDTO userDTO = new UserDTO(userService.getById(id));
-        if(userDTO.isEmailConfirmed()) {
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        if(userDTO == null || !userDTO.isEmailConfirmed()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
+        LoyaltyProgram loyaltyProgram = loyaltyService.getUserLoyaltyType(userDTO.getPoints(), userDTO.getPenaltyPoints());
+        if(loyaltyProgram == null){
+            userDTO.setLoyaltyType("NONE");
+            userDTO.setDiscount(0);
+        }else{
+            userDTO.setLoyaltyType(loyaltyProgram.getLoyaltyType());
+            userDTO.setDiscount(loyaltyProgram.getDiscount());
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PostMapping
@@ -74,12 +86,26 @@ public class UserController {
     public ResponseEntity<String>  confirm(@RequestParam("token") String token){
         EmailToken emailToken = this.emailTokenService.getByToken(token);
         User user = emailToken.getUser();
-        user.setEmailConfirmed(true);
-        userService.update(user);
+        userService.setEmailAsConfirmed(user);
 
         return  new ResponseEntity<>(generateResponse(user.getId()), HttpStatus.OK);
     }
+    @PutMapping("/update")
+    public ResponseEntity<UserDTO> update(@RequestBody User user) {
+        user = userService.update(user);
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+    @PutMapping("/updatePassword/{userId}")
+    public ResponseEntity<UserDTO> updatePassword(@PathVariable long userId,  @RequestBody String password) {
+        User user = userService.updatePassword(userId, password);
 
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
     public String generateResponse(Long userId){
         return "<!DOCTYPE html>" +
                 "<html>" +
@@ -91,7 +117,7 @@ public class UserController {
                 "</html>";
     }
 
-    public User mapDtoToDomain(UserDTO userDTO){
+    public User mapDtoToDomain(UserDTO userDTO) {
         User user = new User();
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
@@ -104,6 +130,8 @@ public class UserController {
         user.setHospitalInfo(userDTO.getHospitalInfo());
         user.setUserType(UserType.CUSTOMER);
         user.setEmailConfirmed(false);
+        user.setPenaltyPoints(0);
+        user.setPoints(0);
         return user;
     }
 }
