@@ -33,13 +33,11 @@ public class CompanyAdmin {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "is_enabled", nullable = false)
-    private boolean isEnabled;
 
     public CompanyAdmin() {
     }
 
-    public CompanyAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, Company company, boolean isEnabled) {
+    public CompanyAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, Company company) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -49,7 +47,6 @@ public class CompanyAdmin {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.company = company;
-        this.isEnabled = isEnabled;
     }
 
     public Long getId() {
@@ -122,13 +119,5 @@ public class CompanyAdmin {
 
     public void setCompany(Company company) {
         this.company = company;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
     }
 }

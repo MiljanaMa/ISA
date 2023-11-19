@@ -1,32 +1,19 @@
-package medequipsystem.domain;
-import javax.persistence.*;
+package medequipsystem.dto;
 
-@Entity
-@Table(name = "company_equipment_items")
-public class CompanyEquipmentItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import medequipsystem.domain.CompanyEquipmentItem;
+
+public class CompanyEquipmentItemDTO {
     private Long id;
-
-    @Column(name = "name",nullable = false)
     private String name;
-
-    @Column(name = "type", nullable = false)
     private String type;
-
-    @Column(name = "description", nullable = false)
     private String description;
-
-    @Column(name = "price", nullable = false)
     private double price;
-
-    @Column (name = "companyId", nullable = false)
     private Long companyId;
 
-    public CompanyEquipmentItem() {
+    public CompanyEquipmentItemDTO() {
     }
 
-    public CompanyEquipmentItem(Long id, String name, String type, String description, double price, Long companyId) {
+    public CompanyEquipmentItemDTO(Long id, String name, String type, String description, double price, Long companyId) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -34,6 +21,17 @@ public class CompanyEquipmentItem {
         this.price = price;
         this.companyId = companyId;
     }
+
+    public CompanyEquipmentItemDTO(CompanyEquipmentItem companyEquipmentItem) {
+        this.id = companyEquipmentItem.getId();
+        this.name = companyEquipmentItem.getName();
+        this.type = companyEquipmentItem.getType();
+        this.description = companyEquipmentItem.getDescription();
+        this.price = companyEquipmentItem.getPrice();
+        this.companyId = companyEquipmentItem.getCompanyId();
+    }
+
+    // Getters and setters...
 
     public Long getId() {
         return id;
@@ -83,4 +81,3 @@ public class CompanyEquipmentItem {
         this.companyId = companyId;
     }
 }
-

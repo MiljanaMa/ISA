@@ -28,12 +28,10 @@ public class SystemAdmin {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "is_enabled", nullable = false)
-    private boolean isEnabled;
 
     public SystemAdmin() { }
 
-    public SystemAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, boolean isEnabled) {
+    public SystemAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -42,7 +40,6 @@ public class SystemAdmin {
         this.city = city;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.isEnabled = isEnabled;
     }
 
     public Long getId() {
@@ -109,11 +106,4 @@ public class SystemAdmin {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
 }
