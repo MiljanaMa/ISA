@@ -12,8 +12,13 @@ import { CompanyAdmin } from '../model/companyAdmin.model';
 export class CompanyCreationComponent {
   companyForm: FormGroup;
   isAddingAdmin: boolean = false;
+  companyToCreate?: Company;
+  
+  public companyPls : Company;
+  public adminsArray: CompanyAdmin[] = [];
 
   constructor(private fb: FormBuilder, private layoutService: LayoutService) {
+    this.companyPls = {id: -1, name: '', description: '', averageRate: 0.0, location: {id: -1, longitude: 0, latitude:0,  street: '', streetNumber: '', city: '', country: '', postcode: 0}, companyAdmins: [] };
     this.companyForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -28,10 +33,11 @@ export class CompanyCreationComponent {
       admins: this.fb.array([]) 
     });
   }
+  
 
-  get adminsArray() {
+  /*get adminsArray() {
     return this.companyForm.get('admins') as FormArray;
-  }
+  }*/
 
   addAdmin() {
     const adminFormGroup = this.fb.group({
@@ -54,23 +60,41 @@ export class CompanyCreationComponent {
       phoneNumber: adminFormGroup.value.phoneNumber || '',
     };
   
-    this.adminsArray.push(adminFormGroup);
+    this.adminsArray.push(admin);
+    console.log(this.adminsArray);
   
-    const company: Company = this.companyForm.value;
-    company.companyAdmins = this.adminsArray.value;
+    //const company: Company = this.companyForm.value;
+     this.companyToCreate = this.companyForm.value;
+
+    //companyToCreate.admins.push(admin);
+
+    if(this.companyToCreate){
+      this.companyToCreate.companyAdmins = [];
+    }
+
+    for(let a of this.adminsArray){
+      this.companyToCreate?.companyAdmins?.push(a); 
+    }  
+  
+    console.log(this.companyToCreate?.companyAdmins);
+
   }
 
   onSubmit() {
     if (this.companyForm.valid) {
-      const company: Company = this.companyForm.value;
-      this.layoutService.createCompany(company).subscribe(
-        (createdCompany: Company) => {
-          console.log('Company created successfully:', createdCompany);
-        },
-        (error) => {
-          console.error('Error creating company:', error);
-        }
-      );
+      if(this.companyToCreate){
+        let company : Company = this.companyToCreate;
+        console.log(company);
+        console.log(this.companyToCreate);
+        this.layoutService.createCompany(company).subscribe(
+          (createdCompany: Company) => {
+            console.log('Company created successfully:', createdCompany);
+          },
+          (error) => {
+            console.error('Error creating company:', error);
+          }
+        );
+      }
     }
   }
 

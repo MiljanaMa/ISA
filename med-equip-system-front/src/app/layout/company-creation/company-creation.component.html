@@ -42,7 +42,7 @@
 
     <div formArrayName="admins">
       <h3>Admins</h3>
-      <div *ngFor="let admin of adminsArray.controls; let i = index" [formGroupName]="i">
+      <div *ngFor="let admin of adminsArray; let i = index" [formGroupName]="i">
         <div class="form-group">
           <label for="adminEmail">Email:</label>
           <input type="text" id="adminEmail" formControlName="email" required>
@@ -73,6 +73,7 @@
         </div>
       </div>
       <button type="button" (click)="addAdmin()">Add Admin</button>
+      
     </div>
 
     <button type="submit" [disabled]="companyForm.invalid">Create Company</button>
