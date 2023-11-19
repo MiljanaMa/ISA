@@ -5,6 +5,7 @@ import medequipsystem.domain.CompanyAdmin;
 import medequipsystem.domain.Location;
 import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyDTO;
+import medequipsystem.mapper.CompanyAdminDTOMapper;
 import medequipsystem.service.CompanyAdminService;
 import medequipsystem.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -25,7 +27,36 @@ public class CompanyAdminController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private CompanyAdminDTOMapper companyAdminDTOMapper;
+
     @GetMapping(value = "/all")
+    public ResponseEntity<List<CompanyAdminDTO>> getAll() {
+        List<CompanyAdmin> admins = companyAdminService.getAll();
+        List<CompanyAdminDTO> adminsDTO = admins.stream()
+                .map(companyAdminDTOMapper::fromCompanyAdmintoDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/free")
+    public ResponseEntity<List<CompanyAdminDTO>> getFree() {
+        List<CompanyAdmin> admins = companyAdminService.getAll();
+        List<CompanyAdminDTO> adminsDTO = admins.stream()
+                .filter(a -> a.getCompany() == null)
+                .map(companyAdminDTOMapper::fromCompanyAdmintoDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<CompanyAdminDTO> createCompanyAdmin(@RequestBody CompanyAdminDTO companyAdminDTO) {
+        CompanyAdmin companyAdminToCreate = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+        CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
+        return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(createdCompanyAdmin), HttpStatus.CREATED);
+    }
+
+    /*@GetMapping(value = "/all")
     public ResponseEntity<List<CompanyAdminDTO>> getAll() {
         List<CompanyAdmin> admins = companyAdminService.getAll();;
         List<CompanyAdminDTO> adminsDTO = new ArrayList<>();
@@ -49,7 +80,8 @@ public class CompanyAdminController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyAdminDTO> createCompanyAdmin(@RequestBody CompanyAdminDTO companyAdminDTO) {
-        CompanyAdmin companyAdminToCreate = mapDtoToDomain(companyAdminDTO);
+        //CompanyAdmin companyAdminToCreate = mapDtoToDomain(companyAdminDTO);
+        CompanyAdmin companyAdminToCreate =
         CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
         return new ResponseEntity<>(new CompanyAdminDTO(createdCompanyAdmin), HttpStatus.CREATED);
     }
@@ -67,5 +99,5 @@ public class CompanyAdminController {
         companyAdmin.setPhoneNumber(companyAdminDTO.getPhoneNumber());
         companyAdmin.setCompany(companyService.getById(companyAdminDTO.getCompanyDTO().getId()));
         return companyAdmin;
-    }
+    }*/
 }

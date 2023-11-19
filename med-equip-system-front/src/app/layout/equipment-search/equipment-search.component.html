@@ -1,0 +1,29 @@
+<div class="search-container">
+    <input type="text" placeholder="Search by name" class="search-input" [(ngModel)]="inputSearch">
+    
+    <label for="typeFilter">Filter by Type:</label>
+    <select id="typeFilter" class="filter-input" [(ngModel)]="inputType">
+      <option value="" selected>Any</option>
+      <option value="DIAGNOSTIC">Diagnostic</option>
+      <option value="LIFE_SUPPORT">Life Support</option>
+      <option value="LABORATORY">Laboratory</option>
+      <option value="SURGICAL">Surgical</option>
+      <option value="OTHER">Other</option>
+    </select>
+    
+    <br>
+    <label for="priceFilter">Filter by Min Price:</label>
+    <input type="number" placeholder="Enter minimum price" class="filter-input" [(ngModel)]="inputPrice">
+    
+    <button class="primary" type="button" (click)="searchEquipments()">Search</button>
+    <button class="primary" type="button" (click)="clearSearch()">Clear</button>
+  </div>
+<div class="equipment-container">
+    <div *ngFor="let equipment of filteredEquipments" class="equipment-card">
+        <h3>{{ equipment.name }}</h3>
+        <p>Type: {{ equipment.type }}</p>
+        <p>Price: {{ equipment.price }}</p>
+        <p>Description: {{ equipment.description }}</p>
+        <p>Company: {{ equipment.company.name }}</p>
+    </div>
+</div>

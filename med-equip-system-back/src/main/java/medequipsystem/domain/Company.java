@@ -1,4 +1,7 @@
 package medequipsystem.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -6,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "companies")
+@JsonIgnoreProperties("company")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +23,12 @@ public class Company {
     private String description;
     @Column(name = "avgRate", nullable = false)
     private Double averageRate;
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CompanyAdmin> companyAdmins = new HashSet<>();
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CompanyEquipment> equipment = new HashSet<>();
 
     public Company() {

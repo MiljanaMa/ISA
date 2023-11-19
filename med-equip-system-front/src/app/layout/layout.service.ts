@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from './model/user.model';
 import { Company } from './model/company.model';
 import { LoyaltyProgram } from './model/loyaltyProgram';
+import { CompanyEquipment } from './model/equipment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class LayoutService {
   }
   createCompany(company: Company): Observable<Company> {
     return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
+  }
+
+  getEquipments(): Observable<Array<CompanyEquipment>>{
+    return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
   }
 }
