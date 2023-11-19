@@ -3,6 +3,9 @@ package medequipsystem.dto;
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.enums.EquipmentType;
+import medequipsystem.repository.CompanyRepository;
+
+import java.util.Optional;
 
 public class CompanyEquipmentDTO {
     private Long id;
@@ -26,13 +29,22 @@ public class CompanyEquipmentDTO {
         this.count = count;
     }
 
+    public CompanyRepository companyRepository;
     public CompanyEquipmentDTO(CompanyEquipment companyEquipment) {
         this.id = companyEquipment.getId();
         this.name = companyEquipment.getName();
         this.type = companyEquipment.getType();
         this.description = companyEquipment.getDescription();
         this.price = companyEquipment.getPrice();
-        this.company = companyEquipment.getCompany() != null ? new CompanyDTO(companyEquipment.getCompany()) : null;
+        if(companyEquipment.getCompany() != null){
+            Long temp = 1L;
+            Optional<Company> comp = companyRepository.findById(1L);
+            if(comp != null){
+                this.company = new CompanyDTO(comp);
+            } else this.company = null;
+        }
+
+        //this.company = companyEquipment.getCompany() != null ? new CompanyDTO(companyEquipment.getCompany()) : null;
         this.count = companyEquipment.getCount();
     }
 

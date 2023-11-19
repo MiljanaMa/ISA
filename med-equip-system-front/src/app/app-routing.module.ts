@@ -4,6 +4,7 @@ import { HomeComponent } from './layout/home/home.component';
 import { RegistrationComponent } from './layout/registration/registration.component';
 import { ProfileComponent } from './layout/profile/profile.component';
 import { CompanyCreationComponent } from './layout/company-creation/company-creation.component';
+import { EquipmentSearchComponent } from './layout/equipment-search/equipment-search.component';
 
 const routes: Routes = [
 
@@ -11,6 +12,7 @@ const routes: Routes = [
   {path: 'profile/:id', component: ProfileComponent},
   {path: '', component: HomeComponent},
   {path: 'companyCreation', component: CompanyCreationComponent},
+  {path: 'equipmentSearch', component: EquipmentSearchComponent},
   
 ];
 

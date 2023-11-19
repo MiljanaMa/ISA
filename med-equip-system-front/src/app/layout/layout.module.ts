@@ -9,6 +9,7 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { MatSliderModule } from '@angular/material/slider';
 import { CompanyCreationComponent } from './company-creation/company-creation.component';
 import { CompanyAdminCreationComponent } from './company-admin-creation/company-admin-creation.component';
+import { EquipmentSearchComponent } from './equipment-search/equipment-search.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CompanyAdminCreationComponent } from './company-admin-creation/company-
     RegistrationComponent,
     ProfileComponent,
     CompanyCreationComponent,
-    CompanyAdminCreationComponent
+    CompanyAdminCreationComponent,
+    EquipmentSearchComponent
   ],
   imports: [
     CommonModule,
