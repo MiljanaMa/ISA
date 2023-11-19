@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './model/user.model';
 import { Company } from './model/company.model';
+import { LoyaltyProgram } from './model/loyaltyProgram';
 
 @Injectable({
   providedIn: 'root'

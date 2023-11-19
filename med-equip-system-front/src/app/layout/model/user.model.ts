@@ -3,12 +3,6 @@ export enum UserType{
     SYS_ADMIN = 'SYS_ADMIN',
     COMP_ADMIN = 'COMP_ADMIN'
 }
-export enum LoyaltyType{
-    GOLDEN = 'GOLDEN',
-    SILVER = 'SILVER',
-    BRONZE = 'BRONZE',
-    NONE = 'NONE'
-}
 export interface User {
     id?: number;
     email: string;
@@ -19,8 +13,10 @@ export interface User {
     country: string;
     phoneNumber: string;
     jobTitle: string;
-    companyInformation: string;
+    hospitalInfo: string;
     userType: UserType,
-    penalPoints: number,
-    loyaltyType: LoyaltyType
+    penaltyPoints: number,
+    points: number,
+    loyaltyType: string;
+    discount: number,
 }

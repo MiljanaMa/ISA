@@ -1,7 +1,6 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.User;
-import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.domain.enums.UserType;
 
 public class UserDTO {
@@ -12,17 +11,20 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String city;
-    private String country; //change this later (city + country)
+    private String country;
     private String phoneNumber;
     private String jobTitle;
-    private String companyInformation;
+    private String hospitalInfo;
     private UserType userType;
-    private int penalPoints;
-    private LoyaltyType loyaltyType;
+    private int penaltyPoints;
+    private int points;
+    private String loyaltyType;
+    private double discount;
+
 
     public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType,
-                    int penalPoints, LoyaltyType loyaltyType) {
+                   String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
+                    int penaltyPoints, int points, String loyaltyType, double discount) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -32,10 +34,12 @@ public class UserDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.jobTitle = jobTitle;
-        this.companyInformation = companyInformation;
+        this.hospitalInfo = hospitalInfo;
         this.userType = userType;
-        this.penalPoints = penalPoints;
+        this.penaltyPoints = penaltyPoints;
+        this.points = points;
         this.loyaltyType = loyaltyType;
+        this.discount = discount;
     }
 
     public UserDTO(User user) {
@@ -48,26 +52,26 @@ public class UserDTO {
         this.country = user.getCountry();
         this.phoneNumber = user.getPhoneNumber();
         this.jobTitle = user.getJobTitle();
-        this.companyInformation = user.getCompanyInformation();
+        this.hospitalInfo = user.getHospitalInfo();
         this.userType = user.getUserType();
-        this.penalPoints = user.getPenalPoints();
-        this.loyaltyType = user.getLoyaltyType();
+        this.penaltyPoints = user.getPenaltyPoints();
+        this.points = user.getPoints();
     }
 
-    public int getPenalPoints() {
-        return penalPoints;
+    public int getPoints() {
+        return points;
     }
 
-    public void setPenalPoints(int penalPoints) {
-        this.penalPoints = penalPoints;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public LoyaltyType getLoyaltyType() {
-        return loyaltyType;
+    public int getPenaltyPoints() {
+        return penaltyPoints;
     }
 
-    public void setLoyaltyType(LoyaltyType loyaltyType) {
-        this.loyaltyType = loyaltyType;
+    public void setPenaltyPoints(int penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
     }
 
     public Long getId() {
@@ -142,12 +146,12 @@ public class UserDTO {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompanyInformation() {
-        return companyInformation;
+    public String getHospitalInfo() {
+        return hospitalInfo;
     }
 
-    public void setCompanyInformation(String companyInformation) {
-        this.companyInformation = companyInformation;
+    public void setHospitalInfo(String hospitalInfo) {
+        this.hospitalInfo = hospitalInfo;
     }
 
     public UserType getUserType() {
@@ -156,5 +160,21 @@ public class UserDTO {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getLoyaltyType() {
+        return loyaltyType;
+    }
+
+    public void setLoyaltyType(String loyaltyType) {
+        this.loyaltyType = loyaltyType;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

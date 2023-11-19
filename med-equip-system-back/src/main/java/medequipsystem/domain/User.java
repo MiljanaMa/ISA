@@ -1,6 +1,5 @@
 package medequipsystem.domain;
 
-import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.domain.enums.UserType;
 
 import javax.persistence.*;
@@ -9,7 +8,9 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 11, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column(name = "email", nullable = false)
     private String email;
@@ -27,19 +28,19 @@ public class User {
     private String phoneNumber;
     @Column(name = "jobTitle", nullable = false)
     private String jobTitle;
-    @Column(name = "companyInformation", nullable = false)
-    private String companyInformation;
+    @Column(name = "hospitalInfo", nullable = false)
+    private String hospitalInfo;
     @Column(name = "userType", nullable = false)
     private UserType userType;
     @Column(name = "penalPoints", nullable = true)
-    private int penalPoints;
-    @Column(name = "loyaltyType", nullable = true)
-    private LoyaltyType loyaltyType;
+    private int penaltyPoints;
+    @Column(name = "points", nullable = true)
+    private int points;
 
     public User() {}
 
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String companyInformation, UserType userType,
-                int penalPoints, LoyaltyType loyaltyType) {
+    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
+                int penaltyPoints, int points) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -48,28 +49,27 @@ public class User {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.jobTitle = jobTitle;
-        this.companyInformation = companyInformation;
+        this.hospitalInfo = hospitalInfo;
         this.userType = userType;
-        this.penalPoints = penalPoints;
-        this.loyaltyType = loyaltyType;
+        this.penaltyPoints = penaltyPoints;
+        this.points = points;
     }
 
-    public int getPenalPoints() {
-        return penalPoints;
+    public int getPoints() {
+        return points;
     }
 
-    public void setPenalPoints(int penalPoints) {
-        this.penalPoints = penalPoints;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public LoyaltyType getLoyaltyType() {
-        return loyaltyType;
+    public int getPenaltyPoints() {
+        return penaltyPoints;
     }
 
-    public void setLoyaltyType(LoyaltyType loyaltyType) {
-        this.loyaltyType = loyaltyType;
+    public void setPenaltyPoints(int penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
     }
-
     public Long getId() {
         return id;
     }
@@ -142,12 +142,12 @@ public class User {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompanyInformation() {
-        return companyInformation;
+    public String getHospitalInfo() {
+        return hospitalInfo;
     }
 
-    public void setCompanyInformation(String companyInformation) {
-        this.companyInformation = companyInformation;
+    public void setHospitalInfo(String hospitalInfo) {
+        this.hospitalInfo = hospitalInfo;
     }
 
     public UserType getUserType() {

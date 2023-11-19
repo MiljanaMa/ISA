@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../layout.service';
-import { LoyaltyType, User, UserType } from '../model/user.model';
+import { User, UserType } from '../model/user.model';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
       country: new FormControl(this.user?.country, [Validators.required, this.notEmptyString]),
       phoneNumber: new FormControl(this.user?.phoneNumber, [Validators.required, this.notEmptyString]),
       jobTitle: new FormControl(this.user?.jobTitle, [Validators.required, this.notEmptyString]),
-      companyInformation: new FormControl(this.user?.companyInformation, [Validators.required, this.notEmptyString]),
+      hospitalInfo: new FormControl(this.user?.hospitalInfo, [Validators.required, this.notEmptyString]),
     });
 
     this.passwordForm = new FormGroup({
@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
           country: this.user.country,
           phoneNumber: this.user.phoneNumber,
           jobTitle: this.user.jobTitle,
-          companyInformation: this.user.companyInformation
+          hospitalInfo: this.user.hospitalInfo
         });
         this.passwordForm.patchValue({
           oldPassword: '',
@@ -83,15 +83,14 @@ export class ProfileComponent implements OnInit {
   showUpdateForm(): void {
     this.updateMode = true;
   }
+  showPasswordForm(): void {
+    this.updatePasswordMode = true;
+  }
   cancelUpdate(): void {
     this.updateMode = false;
     this.updatePasswordMode = false;
     this.getById();
   }
-  showPasswordForm(): void {
-    this.updatePasswordMode = true;
-  }
-
   update(): void {
     if (!this.userForm.valid) {
       window.alert("All fields are required.");
@@ -110,10 +109,13 @@ export class ProfileComponent implements OnInit {
         country: this.userForm.value.country,
         phoneNumber: this.userForm.value.phoneNumber,
         jobTitle: this.userForm.value.jobTitle,
-        companyInformation: this.userForm.value.companyInformation,
+        hospitalInfo: this.userForm.value.hospitalInfo,
         userType: UserType.CUSTOMER,
-        loyaltyType: LoyaltyType.NONE,
-        penalPoints: 0
+        penaltyPoints: 0,
+        points: 0,
+        loyaltyType: '',
+        discount: 0
+
       }
 
       this.layoutService.updateUser(user).subscribe({

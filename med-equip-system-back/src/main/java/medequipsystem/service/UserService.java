@@ -1,11 +1,10 @@
 package medequipsystem.service;
 
 import medequipsystem.domain.User;
-import medequipsystem.dto.UserDTO;
+import medequipsystem.repository.LoyaltyProgramRepository;
 import medequipsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,15 @@ public class UserService {
                 return null;
             }
         }
-        return this.userRepository.save(user);
+        try {
+            return this.userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            // Handle the exception caused by a duplicate key violation
+            // You may want to log the error or take appropriate action
+            System.out.println(e.getMessage());
+            return null;
+        }
+        //return this.userRepository.save(user);
     }
     public User update(User updatedUser){
         User user = getById(updatedUser.getId());
@@ -44,7 +51,7 @@ public class UserService {
         user.setCountry(updatedUser.getCountry());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
         user.setJobTitle(updatedUser.getJobTitle());
-        user.setCompanyInformation(updatedUser.getCompanyInformation());
+        user.setHospitalInfo(updatedUser.getHospitalInfo());
 
         return this.userRepository.save(user);
     }

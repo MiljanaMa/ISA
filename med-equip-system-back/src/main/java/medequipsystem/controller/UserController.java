@@ -1,10 +1,11 @@
 package medequipsystem.controller;
 
+import medequipsystem.domain.LoyaltyProgram;
 import medequipsystem.domain.User;
-import medequipsystem.domain.enums.LoyaltyType;
 import medequipsystem.dto.UserDTO;
 import medequipsystem.domain.enums.UserType;
 import medequipsystem.service.EmailService;
+import medequipsystem.service.LoyaltyProgramService;
 import medequipsystem.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private LoyaltyProgramService loyaltyService;
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
@@ -39,6 +42,15 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
         UserDTO userDTO = new UserDTO(userService.getById(id));
+
+        LoyaltyProgram loyaltyProgram = loyaltyService.getUserLoyaltyType(userDTO.getPoints(), userDTO.getPenaltyPoints());
+        if(loyaltyProgram == null){
+            userDTO.setLoyaltyType("NONE");
+            userDTO.setDiscount(0);
+        }else{
+            userDTO.setLoyaltyType(loyaltyProgram.getLoyaltyType());
+            userDTO.setDiscount(loyaltyProgram.getDiscount());
+        }
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -53,10 +65,10 @@ public class UserController {
         user.setCountry(userDTO.getCountry());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setJobTitle(userDTO.getJobTitle());
-        user.setCompanyInformation(userDTO.getCompanyInformation());
+        user.setHospitalInfo(userDTO.getHospitalInfo());
         user.setUserType(UserType.CUSTOMER);
-        user.setLoyaltyType(LoyaltyType.NONE);
-        user.setPenalPoints(0);
+        user.setPenaltyPoints(0);
+        user.setPoints(0);
 
         user = userService.create(user);
 
