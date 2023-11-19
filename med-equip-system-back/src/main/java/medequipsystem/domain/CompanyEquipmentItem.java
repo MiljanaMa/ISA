@@ -3,7 +3,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "company_equipment_items")
-public class CompanyEquipmentItem {
+public class CompanyEquipmentItem {      //TODO: check to delete
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

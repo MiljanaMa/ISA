@@ -20,6 +20,9 @@ public class CompanyService {
     @Autowired
     private CompanyAdminService companyAdminService;
 
+    @Autowired
+    private  CompanyEquipmentService companyEquipmentService;
+
 
     public List<Company> getAll() {
         return this.companyRepository.findAll();
@@ -56,7 +59,10 @@ public class CompanyService {
 
         if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
             Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
-                    .map(CompanyEquipmentDTO::mapDtoToDomain)
+                    .map(companyEquipmentDTO -> {
+                        CompanyEquipment companyEquipment = companyEquipmentDTO.mapDtoToDomain(company);
+                        return  companyEquipmentService.create(companyEquipment);
+                    })
                     .collect(Collectors.toSet());
             company.setEquipment(equipment);
         }

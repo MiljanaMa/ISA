@@ -54,6 +54,8 @@ public class CompanyAdminController {
         return new ResponseEntity<>(new CompanyAdminDTO(createdCompanyAdmin), HttpStatus.CREATED);
     }
 
+    //TODO: napraviti da radi kako treba aaaaa
+        //nemam snage vise
     public CompanyAdmin mapDtoToDomain(CompanyAdminDTO companyAdminDTO) {
         CompanyAdmin companyAdmin = new CompanyAdmin();
         companyAdmin.setEmail(companyAdminDTO.getEmail());

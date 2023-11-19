@@ -114,6 +114,7 @@ public class CompanyAdminDTO {
         this.companyDTO = companyDTO;
     }
 
+    //TODO: napraviti da radi kako treba aaaaa
     public CompanyAdmin mapDtoToDomain(Company company) {
         CompanyAdmin companyAdmin = new CompanyAdmin();
         companyAdmin.setEmail(this.getEmail());

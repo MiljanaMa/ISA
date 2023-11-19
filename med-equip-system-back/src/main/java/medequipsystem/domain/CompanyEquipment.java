@@ -1,5 +1,7 @@
 package medequipsystem.domain;
 
+import medequipsystem.domain.enums.EquipmentType;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,24 +11,39 @@ public class CompanyEquipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name",nullable = false)
+    private String name;
+
+    @Column(name = "type", nullable = false)
+    private EquipmentType type;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private double price;
+
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipment_item_id", referencedColumnName = "id")
-    private CompanyEquipmentItem companyEquipmentItem;
-
     @Column(name = "count", nullable = false)
     private int count;
+
+    /*@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipment_item_id", referencedColumnName = "id")
+    private CompanyEquipmentItem companyEquipmentItem;*/
 
     public CompanyEquipment() {
     }
 
-    public CompanyEquipment(Long id, Company company, CompanyEquipmentItem companyEquipmentItem, int count) {
+    public CompanyEquipment(Long id, String name, EquipmentType type, String description, double price, Company company, int count) {
         this.id = id;
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.price = price;
         this.company = company;
-        this.companyEquipmentItem = companyEquipmentItem;
         this.count = count;
     }
 
@@ -46,20 +63,44 @@ public class CompanyEquipment {
         this.company = company;
     }
 
-    public CompanyEquipmentItem getCompanyEquipmentItem() {
-        return companyEquipmentItem;
-    }
-
-    public void setCompanyEquipmentItem(CompanyEquipmentItem companyEquipmentItem) {
-        this.companyEquipmentItem = companyEquipmentItem;
-    }
-
     public int getCount() {
         return count;
     }
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public EquipmentType getType() {
+        return type;
+    }
+
+    public void setType(EquipmentType type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
 

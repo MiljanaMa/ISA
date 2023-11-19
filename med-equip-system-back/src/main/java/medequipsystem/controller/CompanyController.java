@@ -44,7 +44,7 @@ public class CompanyController {
         return new ResponseEntity<>(new CompanyDTO(createdCompany), HttpStatus.CREATED);
     }
 
-    private Company mapDtoToDomain(CompanyDTO companyDTO) {
+    public Company mapDtoToDomain(CompanyDTO companyDTO) {
         Company company = new Company();
         company.setId(companyDTO.getId());
         company.setName(companyDTO.getName());
@@ -63,7 +63,7 @@ public class CompanyController {
 
         if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
             Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
-                    .map(CompanyEquipmentDTO::mapDtoToDomain)
+                    .map(companyEquipmentDTO -> companyEquipmentDTO.mapDtoToDomain(company))
                     .collect(Collectors.toSet());
             company.setEquipment(equipment);
         }

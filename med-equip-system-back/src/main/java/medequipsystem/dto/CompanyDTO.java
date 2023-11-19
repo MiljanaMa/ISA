@@ -101,7 +101,8 @@ public class CompanyDTO {
                 this.equipment = equipment;
         }
 
-        private Company mapDtoToDomain(CompanyDTO companyDTO) {
+        //TODO: napraviti da radi kako treba aaaaa
+        /*private Company mapDtoToDomain(CompanyDTO companyDTO) {
                 Company company = new Company();
                 company.setId(companyDTO.getId());
                 company.setName(companyDTO.getName());
@@ -126,5 +127,5 @@ public class CompanyDTO {
                 }
 
                 return company;
-        }
+        }*/
 }
