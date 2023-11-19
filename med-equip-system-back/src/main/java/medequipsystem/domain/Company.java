@@ -1,5 +1,9 @@
 package medequipsystem.domain;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+
 @Entity
 @Table(name = "companies")
 public class Company {
@@ -15,6 +19,10 @@ public class Company {
     private String description;
     @Column(name = "avgRate", nullable = false)
     private Double averageRate;
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<CompanyAdmin> companyAdmins = new HashSet<>();
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<CompanyEquipment> equipment = new HashSet<>();
 
     public Company() {
     }
@@ -25,6 +33,16 @@ public class Company {
         this.location = location;
         this.description = description;
         this.averageRate = averageRate;
+    } //check if needed or delete
+
+    public Company(Long id, String name, Location location, String description, Double averageRate, Set<CompanyAdmin> companyAdmins, Set<CompanyEquipment> equipment) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.averageRate = averageRate;
+        this.companyAdmins = companyAdmins;
+        this.equipment = equipment;
     }
 
     public Long getId() {
@@ -65,5 +83,21 @@ public class Company {
 
     public void setAverageRate(Double averageRate) {
         this.averageRate = averageRate;
+    }
+
+    public Set<CompanyEquipment> getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(Set<CompanyEquipment> equipment) {
+        this.equipment = equipment;
+    }
+
+    public Set<CompanyAdmin> getCompanyAdmins() {
+        return companyAdmins;
+    }
+
+    public void setCompanyAdmins(Set<CompanyAdmin> companyAdmins) {
+        this.companyAdmins = companyAdmins;
     }
 }

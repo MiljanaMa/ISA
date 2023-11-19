@@ -1,0 +1,82 @@
+<p>company-creation works!</p>
+
+<div class="company-creation-form">
+  <h2>Create Company</h2>
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Company Name:</label>
+      <input type="text" id="name" formControlName="name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="averageRate">Average Rate:</label>
+      <input type="number" id="averageRate" formControlName="averageRate" required>
+    </div>
+
+    <div formGroupName="location">
+      <h3>Location</h3>
+      <div class="form-group">
+        <label for="street">Street:</label>
+        <input type="text" id="street" formControlName="street" required>
+      </div>
+      <div class="form-group">
+        <label for="streetNumber">Street Number:</label>
+        <input type="text" id="streetNumber" formControlName="streetNumber" required>
+      </div>
+      <div class="form-group">
+        <label for="city">City:</label>
+        <input type="text" id="city" formControlName="city" required>
+      </div>
+      <div class="form-group">
+        <label for="country">Country:</label>
+        <input type="text" id="country" formControlName="country" required>
+      </div>
+      <div class="form-group">
+        <label for="postcode">Postcode:</label>
+        <input type="text" id="postcode" formControlName="postcode" required>
+      </div>
+    </div>
+
+    <div formArrayName="admins">
+      <h3>Admins</h3>
+      <div *ngFor="let admin of adminsArray; let i = index" [formGroupName]="i">
+        <div class="form-group">
+          <label for="adminEmail">Email:</label>
+          <input type="text" id="adminEmail" formControlName="email" required>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password:</label>
+          <input type="password" id="adminPassword" formControlName="password" required>
+        </div>
+        <div class="form-group">
+          <label for="adminFirstName">First Name:</label>
+          <input type="text" id="adminFirstName" formControlName="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="adminLastName">Last Name:</label>
+          <input type="text" id="adminLastName" formControlName="lastName" required>
+        </div>
+        <div class="form-group">
+          <label for="adminCity">City:</label>
+          <input type="text" id="adminCity" formControlName="city" required>
+        </div>
+        <div class="form-group">
+          <label for="adminCountry">Country:</label>
+          <input type="text" id="adminCountry" formControlName="country" required>
+        </div>
+        <div class="form-group">
+          <label for="adminPhoneNumber">Phone Number:</label>
+          <input type="text" id="adminPhoneNumber" formControlName="phoneNumber" required>
+        </div>
+      </div>
+      <button type="button" (click)="addAdmin()">Add Admin</button>
+      
+    </div>
+
+    <button type="submit" [disabled]="companyForm.invalid">Create Company</button>
+
+  </form>
+</div>

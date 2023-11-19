@@ -100,4 +100,17 @@ public class LocationDTO {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    public Location mapDtoToDomain() {
+        Location location = new Location();
+        location.setId(this.getId());
+        location.setStreet(this.getStreet());
+        location.setStreetNumber(this.getStreetNumber());
+        location.setCity(this.getCity());
+        location.setCountry(this.getCountry());
+        location.setPostcode(this.getPostcode());
+        location.setLongitude(this.getLongitude());
+        location.setLatitude(this.getLatitude());
+        return location;
+    }
 }

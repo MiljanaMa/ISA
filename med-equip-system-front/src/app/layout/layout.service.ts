@@ -25,4 +25,8 @@ export class LayoutService {
   getCompanies(): Observable<Array<Company>>{
     return this.http.get<Array<Company>>(`http://localhost:8092/api/companies/all`);
   }
+
+  createCompany(company: Company): Observable<Company> {
+    return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
+  }
 }
