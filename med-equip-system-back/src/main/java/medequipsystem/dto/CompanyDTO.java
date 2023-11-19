@@ -12,10 +12,9 @@ public class CompanyDTO {
         private LocationDTO location;
         private String description;
         private Double averageRate;
-        private Set<CompanyAdminDTO> companyAdmins;
-        private Set<CompanyEquipmentDTO> equipment;
+        //private Set<CompanyAdminDTO> companyAdmins;
+        //private Set<CompanyEquipmentDTO> equipment;
 
-        private Set<AppointmentDTO> appointments;
 
   
         public CompanyDTO() {
@@ -27,12 +26,12 @@ public class CompanyDTO {
                 description = company.getDescription();
                 averageRate = company.getAverageRate();
                 location = new LocationDTO(company.getLocation());
-                companyAdmins = company.getCompanyAdmins().stream()
+                /*companyAdmins = company.getCompanyAdmins().stream()
                         .map(CompanyAdminDTO::new)
                         .collect(Collectors.toSet());
                 equipment = company.getEquipment().stream()
                         .map(CompanyEquipmentDTO::new)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toSet());*/
 
                 
         }
@@ -44,27 +43,11 @@ public class CompanyDTO {
                 this.location = location;
                 this.description = description;
                 this.averageRate = averageRate;
-                this.companyAdmins = companyAdmins;
-                this.equipment = equipment;
+                //this.companyAdmins = companyAdmins;
+                //this.equipment = equipment;
         }
 
-        public CompanyDTO(Company company, Set<AppointmentDTO> appointments){
 
-                id = company.getId();
-                name = company.getName();
-                description = company.getDescription();
-                averageRate = company.getAverageRate();
-                location = new LocationDTO(company.getLocation());
-                companyAdmins = company.getCompanyAdmins().stream()
-                        .map(CompanyAdminDTO::new)
-                        .collect(Collectors.toSet());
-                equipment = company.getEquipment().stream()
-                        .map(CompanyEquipmentDTO::new)
-                        .collect(Collectors.toSet());
-
-                this.appointments = appointments;
-
-        }
 
         public Long getId() {
                 return id;
@@ -106,7 +89,7 @@ public class CompanyDTO {
                 this.averageRate = averageRate;
         }
 
-       public Set<CompanyAdminDTO> getCompanyAdmins() {
+       /*public Set<CompanyAdminDTO> getCompanyAdmins() {
                 return companyAdmins;
         }
 
@@ -122,13 +105,7 @@ public class CompanyDTO {
                 this.equipment = equipment;
         }
 
-        public Set<AppointmentDTO> getAppointments() {
-                return appointments;
-        }
-
-        public void setAppointments(Set<AppointmentDTO> appointments) {
-                this.appointments = appointments;
-        }
+        */
 
 
         //TODO: napraviti da radi kako treba aaaaa

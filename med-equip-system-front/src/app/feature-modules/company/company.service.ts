@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Company } from 'src/app/layout/model/company.model';
+import { CompanyProfile } from './model/company-profile-model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +11,15 @@ export class CompanyService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCompanies(): Observable<Company[]> {
-    return this.http.get<Company[]>(`${this.baseUrl}/all`);
+  getAllCompanies(): Observable<CompanyProfile[]> {
+    return this.http.get<CompanyProfile[]>(`${this.baseUrl}/all`);
   }
 
-  getCompanyById(companyId: number): Observable<Company> {
-    return this.http.get<Company>(`${this.baseUrl}/${companyId}`);
+  getCompanyById(companyId: number): Observable<CompanyProfile> {
+    return this.http.get<CompanyProfile>(`${this.baseUrl}/${companyId}`);
   }
 
-  updateCompany(company: Company): Observable<Company>{
-    return this.http.put<Company>(`${this.baseUrl}/update/${company.id}`, company);
+  updateCompany(company: CompanyProfile): Observable<void>{
+    return this.http.put<void>(`${this.baseUrl}/update/${company.id}`, company);
   }
 }

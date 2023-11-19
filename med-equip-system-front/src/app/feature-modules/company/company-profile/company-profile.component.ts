@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Company } from 'src/app/layout/model/company.model';
+import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 import { CompanyEquipment } from '../model/companyEquipment.model';
@@ -51,7 +51,9 @@ export class CompanyProfileComponent implements OnInit {
         this.company = data;
         console.log(data); 
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
+        console.log(this.company?.companyEquipment);
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
+        console.log(this.companyEquipmentDataSource.data); 
         this.appointmentsDataSource.data = this.company?.appointments || [];
       },
       error => {

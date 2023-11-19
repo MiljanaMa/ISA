@@ -51,7 +51,7 @@ export class LayoutService {
   }
   updateAdmin(admin : CompanyAdmin): Observable<CompanyAdmin>{
       return this.http.put<CompanyAdmin>(`http://localhost:8092/api/companyadmins/update/${admin?.id}`,admin); 
-
+  }
   getEquipments(): Observable<Array<CompanyEquipment>>{
     return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
 

@@ -1,9 +1,6 @@
 package medequipsystem.controller;
 import medequipsystem.domain.*;
-import medequipsystem.dto.AppointmentDTO;
-import medequipsystem.dto.CompanyAdminDTO;
-import medequipsystem.dto.CompanyDTO;
-import medequipsystem.dto.CompanyEquipmentDTO;
+import medequipsystem.dto.*;
 import medequipsystem.repository.AppointmentRepository;
 import medequipsystem.service.AppointmentService;
 import medequipsystem.service.CompanyService;
@@ -29,8 +26,10 @@ public class CompanyController {
 
     @Autowired
     private AppointmentService appointmentService;
-  
+
+    @Autowired
     private CompanyDTOMapper companyDTOMapper;
+
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyDTO>> getAll() {
@@ -42,6 +41,7 @@ public class CompanyController {
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
     }
 
+
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         Company companyToCreate = companyDTOMapper.fromDTOtoCompany(companyDTO);
@@ -49,7 +49,8 @@ public class CompanyController {
         return new ResponseEntity<>(companyDTOMapper.fromCompanytoDTO(createdCompany), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/all")
+
+    /*@GetMapping(value = "/all")
     public ResponseEntity<List<CompanyDTO>> getAll() {
 
         List<Company> companies = companyService.getAll();;
@@ -60,18 +61,18 @@ public class CompanyController {
         }
 
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CompanyDTO> getById(@PathVariable Long id){
+    public ResponseEntity<CompanyProfileDTO> getById(@PathVariable Long id) {
         Company c = companyService.getById(id);
         Set<Appointment> appointments = appointmentService.getByCompany(id);
 
-        CompanyDTO dto = new CompanyDTO(c,appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
+        CompanyProfileDTO dto = new CompanyProfileDTO(c, appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
+    /*
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         Company companyToCreate = mapDtoToDomain(companyDTO);
@@ -105,14 +106,13 @@ public class CompanyController {
 
         return company;
     }
+    */
 
 
-    }
-
-    @PutMapping(value="/update/{id}")
-    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO) {
-
-        Company updatedCompany = companyService.createOrUpdate(companyDTO);
-        return new ResponseEntity<>(new CompanyDTO(updatedCompany), HttpStatus.OK);
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<Void> updateCompany(@RequestBody CompanyProfileDTO companyDTO) {
+        CompanyDTO dto = new CompanyDTO(companyDTO.getId(), companyDTO.getName(), companyDTO.getLocation(), companyDTO.getDescription(), companyDTO.getAverageRate());
+        Company updatedCompany = companyService.createOrUpdate(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -58,6 +58,36 @@ INSERT INTO public.loyalty_programs(
     id, discount, loyalty_type, max_penalty_points, min_points)
 VALUES (5, 15, 'GOLD', 0, 400);
 
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (3, 8, 'Cutting-edge laboratory equipment', 'LabTech 2000', 8000.00, 2, 3);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (4, 12, 'High-tech surgical instruments', 'SurgiMate X', 10000.00, 3, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (5, 7, 'Versatile medical equipment', 'MediPro', 6000.00, 4, 3);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (6, 500, 'Disposable Syringes', 'SyringeMaster 500', 2.50, 4, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (7, 1000, 'Sterile Needles', 'NeedleSafe Pro', 1.50, 4, 2);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (8, 2000, 'Medical Cotton', 'CottonComfort', 0.75, 4, 3);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (9, 50, 'First Aid Kits', 'SafetyKit Plus', 15.00, 4, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (10, 20, 'Digital Thermometers', 'ThermoTech Pro', 25.00, 4, 3);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (11, 30, 'Bandages', 'HealBand Pro', 5.00, 4, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (12, 15, 'Gauze Pads', 'GauzeGuard', 3.00, 4, 2);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (13, 10, 'Medical Scissors', 'ScissorTech', 8.00, 4, 3);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (14, 40, 'Pain Relievers', 'PainAway', 7.00, 4, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
+VALUES (15, 25, 'Hand Sanitizers', 'SafeHands', 3.50, 4, 3);
 
 
 INSERT INTO public.company_admins(
@@ -104,4 +134,5 @@ INSERT INTO public.appointments(
 VALUES
     (9, '2023-11-28', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 4),
     (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 5);
+
 
