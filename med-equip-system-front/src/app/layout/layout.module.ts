@@ -5,17 +5,23 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
+import { MaterialModule } from '../infrastructure/material/material.module';
 import { MatSliderModule } from '@angular/material/slider';
+import { CompanyCreationComponent } from './company-creation/company-creation.component';
+import { CompanyAdminCreationComponent } from './company-admin-creation/company-admin-creation.component';
 
 @NgModule({
   declarations: [
     NavbarComponent,
     HomeComponent,
     RegistrationComponent,
-    ProfileComponent
+    ProfileComponent,
+    CompanyCreationComponent,
+    CompanyAdminCreationComponent
   ],
   imports: [
     CommonModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     MatSliderModule

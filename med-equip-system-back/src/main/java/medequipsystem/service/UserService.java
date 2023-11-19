@@ -62,4 +62,9 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public User setEmailAsConfirmed(User user){
+        user.setEmailConfirmed(true);
+        return this.userRepository.save(user);
+    }
+
 }

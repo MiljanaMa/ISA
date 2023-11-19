@@ -14,9 +14,9 @@ export interface User {
     phoneNumber: string;
     jobTitle: string;
     hospitalInfo: string;
-    userType: UserType,
-    penaltyPoints: number,
-    points: number,
+    userType: UserType;
+    penaltyPoints: number;
+    points: number;
     loyaltyType: string;
-    discount: number,
+    discount: number;
 }

@@ -1,3 +1,4 @@
+import { CompanyAdmin } from './companyAdmin.model';
 import { Location } from './location.model';
 export interface Company {
     id: number;
@@ -5,4 +6,5 @@ export interface Company {
     description: string;
     averageRate: number;
     location: Location;
+    companyAdmins?: CompanyAdmin[]; 
 }

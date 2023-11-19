@@ -32,4 +32,7 @@ export class LayoutService {
   updatePassword(userId: number, password: string): Observable<User>{
     return this.http.put<User>(`http://localhost:8092/api/users/updatePassword/${userId}`, password);
   }
+  createCompany(company: Company): Observable<Company> {
+    return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
+  }
 }

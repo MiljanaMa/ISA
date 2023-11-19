@@ -20,27 +20,9 @@ public class UserDTO {
     private int points;
     private String loyaltyType;
     private double discount;
+    private boolean emailConfirmed;
 
-
-    public UserDTO(Long id, String email, String password, String firstName, String lastName, String city,
-                   String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
-                    int penaltyPoints, int points, String loyaltyType, double discount) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.hospitalInfo = hospitalInfo;
-        this.userType = userType;
-        this.penaltyPoints = penaltyPoints;
-        this.points = points;
-        this.loyaltyType = loyaltyType;
-        this.discount = discount;
-    }
+    public UserDTO(){}
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -56,6 +38,7 @@ public class UserDTO {
         this.userType = user.getUserType();
         this.penaltyPoints = user.getPenaltyPoints();
         this.points = user.getPoints();
+        this.emailConfirmed = user.isEmailConfirmed();
     }
 
     public int getPoints() {
@@ -176,5 +159,11 @@ public class UserDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
     }
 }

@@ -1,10 +1,8 @@
 <div>
     <div class="center">
         <div class="profile-table">
-
             <h1>My profile</h1>
             <table *ngIf="user && !updateMode && !updatePasswordMode" class="profile-table">
-
                 <tr>
                     <td><label>Email:</label></td>
                     <td class="info">{{user.email}}</td>
@@ -103,15 +101,18 @@
                 <table class="form-table">
                     <tr>
                         <td><label>Old Password: </label></td>
-                        <td><input type="text" formControlName="oldPassword" /></td>
+                        <td><input type="password" formControlName="oldPassword" [type]="hideOld ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isOldPasswordVisible()">{{hideOld ? 'visibility_off' : 'visibility'}}</mat-icon></td>
                     </tr>
                     <tr>
                         <td><label>New Password: </label></td>
-                        <td><input type="text" formControlName="newPassword" /></td>
+                        <td><input type="password" formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isNewPasswordVisible()">{{hideNew ? 'visibility_off' : 'visibility'}}</mat-icon></td>
                     </tr>
                     <tr>
                         <td><label>New Password check: </label></td>
-                        <td><input type="text" formControlName="passwordCheck" /></td>
+                        <td><input type="password" formControlName="passwordCheck" [type]="hideCheck ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isCheckPasswordVisible()">{{hideCheck ? 'visibility_off' : 'visibility'}}</mat-icon></td>
                     </tr>
                     <tr>
                         <td><button class="primary" type="button" (click)="updatePassword()">Update</button></td>

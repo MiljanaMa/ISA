@@ -23,21 +23,21 @@ INSERT INTO public.companies (
 ) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3);
 -- User 1
 INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points)
+    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
 VALUES
-    (1, 'New York', 'USA', 'miljana@email.com', 'Miljana', 'General Hospital', 'Doctor', 'Johnson', '123', 0, '123456789', 0, 450);
+    (1, 'New York', 'USA', 'miljana@email.com', 'Miljana', 'General Hospital', 'Doctor', 'Johnson', '123', 0, '123456789', 0, 450, true);
 
 -- User 2
 INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points)
+    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
 VALUES
-    (2, 'London', 'UK', 'milena@email.com', 'Milena', 'City Medical Center', 'Nurse', 'Markovic', '123', 2, '987654321', 0, 150);
+    (2, 'London', 'UK', 'milena@email.com', 'Milena', 'City Medical Center', 'Nurse', 'Markovic', '123', 2, '987654321', 0, 150, true);
 
 -- User 3
 INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points)
+    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
 VALUES
-    (3, 'Berlin', 'Germany', 'praska@email.com', 'Praska', 'Specialty Clinic', 'Surgeon', 'Praska', '123', 1, '5551234567', 0, 350);
+    (3, 'Berlin', 'Germany', 'praska@email.com', 'Praska', 'Specialty Clinic', 'Surgeon', 'Praska', '123', 1, '5551234567', 0, 350, true);
 
 
 INSERT INTO public.loyalty_programs(
@@ -56,4 +56,4 @@ INSERT INTO public.loyalty_programs(
 VALUES (4, 10, 'SILVER', 1, 300);
 INSERT INTO public.loyalty_programs(
     id, discount, loyalty_type, max_penalty_points, min_points)
-VALUES (5, 15, 'GOLD', 0, 400);
+VALUES (5, 15, 'GOLD', 0, 400);ng

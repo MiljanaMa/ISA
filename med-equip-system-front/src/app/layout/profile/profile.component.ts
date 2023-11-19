@@ -18,6 +18,9 @@ export class ProfileComponent implements OnInit {
   public passwordForm: FormGroup;
   public updateMode: boolean = false;
   public updatePasswordMode: boolean = false;
+  public hideOld: boolean = true;
+  public hideNew: boolean = true;
+  public hideCheck: boolean = true;
 
   constructor(private layoutService: LayoutService, private currentRoute: ActivatedRoute) {
     this.userForm = new FormGroup({
@@ -91,6 +94,17 @@ export class ProfileComponent implements OnInit {
     this.updatePasswordMode = false;
     this.getById();
   }
+  
+  isOldPasswordVisible(): void{
+    this.hideOld = !this.hideOld;
+  }
+  isNewPasswordVisible(): void{
+    this.hideNew = !this.hideNew;
+  }
+  isCheckPasswordVisible(): void{
+    this.hideCheck = !this.hideCheck;
+  }
+
   update(): void {
     if (!this.userForm.valid) {
       window.alert("All fields are required.");
