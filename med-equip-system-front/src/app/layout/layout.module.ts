@@ -11,6 +11,7 @@ import { CompanyCreationComponent } from './company-creation/company-creation.co
 import { CompanyAdminCreationComponent } from './company-admin-creation/company-admin-creation.component';
 import { CompanyMapComponent } from './map/map.component';
 import { AdminProfileComponent } from './admin-profile/admin-profile.component';
+import { EquipmentSearchComponent } from './equipment-search/equipment-search.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AdminProfileComponent } from './admin-profile/admin-profile.component';
     CompanyCreationComponent,
     CompanyAdminCreationComponent,
     CompanyMapComponent,
-    AdminProfileComponent
+    AdminProfileComponent,
+    EquipmentSearchComponent
   ],
   imports: [
     CommonModule,

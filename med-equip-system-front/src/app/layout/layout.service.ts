@@ -5,6 +5,7 @@ import { User } from './model/user.model';
 import { Company } from './model/company.model';
 import { LoyaltyProgram } from './model/loyaltyProgram';
 import { CompanyAdmin } from './model/companyAdmin.model';
+import { CompanyEquipment } from './model/equipment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class LayoutService {
     return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
   }
 
+
   reverseGeocode(latitude: number, longitude: number): Observable<any> {
     let apiUrl = 'https://nominatim.openstreetmap.org/reverse';
 
@@ -49,5 +51,9 @@ export class LayoutService {
   }
   updateAdmin(admin : CompanyAdmin): Observable<CompanyAdmin>{
       return this.http.put<CompanyAdmin>(`http://localhost:8092/api/companyadmins/update/${admin?.id}`,admin); 
+
+  getEquipments(): Observable<Array<CompanyEquipment>>{
+    return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
+
   }
 }

@@ -1,5 +1,8 @@
 package medequipsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import medequipsystem.domain.enums.EquipmentType;
 
 import javax.persistence.*;
@@ -23,6 +26,7 @@ public class CompanyEquipment {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;

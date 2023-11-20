@@ -1,5 +1,9 @@
 package medequipsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -29,6 +33,7 @@ public class CompanyAdmin {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;

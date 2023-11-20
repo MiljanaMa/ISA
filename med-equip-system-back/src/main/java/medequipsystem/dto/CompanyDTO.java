@@ -1,11 +1,8 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.Company;
-import medequipsystem.domain.CompanyAdmin;
-import medequipsystem.domain.CompanyEquipment;
-import medequipsystem.domain.Location;
 
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,12 +15,12 @@ public class CompanyDTO {
         private Set<CompanyAdminDTO> companyAdmins;
         private Set<CompanyEquipmentDTO> equipment;
 
-
         private Set<AppointmentDTO> appointments;
 
-        public  CompanyDTO() {
-
+  
+        public CompanyDTO() {
         }
+
         public CompanyDTO(Company company) {
                 id = company.getId();
                 name = company.getName();
@@ -36,10 +33,12 @@ public class CompanyDTO {
                 equipment = company.getEquipment().stream()
                         .map(CompanyEquipmentDTO::new)
                         .collect(Collectors.toSet());
+
+                
         }
 
-        public CompanyDTO(Long id, String name, LocationDTO location, String description, Double averageRate,
-                          Set<CompanyAdminDTO> companyAdmins, Set<CompanyEquipmentDTO> equipment) {
+
+        public CompanyDTO(Long id, String name, LocationDTO location, String description, Double averageRate) {
                 this.id = id;
                 this.name = name;
                 this.location = location;
@@ -107,7 +106,7 @@ public class CompanyDTO {
                 this.averageRate = averageRate;
         }
 
-        public Set<CompanyAdminDTO> getCompanyAdmins() {
+       public Set<CompanyAdminDTO> getCompanyAdmins() {
                 return companyAdmins;
         }
 
