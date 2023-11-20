@@ -15,12 +15,11 @@ public class CompanyDTO {
         private Set<CompanyAdminDTO> companyAdmins;
         //private Set<CompanyEquipmentDTO> equipment;
 
+
+  
         public CompanyDTO() {
         }
 
-        public  CompanyDTO(Optional<Company> comp) {
-
-        }
         public CompanyDTO(Company company) {
                 id = company.getId();
                 name = company.getName();
@@ -32,10 +31,11 @@ public class CompanyDTO {
                         .collect(Collectors.toSet());
                 equipment = company.getEquipment().stream()
                         .map(CompanyEquipmentDTO::new)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toSet());*/
 
-                 */
+                
         }
+
 
         public CompanyDTO(Long id, String name, LocationDTO location, String description, Double averageRate) {
                 this.id = id;
@@ -46,6 +46,8 @@ public class CompanyDTO {
                 //this.companyAdmins = companyAdmins;
                 //this.equipment = equipment;
         }
+
+
 
         public Long getId() {
                 return id;
@@ -87,20 +89,23 @@ public class CompanyDTO {
                 this.averageRate = averageRate;
         }
 
-        public Set<CompanyAdminDTO> getCompanyAdmins() {
+       public Set<CompanyAdminDTO> getCompanyAdmins() {
                 return companyAdmins;
         }
 
         public void setCompanyAdmins(Set<CompanyAdminDTO> companyAdmins) {
                 this.companyAdmins = companyAdmins;
         }
-/*
+        /*
         public Set<CompanyEquipmentDTO> getEquipment() {
                 return equipment;
         }
 
         public void setEquipment(Set<CompanyEquipmentDTO> equipment) {
                 this.equipment = equipment;
-        }*/
+        }
+
+        */
+
 
 }

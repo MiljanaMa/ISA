@@ -14,6 +14,7 @@ public class CompanyAdminDTO {
     private String phoneNumber;
     private CompanyDTO companyDTO;
     private Long companyId;
+    //private CompanyDTO companyDTO; stack overflow goes brrr
 
     public CompanyAdminDTO() {
     }
@@ -30,6 +31,7 @@ public class CompanyAdminDTO {
         this.phoneNumber = phoneNumber;
         //this.companyDTO = companyDto;
         this.companyId = companyId;
+
     }
 
     public CompanyAdminDTO(CompanyAdmin companyAdmin) {
@@ -109,13 +111,13 @@ public class CompanyAdminDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public CompanyDTO getCompanyDTO() {
+    /*public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
 
     public void setCompanyDTO(CompanyDTO companyDTO) {
         this.companyDTO = companyDTO;
-    }
+    }*/
 
     public Long getCompanyId() {
         return companyId;

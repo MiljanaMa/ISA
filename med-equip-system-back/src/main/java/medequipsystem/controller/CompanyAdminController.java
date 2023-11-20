@@ -82,4 +82,16 @@ public class CompanyAdminController {
         if(companyAdmin == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(companyAdmin), HttpStatus.OK);
     }
+
+     @PutMapping(value="update/{id}")
+    public ResponseEntity<CompanyAdminDTO> updateAdmin(@RequestBody CompanyAdminDTO adminDTO) {
+
+        CompanyAdmin updatedAdmin = companyAdminService.update(adminDTO);
+        return new ResponseEntity<>(new CompanyAdminDTO(updatedAdmin), HttpStatus.OK);
+    }
+    @GetMapping(value="{id}")
+    public ResponseEntity<CompanyAdminDTO> getAdmin(@PathVariable Long id){
+        CompanyAdmin admin = companyAdminService.get(id);
+        return new ResponseEntity<>(new CompanyAdminDTO(admin),HttpStatus.OK);
+    }
 }
