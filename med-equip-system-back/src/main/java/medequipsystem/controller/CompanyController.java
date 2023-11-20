@@ -44,8 +44,7 @@ public class CompanyController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
-        Company companyToCreate = companyDTOMapper.fromDTOtoCompany(companyDTO);
-        Company createdCompany = companyService.createOrUpdate(companyToCreate);
+        Company createdCompany = companyService.createOrUpdate(companyDTO);
         return new ResponseEntity<>(companyDTOMapper.fromCompanytoDTO(createdCompany), HttpStatus.CREATED);
     }
 

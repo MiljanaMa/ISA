@@ -1,13 +1,16 @@
 package medequipsystem.service;
 
 import medequipsystem.domain.*;
+import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
+import medequipsystem.mapper.CompanyAdminDTOMapper;
 import medequipsystem.repository.CompanyRepository;
 import medequipsystem.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +28,9 @@ public class CompanyService {
     private  CompanyEquipmentService companyEquipmentService;
     @Autowired
     private LocationRepository locationRepository;
+
+    @Autowired
+    private CompanyAdminDTOMapper companyAdminDTOMapper;
 
 
     public List<Company> getAll() {
@@ -51,16 +57,26 @@ public class CompanyService {
         locationRepository.save(location);
         company.setLocation(location);
 
+        if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
+            Set<CompanyAdmin> companyAdmins = new HashSet<>();
 
-        /*if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
-            Set<CompanyAdmin> companyAdmins = companyDTO.getCompanyAdmins().stream()
-                    .map(adminDTO -> {
-                        CompanyAdmin admin = adminDTO.mapDtoToDomain(company);
-                        return companyAdminService.create(admin);
-                    })
-                    .collect(Collectors.toSet());
+            for (CompanyAdminDTO adminDTO : companyDTO.getCompanyAdmins()) {
+                CompanyAdmin ca = companyAdminService.getById(adminDTO.getId());
+                companyAdmins.add(ca); //dodaj kompaniji admina koji je pronadjen preko id-a iz liste admina prosledjenih iz companyDto
+
+            }
             company.setCompanyAdmins(companyAdmins);
-        }*/
+        }
+
+        Company savedCompany =  companyRepository.save(company);
+
+        for(CompanyAdmin adminToUpdate : savedCompany.getCompanyAdmins()){
+            adminToUpdate.setCompany(savedCompany);
+            adminToUpdate = companyAdminService.update(adminToUpdate);
+        }
+
+        //TODO: ovde bi mozda trebalo da se kompaniji dodeli ova lista povezanih admina, pa da se update... mada mozda i ne mora
+        //TODO: trebace mozda da se doradi za opremu
 
         /*if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
             Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
@@ -72,6 +88,6 @@ public class CompanyService {
             company.setEquipment(equipment);
         }*/
 
-        return companyRepository.save(company);
+        return savedCompany;
     }
 }

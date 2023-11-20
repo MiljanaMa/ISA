@@ -1,34 +1,80 @@
 .company-creation-form {
-  max-width: 400px;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin: 0 auto; /* Center the form on the page */
+}
+
+.company-creation-form h2 {
+  text-align: center;
+  color: #7149b1;
+}
+
+.company-creation-form h3 {
+  text-align: center;
+  color: #7149b1;
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.form-group label {
+  font-weight: bold;
+  color: #3d3b3b;
 }
 
-input,
-textarea {
+.form-group input,
+.form-group textarea {
   width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-array-group {
+  margin-top: 15px;
+}
+
+.form-array-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
+  background-color: #7e55ab;
+  color: #fff;
   border: none;
+  padding: 12px 20px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 button:disabled {
-  background-color: #aaaaaa;
+  background-color: #ccc;
   cursor: not-allowed;
+}
+
+.form-array-group ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.form-array-group li {
+  margin-bottom: 5px;
 }

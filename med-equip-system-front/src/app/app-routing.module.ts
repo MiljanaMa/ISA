@@ -7,6 +7,7 @@ import { CompanyCreationComponent } from './layout/company-creation/company-crea
 import { CompanyProfileComponent } from './feature-modules/company/company-profile/company-profile.component';
 import { AdminProfileComponent } from './layout/admin-profile/admin-profile.component';
 import { EquipmentSearchComponent } from './layout/equipment-search/equipment-search.component';
+import { CompanyAdminCreationComponent } from './layout/company-admin-creation/company-admin-creation.component';
 
 const routes: Routes = [
 
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'admin-profile/:id', component: AdminProfileComponent },
   { path: 'company-profile/:id', component: CompanyProfileComponent },
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
+  {path: 'companyadminCreation', component: CompanyAdminCreationComponent},
   
 ];
 

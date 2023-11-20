@@ -1,4 +1,6 @@
 package medequipsystem.controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyAdmin;
@@ -41,68 +43,46 @@ public class CompanyAdminController {
 
     @GetMapping(value = "/free")
     public ResponseEntity<List<CompanyAdminDTO>> getFree() {
-        List<CompanyAdmin> admins = companyAdminService.getAll();
-        List<CompanyAdminDTO> adminsDTO = admins.stream()
-                .filter(a -> a.getCompany() == null)
+        List<CompanyAdmin> freeAdmins = companyAdminService.getFreeAdmins();
+
+        List<CompanyAdminDTO> adminsDTO = freeAdmins.stream()
                 .map(companyAdminDTOMapper::fromCompanyAdmintoDTO)
                 .collect(Collectors.toList());
+
         return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<CompanyAdminDTO> createCompanyAdmin(@RequestBody CompanyAdminDTO companyAdminDTO) {
-        CompanyAdmin companyAdminToCreate = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+    @PostMapping(value = "/create") //clean code left the chat
+    public ResponseEntity<CompanyAdminDTO> create(@RequestBody CompanyAdminDTO companyAdminDTO) {
+        CompanyAdmin companyAdminToCreate = new CompanyAdmin();
+
+        companyAdminToCreate.setEmail(companyAdminDTO.getEmail());
+        companyAdminToCreate.setPassword(companyAdminDTO.getPassword());
+        companyAdminToCreate.setFirstName(companyAdminDTO.getFirstName());
+        companyAdminToCreate.setLastName(companyAdminDTO.getLastName());
+        companyAdminToCreate.setCity(companyAdminDTO.getCity());
+        companyAdminToCreate.setCountry(companyAdminDTO.getCountry());
+        companyAdminToCreate.setPhoneNumber(companyAdminDTO.getPhoneNumber());
+
+        if (companyAdminDTO.getCompanyId() == 0) {
+            companyAdminToCreate.setCompany(null);
+        } else {
+            Company existingCompany = companyService.getById(companyAdminDTO.getCompanyId());
+            companyAdminToCreate.setCompany(existingCompany);
+        }
+
         CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
         return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(createdCompanyAdmin), HttpStatus.CREATED);
     }
 
-    /*@GetMapping(value = "/all")
-    public ResponseEntity<List<CompanyAdminDTO>> getAll() {
-        List<CompanyAdmin> admins = companyAdminService.getAll();;
-        List<CompanyAdminDTO> adminsDTO = new ArrayList<>();
-        for (CompanyAdmin a : admins) {
-            adminsDTO.add(new CompanyAdminDTO(a));
-        }
-        return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
+    @PutMapping("/update")
+    public ResponseEntity<CompanyAdminDTO> update(@RequestBody CompanyAdminDTO companyAdminDTO){
+        CompanyAdmin companyAdmin = companyAdminDTOMapper.fromDTOtoCompanyAdmin(companyAdminDTO);
+        companyAdmin = companyAdminService.update(companyAdmin);
+        if(companyAdmin == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(companyAdminDTOMapper.fromCompanyAdmintoDTO(companyAdmin), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/free")
-    public ResponseEntity<List<CompanyAdminDTO>> getFree() {
-        List<CompanyAdmin> admins = companyAdminService.getAll();;
-        List<CompanyAdminDTO> adminsDTO = new ArrayList<>();
-        for (CompanyAdmin a : admins) {
-            if(a.getCompany() == null){
-                adminsDTO.add(new CompanyAdminDTO(a));
-            }
-        }
-        return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/create")
-    public ResponseEntity<CompanyAdminDTO> createCompanyAdmin(@RequestBody CompanyAdminDTO companyAdminDTO) {
-        //CompanyAdmin companyAdminToCreate = mapDtoToDomain(companyAdminDTO);
-        CompanyAdmin companyAdminToCreate =
-        CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
-        return new ResponseEntity<>(new CompanyAdminDTO(createdCompanyAdmin), HttpStatus.CREATED);
-    }
-
-    //TODO: napraviti da radi kako treba aaaaa
-        //nemam snage vise
-    public CompanyAdmin mapDtoToDomain(CompanyAdminDTO companyAdminDTO) {
-        CompanyAdmin companyAdmin = new CompanyAdmin();
-        companyAdmin.setEmail(companyAdminDTO.getEmail());
-        companyAdmin.setPassword(companyAdminDTO.getPassword());
-        companyAdmin.setFirstName(companyAdminDTO.getFirstName());
-        companyAdmin.setLastName(companyAdminDTO.getLastName());
-        companyAdmin.setCity(companyAdminDTO.getCity());
-        companyAdmin.setCountry(companyAdminDTO.getCountry());
-        companyAdmin.setPhoneNumber(companyAdminDTO.getPhoneNumber());
-        //companyAdmin.setCompany(companyService.getById(companyAdminDTO.getCompanyDTO().getId()));
-        return companyAdmin;
-
-    }
-
-    }*/
      @PutMapping(value="update/{id}")
     public ResponseEntity<CompanyAdminDTO> updateAdmin(@RequestBody CompanyAdminDTO adminDTO) {
 

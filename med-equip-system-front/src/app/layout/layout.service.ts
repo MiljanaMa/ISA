@@ -56,4 +56,12 @@ export class LayoutService {
     return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
 
   }
+
+  addCompanyAdmin(admin: CompanyAdmin): Observable<CompanyAdmin>{
+    return this.http.post<CompanyAdmin>(`http://localhost:8092/api/companyadmins/create`, admin);
+  }
+
+  getFreeAdmins(): Observable<Array<CompanyAdmin>>{
+    return this.http.get<Array<CompanyAdmin>>(`http://localhost:8092/api/companyadmins/free`);
+  }
 }

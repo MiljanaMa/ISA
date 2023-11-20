@@ -12,13 +12,15 @@ public class CompanyAdminDTO {
     private String city;
     private String country;
     private String phoneNumber;
+    private CompanyDTO companyDTO;
+    private Long companyId;
     //private CompanyDTO companyDTO; stack overflow goes brrr
 
     public CompanyAdminDTO() {
     }
 
     public CompanyAdminDTO(Long id, String email, String password, String firstName, String lastName,
-                           String city, String country, String phoneNumber, CompanyDTO companyDto) {
+                           String city, String country, String phoneNumber, Long companyId) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -28,6 +30,8 @@ public class CompanyAdminDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         //this.companyDTO = companyDto;
+        this.companyId = companyId;
+
     }
 
     public CompanyAdminDTO(CompanyAdmin companyAdmin) {
@@ -39,6 +43,7 @@ public class CompanyAdminDTO {
         this.city = companyAdmin.getCity();
         this.country = companyAdmin.getCountry();
         this.phoneNumber = companyAdmin.getPhoneNumber();
+        this.companyId = companyAdmin.getCompany().getId();
         //this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
     }
 
@@ -114,19 +119,12 @@ public class CompanyAdminDTO {
         this.companyDTO = companyDTO;
     }*/
 
-    //TODO: napraviti da radi kako treba aaaaa
-    public CompanyAdmin mapDtoToDomain(Company company) {
-        CompanyAdmin companyAdmin = new CompanyAdmin();
-        companyAdmin.setEmail(this.getEmail());
-        companyAdmin.setPassword(this.getPassword());
-        companyAdmin.setFirstName(this.getFirstName());
-        companyAdmin.setLastName(this.getLastName());
-        companyAdmin.setCity(this.getCity());
-        companyAdmin.setCountry(this.getCountry());
-        companyAdmin.setPhoneNumber(this.getPhoneNumber());
-        if (company != null) {
-            companyAdmin.setCompany(company);
-        }
-        return companyAdmin;
+    public Long getCompanyId() {
+        return companyId;
     }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
 }
