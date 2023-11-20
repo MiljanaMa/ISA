@@ -6,7 +6,6 @@ import { Company } from './model/company.model';
 import { LoyaltyProgram } from './model/loyaltyProgram';
 import { CompanyAdmin } from './model/companyAdmin.model';
 import { CompanyEquipment } from './model/equipment.model';
-import { CompanyAdmin } from './model/companyAdmin.model';
 
 @Injectable({
   providedIn: 'root'
