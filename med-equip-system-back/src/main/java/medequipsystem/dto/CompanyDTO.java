@@ -12,7 +12,7 @@ public class CompanyDTO {
         private LocationDTO location;
         private String description;
         private Double averageRate;
-        //private Set<CompanyAdminDTO> companyAdmins;
+        private Set<CompanyAdminDTO> companyAdmins;
         //private Set<CompanyEquipmentDTO> equipment;
 
         public CompanyDTO() {
@@ -87,14 +87,14 @@ public class CompanyDTO {
                 this.averageRate = averageRate;
         }
 
-        /*public Set<CompanyAdminDTO> getCompanyAdmins() {
+        public Set<CompanyAdminDTO> getCompanyAdmins() {
                 return companyAdmins;
         }
 
         public void setCompanyAdmins(Set<CompanyAdminDTO> companyAdmins) {
                 this.companyAdmins = companyAdmins;
         }
-
+/*
         public Set<CompanyEquipmentDTO> getEquipment() {
                 return equipment;
         }
@@ -103,31 +103,4 @@ public class CompanyDTO {
                 this.equipment = equipment;
         }*/
 
-        //TODO: napraviti da radi kako treba aaaaa
-        /*private Company mapDtoToDomain(CompanyDTO companyDTO) {
-                Company company = new Company();
-                company.setId(companyDTO.getId());
-                company.setName(companyDTO.getName());
-                company.setDescription(companyDTO.getDescription());
-                company.setAverageRate(companyDTO.getAverageRate());
-
-                Location location = companyDTO.getLocation() != null ? companyDTO.getLocation().mapDtoToDomain() : null;
-                company.setLocation(location);
-
-                if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
-                        Set<CompanyAdmin> companyAdmins = companyDTO.getCompanyAdmins().stream()
-                                .map(adminDTO -> adminDTO.mapDtoToDomain(company))
-                                .collect(Collectors.toSet());
-                        company.setCompanyAdmins(companyAdmins);
-                }
-
-                if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
-                        Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
-                                .map(CompanyEquipmentDTO::mapDtoToDomain)
-                                .collect(Collectors.toSet());
-                        company.setEquipment(equipment);
-                }
-
-                return company;
-        }*/
 }

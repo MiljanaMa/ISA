@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyAdminService {
@@ -33,5 +34,13 @@ public class CompanyAdminService {
         companyAdmin.setCompany(updatedCompanyAdmin.getCompany());
 
         return this.companyAdminRepository.save(companyAdmin);
+    }
+
+    public List<CompanyAdmin> getFreeAdmins() {
+        List<CompanyAdmin> allAdmins = companyAdminRepository.findAll();
+        List<CompanyAdmin> freeAdmins = allAdmins.stream()
+                .filter(admin -> admin.getCompany() == null  || admin.getCompany().getId() == null)
+                .collect(Collectors.toList());
+        return freeAdmins;
     }
 }

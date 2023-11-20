@@ -40,31 +40,4 @@ public class CompanyEquipmentController {
 
         return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
     }
-
-    /*@GetMapping(value = "/all")
-    public ResponseEntity<List<CompanyEquipmentDTO>> getAll() {
-
-        List<CompanyEquipment> equipments = companyEquipmentService.getAll();;
-
-        List<CompanyEquipmentDTO> equipmentDTOS = new ArrayList<>();
-        for (CompanyEquipment e : equipments) {
-            //equipmentDTOS.add(new CompanyEquipmentDTO(e));
-
-        }
-
-        return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
-    }*/
-
-    /*@GetMapping(value = "/all")
-    public ResponseEntity<List<CompanyEquipmentDTO>> getAll() {
-
-        List<CompanyEquipment> equipments = companyEquipmentService.getAll();
-
-        List<CompanyEquipmentDTO> equipmentDTOS = equipments.stream()
-                .map(e -> modelMapper.map(e, CompanyEquipmentDTO.class))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
-    }*/
-
 }

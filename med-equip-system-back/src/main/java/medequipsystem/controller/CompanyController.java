@@ -41,56 +41,8 @@ public class CompanyController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
-        Company companyToCreate = companyDTOMapper.fromDTOtoCompany(companyDTO);
-        Company createdCompany = companyService.createOrUpdate(companyToCreate);
+        Company createdCompany = companyService.createOrUpdate(companyDTO);
         return new ResponseEntity<>(companyDTOMapper.fromCompanytoDTO(createdCompany), HttpStatus.CREATED);
     }
-
-    /*@GetMapping(value = "/all")
-    public ResponseEntity<List<CompanyDTO>> getAll() {
-
-        List<Company> companies = companyService.getAll();;
-
-        List<CompanyDTO> companiesDTO = new ArrayList<>();
-        for (Company c : companies) {
-            companiesDTO.add(new CompanyDTO(c));
-        }
-
-        return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/create")
-    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
-        Company companyToCreate = mapDtoToDomain(companyDTO);
-        Company createdCompany = companyService.createOrUpdate(companyDTO);
-        return new ResponseEntity<>(new CompanyDTO(createdCompany), HttpStatus.CREATED);
-    }
-
-    public Company mapDtoToDomain(CompanyDTO companyDTO) {
-        Company company = new Company();
-        company.setId(companyDTO.getId());
-        company.setName(companyDTO.getName());
-        company.setDescription(companyDTO.getDescription());
-        company.setAverageRate(companyDTO.getAverageRate());
-
-        Location location = companyDTO.getLocation() != null ? companyDTO.getLocation().mapDtoToDomain() : null;
-        company.setLocation(location);
-
-        if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
-            Set<CompanyAdmin> companyAdmins = companyDTO.getCompanyAdmins().stream()
-                    .map(adminDTO -> adminDTO.mapDtoToDomain(company))
-                    .collect(Collectors.toSet());
-            company.setCompanyAdmins(companyAdmins);
-        }
-
-        if (companyDTO.getEquipment() != null && !companyDTO.getEquipment().isEmpty()) {
-            Set<CompanyEquipment> equipment = companyDTO.getEquipment().stream()
-                    .map(companyEquipmentDTO -> companyEquipmentDTO.mapDtoToDomain(company))
-                    .collect(Collectors.toSet());
-            company.setEquipment(equipment);
-        }
-
-        return company;
-    }*/
 
 }

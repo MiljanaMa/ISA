@@ -12,7 +12,7 @@ public class CompanyAdminDTO {
     private String city;
     private String country;
     private String phoneNumber;
-    //private CompanyDTO companyDTO;
+    private CompanyDTO companyDTO;
     private Long companyId;
 
     public CompanyAdminDTO() {
@@ -109,13 +109,13 @@ public class CompanyAdminDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    /*public CompanyDTO getCompanyDTO() {
+    public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
 
     public void setCompanyDTO(CompanyDTO companyDTO) {
         this.companyDTO = companyDTO;
-    }*/
+    }
 
     public Long getCompanyId() {
         return companyId;
@@ -125,19 +125,4 @@ public class CompanyAdminDTO {
         this.companyId = companyId;
     }
 
-    //TODO: napraviti da radi kako treba aaaaa
-    public CompanyAdmin mapDtoToDomain(Company company) {
-        CompanyAdmin companyAdmin = new CompanyAdmin();
-        companyAdmin.setEmail(this.getEmail());
-        companyAdmin.setPassword(this.getPassword());
-        companyAdmin.setFirstName(this.getFirstName());
-        companyAdmin.setLastName(this.getLastName());
-        companyAdmin.setCity(this.getCity());
-        companyAdmin.setCountry(this.getCountry());
-        companyAdmin.setPhoneNumber(this.getPhoneNumber());
-        if (company != null) {
-            companyAdmin.setCompany(company);
-        }
-        return companyAdmin;
-    }
 }

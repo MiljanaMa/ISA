@@ -4,7 +4,9 @@ import javax.persistence.*;
 @Table(name = "locations")
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 4, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column(name = "street", nullable = false)
     private String street;
