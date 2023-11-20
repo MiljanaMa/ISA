@@ -1,13 +1,11 @@
 package medequipsystem.controller;
-import medequipsystem.domain.Company;
-import medequipsystem.domain.CompanyAdmin;
-import medequipsystem.domain.CompanyEquipment;
-import medequipsystem.domain.Location;
-import medequipsystem.dto.CompanyAdminDTO;
-import medequipsystem.dto.CompanyDTO;
-import medequipsystem.dto.CompanyEquipmentDTO;
-import medequipsystem.mapper.CompanyDTOMapper;
+import medequipsystem.domain.*;
+import medequipsystem.dto.*;
+import medequipsystem.repository.AppointmentRepository;
+import medequipsystem.service.AppointmentService;
 import medequipsystem.service.CompanyService;
+import org.apache.coyote.Response;
+import medequipsystem.mapper.CompanyDTOMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,11 @@ public class CompanyController {
     private CompanyService companyService;
 
     @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
     private CompanyDTOMapper companyDTOMapper;
+
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyDTO>> getAll() {
@@ -39,12 +41,14 @@ public class CompanyController {
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
     }
 
+
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         Company companyToCreate = companyDTOMapper.fromDTOtoCompany(companyDTO);
         Company createdCompany = companyService.createOrUpdate(companyToCreate);
         return new ResponseEntity<>(companyDTOMapper.fromCompanytoDTO(createdCompany), HttpStatus.CREATED);
     }
+
 
     /*@GetMapping(value = "/all")
     public ResponseEntity<List<CompanyDTO>> getAll() {
@@ -57,8 +61,18 @@ public class CompanyController {
         }
 
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
-    }
+    }*/
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CompanyProfileDTO> getById(@PathVariable Long id) {
+        Company c = companyService.getById(id);
+        Set<Appointment> appointments = appointmentService.getByCompany(id);
+
+        CompanyProfileDTO dto = new CompanyProfileDTO(c, appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+    /*
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         Company companyToCreate = mapDtoToDomain(companyDTO);
@@ -91,6 +105,14 @@ public class CompanyController {
         }
 
         return company;
-    }*/
+    }
+    */
 
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<Void> updateCompany(@RequestBody CompanyProfileDTO companyDTO) {
+        CompanyDTO dto = new CompanyDTO(companyDTO.getId(), companyDTO.getName(), companyDTO.getLocation(), companyDTO.getDescription(), companyDTO.getAverageRate());
+        Company updatedCompany = companyService.createOrUpdate(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

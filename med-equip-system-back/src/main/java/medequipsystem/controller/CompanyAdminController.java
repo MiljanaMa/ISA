@@ -97,7 +97,21 @@ public class CompanyAdminController {
         companyAdmin.setCity(companyAdminDTO.getCity());
         companyAdmin.setCountry(companyAdminDTO.getCountry());
         companyAdmin.setPhoneNumber(companyAdminDTO.getPhoneNumber());
-        companyAdmin.setCompany(companyService.getById(companyAdminDTO.getCompanyDTO().getId()));
+        //companyAdmin.setCompany(companyService.getById(companyAdminDTO.getCompanyDTO().getId()));
         return companyAdmin;
+
+    }
+
     }*/
+     @PutMapping(value="update/{id}")
+    public ResponseEntity<CompanyAdminDTO> updateAdmin(@RequestBody CompanyAdminDTO adminDTO) {
+
+        CompanyAdmin updatedAdmin = companyAdminService.update(adminDTO);
+        return new ResponseEntity<>(new CompanyAdminDTO(updatedAdmin), HttpStatus.OK);
+    }
+    @GetMapping(value="{id}")
+    public ResponseEntity<CompanyAdminDTO> getAdmin(@PathVariable Long id){
+        CompanyAdmin admin = companyAdminService.get(id);
+        return new ResponseEntity<>(new CompanyAdminDTO(admin),HttpStatus.OK);
+    }
 }

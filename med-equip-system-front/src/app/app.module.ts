@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './infrastructure/material/material.module';
+import { CompanyModule } from './feature-modules/company/company.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { MaterialModule } from './infrastructure/material/material.module';
     LayoutModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule, 
+    CompanyModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

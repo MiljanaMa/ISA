@@ -9,6 +9,8 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { MatSliderModule } from '@angular/material/slider';
 import { CompanyCreationComponent } from './company-creation/company-creation.component';
 import { CompanyAdminCreationComponent } from './company-admin-creation/company-admin-creation.component';
+import { CompanyMapComponent } from './map/map.component';
+import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { EquipmentSearchComponent } from './equipment-search/equipment-search.component';
 
 @NgModule({
@@ -19,6 +21,8 @@ import { EquipmentSearchComponent } from './equipment-search/equipment-search.co
     ProfileComponent,
     CompanyCreationComponent,
     CompanyAdminCreationComponent,
+    CompanyMapComponent,
+    AdminProfileComponent,
     EquipmentSearchComponent
   ],
   imports: [
@@ -30,7 +34,9 @@ import { EquipmentSearchComponent } from './equipment-search/equipment-search.co
   ],
   exports: [
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    CompanyMapComponent, 
+  
   ]
 })
 export class LayoutModule { }
