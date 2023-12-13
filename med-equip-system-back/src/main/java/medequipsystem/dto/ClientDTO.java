@@ -1,9 +1,10 @@
 package medequipsystem.dto;
 
+import medequipsystem.domain.Client;
 import medequipsystem.domain.User;
 import medequipsystem.domain.enums.UserType;
 
-public class UserDTO {
+public class ClientDTO {
 
     private Long id;
     private String email;
@@ -22,23 +23,23 @@ public class UserDTO {
     private double discount;
     private boolean emailConfirmed;
 
-    public UserDTO(){}
+    public ClientDTO(){}
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.city = user.getCity();
-        this.country = user.getCountry();
-        this.phoneNumber = user.getPhoneNumber();
-        this.jobTitle = user.getJobTitle();
-        this.hospitalInfo = user.getHospitalInfo();
-        this.userType = user.getUserType();
-        this.penaltyPoints = user.getPenaltyPoints();
-        this.points = user.getPoints();
-        this.emailConfirmed = user.isEmailConfirmed();
+    public ClientDTO(Client client) {
+        this.id = client.getUser().getId();
+        this.email = client.getUser().getEmail();
+        this.password = client.getUser().getPassword();
+        this.firstName = client.getUser().getFirstName();
+        this.lastName = client.getUser().getLastName();
+        this.city = client.getUser().getCity();
+        this.country = client.getUser().getCountry();
+        this.phoneNumber = client.getUser().getPhoneNumber();
+        this.userType = client.getUser().getUserType();
+        this.jobTitle = client.getJobTitle();
+        this.hospitalInfo = client.getHospitalInfo();
+        this.penaltyPoints = client.getPenaltyPoints();
+        this.points = client.getPoints();
+        this.emailConfirmed = client.isEmailConfirmed();
     }
 
     public int getPoints() {

@@ -1,3 +1,35 @@
+-- User 1
+INSERT INTO public.users(
+    id, city, country, email, first_name, last_name, password, phone_number, user_type)
+VALUES
+    (1, 'New York', 'USA', 'miljana@email.com', 'Miljana', 'Johnson', '123', '123456789', 0);
+
+-- User 2
+INSERT INTO public.users(
+    id, city, country, email, first_name, last_name, password, phone_number, user_type)
+VALUES
+    (2, 'London', 'UK', 'milena@email.com', 'Milena', 'Markovic', '123', '987654321', 0);
+
+-- User 3
+INSERT INTO public.users(
+    id, city, country, email, first_name, last_name, password, phone_number, user_type)
+VALUES
+    (3, 'Berlin', 'Germany', 'praska@email.com', 'Praska', 'Praska', '123',  '5551234567', 0);
+
+--Client 1
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, true, 'General hospital', 'Doctor', 0, 0, 1);
+--Client 2
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, true, 'General hospital', 'Nurse', 0, 0, 2);
+--Client 3
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, true, 'General hospital', 'Surgeon', 0, 0, 3);
+
+--Locations
 INSERT INTO public.locations (
     id, city, country, latitude, longitude, postcode, street_number, street
 ) VALUES ( 1, 'New York', 'USA', 40.7128, -74.0060, 123, '10001', 'Broadway');
@@ -21,23 +53,6 @@ INSERT INTO public.companies (
 INSERT INTO public.companies (
     id, avg_rate, description, name, loc_id
 ) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3);
--- User 1
-INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
-VALUES
-    (1, 'New York', 'USA', 'miljana@email.com', 'Miljana', 'General Hospital', 'Doctor', 'Johnson', '123', 0, '123456789', 0, 450, true);
-
--- User 2
-INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
-VALUES
-    (2, 'London', 'UK', 'milena@email.com', 'Milena', 'City Medical Center', 'Nurse', 'Markovic', '123', 2, '987654321', 0, 150, true);
-
--- User 3
-INSERT INTO public.users(
-    id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)
-VALUES
-    (3, 'Berlin', 'Germany', 'praska@email.com', 'Praska', 'Specialty Clinic', 'Surgeon', 'Praska', '123', 1, '5551234567', 0, 350, true);
 
 
 INSERT INTO public.loyalty_programs(

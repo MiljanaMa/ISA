@@ -23,6 +23,7 @@ public class UserService {
         Optional<User> userOptional = this.userRepository.findById(id);
         return userOptional.orElse(null);
     }
+    /*
 
     public User create(User user){
         for(User u: getAll()) {
@@ -66,5 +67,5 @@ public class UserService {
         user.setEmailConfirmed(true);
         return this.userRepository.save(user);
     }
-
+*/
 }

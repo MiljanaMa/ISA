@@ -16,62 +16,21 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
     @Column(name = "city", nullable = false)
     private String city;
     @Column(name = "country", nullable = false)
     private String country; //change this later (city + country)
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-    @Column(name = "jobTitle", nullable = false)
-    private String jobTitle;
-    @Column(name = "hospitalInfo", nullable = false)
-    private String hospitalInfo;
-    @Column(name = "userType", nullable = false)
+    @Column(name = "user_type", nullable = false)
     private UserType userType;
-    @Column(name = "penalPoints", nullable = true)
-    private int penaltyPoints;
-    @Column(name = "points", nullable = true)
-    private int points;
-    @Column(name = "emailConfirmed", nullable = false)
-    private boolean emailConfirmed;
 
     public User() {}
 
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
-                int penaltyPoints, int points) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.hospitalInfo = hospitalInfo;
-        this.userType = userType;
-        this.penaltyPoints = penaltyPoints;
-        this.points = points;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getPenaltyPoints() {
-        return penaltyPoints;
-    }
-
-    public void setPenaltyPoints(int penaltyPoints) {
-        this.penaltyPoints = penaltyPoints;
-    }
     public Long getId() {
         return id;
     }
@@ -136,22 +95,6 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-    public String getHospitalInfo() {
-        return hospitalInfo;
-    }
-
-    public void setHospitalInfo(String hospitalInfo) {
-        this.hospitalInfo = hospitalInfo;
-    }
-
     public UserType getUserType() {
         return userType;
     }
@@ -160,13 +103,6 @@ public class User {
         this.userType = userType;
     }
 
-    public boolean isEmailConfirmed() {
-        return emailConfirmed;
-    }
-
-    public void setEmailConfirmed(boolean emailConfirmed) {
-        this.emailConfirmed = emailConfirmed;
-    }
 }
 
 

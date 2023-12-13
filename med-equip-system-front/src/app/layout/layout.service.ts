@@ -15,24 +15,24 @@ export class LayoutService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<Array<User>>{
-    return this.http.get<Array<User>>(`http://localhost:8092/api/users`);
+    return this.http.get<Array<User>>(`http://localhost:8092/api/clients`);
   }
 
   addUser(user: User): Observable<User>{
-    return this.http.post<User>(`http://localhost:8092/api/users`, user);
+    return this.http.post<User>(`http://localhost:8092/api/clients`, user);
   }
 
   getUserById(userId: number): Observable<User>{
-    return this.http.get<User>(`http://localhost:8092/api/users/${userId}`)
+    return this.http.get<User>(`http://localhost:8092/api/clients/${userId}`)
   }
   getCompanies(): Observable<Array<Company>>{
     return this.http.get<Array<Company>>(`http://localhost:8092/api/companies/all`);
   }
   updateUser(user: User): Observable<User>{
-    return this.http.put<User>(`http://localhost:8092/api/users/update`, user);
+    return this.http.put<User>(`http://localhost:8092/api/clients/update`, user);
   }
   updatePassword(userId: number, password: string): Observable<User>{
-    return this.http.put<User>(`http://localhost:8092/api/users/updatePassword/${userId}`, password);
+    return this.http.put<User>(`http://localhost:8092/api/clients/updatePassword/${userId}`, password);
   }
   createCompany(company: Company): Observable<Company> {
     return this.http.post<Company>(`http://localhost:8092/api/companies/create`, company);
