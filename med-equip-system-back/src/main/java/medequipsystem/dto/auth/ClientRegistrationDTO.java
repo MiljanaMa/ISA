@@ -1,10 +1,8 @@
-package medequipsystem.dto;
+package medequipsystem.dto.auth;
 
 import medequipsystem.domain.Client;
-import medequipsystem.domain.Role;
 
-public class ClientDTO {
-
+public class ClientRegistrationDTO {
     private Long id;
     private String email;
     private String password;
@@ -15,15 +13,11 @@ public class ClientDTO {
     private String phoneNumber;
     private String jobTitle;
     private String hospitalInfo;
-    private int penaltyPoints;
-    private int points;
-    private String loyaltyType;
-    private double discount;
 
-    public ClientDTO(){}
+    public ClientRegistrationDTO(){}
 
-    public ClientDTO(Client client) {
-        this.id = client.getId();
+    public ClientRegistrationDTO(Client client) {
+        this.id = client.getUser().getId();
         this.email = client.getUser().getEmail();
         this.password = client.getUser().getPassword();
         this.firstName = client.getUser().getFirstName();
@@ -33,24 +27,6 @@ public class ClientDTO {
         this.phoneNumber = client.getUser().getPhoneNumber();
         this.jobTitle = client.getJobTitle();
         this.hospitalInfo = client.getHospitalInfo();
-        this.penaltyPoints = client.getPenaltyPoints();
-        this.points = client.getPoints();
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getPenaltyPoints() {
-        return penaltyPoints;
-    }
-
-    public void setPenaltyPoints(int penaltyPoints) {
-        this.penaltyPoints = penaltyPoints;
     }
 
     public Long getId() {
@@ -133,19 +109,4 @@ public class ClientDTO {
         this.hospitalInfo = hospitalInfo;
     }
 
-    public String getLoyaltyType() {
-        return loyaltyType;
-    }
-
-    public void setLoyaltyType(String loyaltyType) {
-        this.loyaltyType = loyaltyType;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
 }

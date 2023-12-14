@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class ClientController {
     private LoyaltyProgramService loyaltyService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<ClientDTO>> getAll() {
@@ -33,10 +37,12 @@ public class ClientController {
         return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ClientDTO> getById(@PathVariable Long id) {
-        ClientDTO clientDTO = new ClientDTO(clientService.getById(id));
-        if(clientDTO == null || !clientDTO.isEmailConfirmed()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping(value = "/getCurrent")
+    public ResponseEntity<ClientDTO> getCurrentClient(Principal user) {
+        Long userId = userService.getByEmail(user.getName()).getId();
+        ClientDTO clientDTO = new ClientDTO(clientService.getByUserId(userId));
+        //if(clientDTO == null || !clientDTO.isEmailConfirmed()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         LoyaltyProgram loyaltyProgram = loyaltyService.getUserLoyaltyType(clientDTO.getPoints(), clientDTO.getPenaltyPoints());
         if(loyaltyProgram == null){
@@ -49,48 +55,33 @@ public class ClientController {
         return new ResponseEntity<>(clientDTO, HttpStatus.OK);
     }
 
-/*
-    @PutMapping("/update")
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping("/update")
     public ResponseEntity<ClientDTO> update(@RequestBody ClientDTO clientDTO) {
-        client = clientService.update(clientDTO);
-        if(user == null)
+        Client client = clientService.update(clientDTO);
+        if(client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new ClientDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
     }
 
-
-    @PutMapping("/updatePassword/{userId}")
-    public ResponseEntity<ClientDTO> updatePassword(@PathVariable long userId, @RequestBody String password) {
-        User user = userService.updatePassword(userId, password);
-
-        if(user == null)
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping("/updatePassword")
+    // password is now hash value, checking the old password on the frontend doesn't make any sense
+    // now it works just when hash is entered as an old password on frontend, change this
+    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PLAKYYYYYYYYYYYYYYYYYYYYYYYY
+    // something wrong when password changes - it goes craazyy
+    public ResponseEntity<ClientDTO> updatePassword(@RequestBody String password, Principal user) {
+        Long userId = userService.getByEmail(user.getName()).getId();
+        Client client = clientService.updatePassword(userId, password);
+        if(client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(new ClientDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ClientDTO> register(@RequestBody ClientDTO userDTO) {
 
-        User user = mapDtoToDomain(userDTO);
-        user = userService.create(user);
-
-        if(user == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        EmailToken emailToken = new EmailToken(user);
-        emailToken = emailTokenService.create(emailToken);
-
-        try {
-            emailService.sendMail(emailToken);
-        }catch( Exception e ){
-            logger.info("Error (sanding mail): " + e.getMessage());
-        }
-
-        return new ResponseEntity<>(new ClientDTO(user), HttpStatus.CREATED);
-    }
-
+/*
+ADD THIS SHIT
     @GetMapping (value = "/confirm")
     public ResponseEntity<String>  confirm(@RequestParam("token") String token){
         EmailToken emailToken = this.emailTokenService.getByToken(token);
@@ -110,26 +101,5 @@ public class ClientController {
                 "</body>" +
                 "</html>";
     }
-    public Client mapDtoToDomain(ClientDTO clientDTO) {
-        User user = new User();
-        user.setEmail(clientDTO.getEmail());
-        user.setPassword(clientDTO.getPassword());
-        user.setFirstName(clientDTO.getFirstName());
-        user.setLastName(clientDTO.getLastName());
-        user.setCity(clientDTO.getCity());
-        user.setCountry(clientDTO.getCountry());
-        user.setPhoneNumber(clientDTO.getPhoneNumber());
-        user.setUserType(UserType.CUSTOMER);
-
-        Client client = new Client();
-        client.setJobTitle(clientDTO.getJobTitle());
-        client.setHospitalInfo(clientDTO.getHospitalInfo());
-        client.setEmailConfirmed(false);
-        client.setPenaltyPoints(0);
-        client.setPoints(0);
-        client.setUser(user);
-        return client;
-    }
-
      */
 }

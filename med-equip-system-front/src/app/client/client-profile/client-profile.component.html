@@ -1,62 +1,63 @@
+
 <div>
     <div class="center">
         <div class="profile-table">
             <h1>My profile</h1>
-            <table *ngIf="user && !updateMode && !updatePasswordMode" class="profile-table">
+            <table *ngIf="client && !updateMode && !updatePasswordMode" class="profile-table">
                 <tr>
                     <td><label>Email:</label></td>
-                    <td class="info">{{user.email}}</td>
+                    <td class="info">{{client.email}}</td>
                 </tr>
                 <tr>
                     <td><label>First name:</label></td>
-                    <td class="info">{{user.firstName}}</td>
+                    <td class="info">{{client.firstName}}</td>
                 </tr>
                 <tr>
                     <td><label>Last name:</label></td>
-                    <td class="info">{{user.lastName}}</td>
+                    <td class="info">{{client.lastName}}</td>
                 </tr>
                 <tr>
                     <td><label>City:</label></td>
-                    <td class="info">{{user.city}}</td>
+                    <td class="info">{{client.city}}</td>
                 </tr>
                 <tr>
                     <td><label>Country:</label></td>
-                    <td class="info">{{user.country}}</td>
+                    <td class="info">{{client.country}}</td>
                 </tr>
                 <tr>
                     <td><label>Phone number:</label></td>
-                    <td class="info">{{user.phoneNumber}}</td>
+                    <td class="info">{{client.phoneNumber}}</td>
                 </tr>
                 <tr>
                     <td><label>Job title:</label></td>
-                    <td class="info">{{user.jobTitle}}</td>
+                    <td class="info">{{client.jobTitle}}</td>
                 </tr>
                 <tr>
                     <td><label>Hospital information:</label></td>
-                    <td class="info">{{user.hospitalInfo}}</td>
+                    <td class="info">{{client.hospitalInfo}}</td>
                 </tr>
                 <tr>
                     <td><label>Penalty points:</label></td>
-                    <td class="info">{{user.penaltyPoints}}</td>
+                    <td class="info">{{client.penaltyPoints}}</td>
                 </tr>
                 <tr>
                     <td><label>Points:</label></td>
-                    <td class="info">{{user.points}}</td>
+                    <td class="info">{{client.points}}</td>
                 </tr>
                 <tr>
                     <td><label>Loyalty Type:</label></td>
-                    <td class="info">{{user.loyaltyType}}</td>
+                    <td class="info">{{client.loyaltyType}}</td>
                 </tr>
                 <tr>
                     <td><label>Discount:</label></td>
-                    <td class="info">{{user.discount}}</td>
+                    <td class="info">{{client.discount}}</td>
                 </tr>
                 <tr>
                     <td><button class="primary" type="button" (click)="showUpdateForm()" *ngIf="!updateMode && !updatePasswordMode">Change info</button></td>
                     <td><button class="primary" type="button" (click)="showPasswordForm()" *ngIf="!updateMode && !updatePasswordMode">Change password</button></td>
                 </tr>
             </table>
-            <form *ngIf="updateMode" [formGroup]="userForm" (ngSubmit)="update()" class="custom-form">
+            <form *ngIf="updateMode" [formGroup]="clientForm" (ngSubmit)="update()" class="custom-form">
                 <table class="form-table">
                     <tr>
                         <td><label>First name: </label></td>

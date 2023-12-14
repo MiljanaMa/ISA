@@ -1,34 +1,3 @@
--- User 1
-INSERT INTO public.users(
-    id, city, country, email, first_name, last_name, password, phone_number, user_type)
-VALUES
-    (1, 'New York', 'USA', 'miljana@email.com', 'Miljana', 'Johnson', '123', '123456789', 0);
-
--- User 2
-INSERT INTO public.users(
-    id, city, country, email, first_name, last_name, password, phone_number, user_type)
-VALUES
-    (2, 'London', 'UK', 'milena@email.com', 'Milena', 'Markovic', '123', '987654321', 0);
-
--- User 3
-INSERT INTO public.users(
-    id, city, country, email, first_name, last_name, password, phone_number, user_type)
-VALUES
-    (3, 'Berlin', 'Germany', 'praska@email.com', 'Praska', 'Praska', '123',  '5551234567', 0);
-
---Client 1
-INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (1, true, 'General hospital', 'Doctor', 0, 0, 1);
---Client 2
-INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (2, true, 'General hospital', 'Nurse', 0, 0, 2);
---Client 3
-INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (3, true, 'General hospital', 'Surgeon', 0, 0, 3);
-
 --Locations
 INSERT INTO public.locations (
     id, city, country, latitude, longitude, postcode, street_number, street
@@ -42,6 +11,7 @@ INSERT INTO public.locations (
     id, city, country, latitude, longitude, postcode, street_number, street
 ) VALUES ( 3, 'Tokyo', 'Japan', 35.6895, 139.6917, 789, '100-0001', 'Chiyoda');
 
+--Companies
 INSERT INTO public.companies (
     id, avg_rate, description, name, loc_id
 ) VALUES ( 1, 4.5, 'A leading technology company in New York.', 'Tech Innovators', 1);
@@ -54,7 +24,7 @@ INSERT INTO public.companies (
     id, avg_rate, description, name, loc_id
 ) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3);
 
-
+--Loyalty programs
 INSERT INTO public.loyalty_programs(
     id, discount, loyalty_type, max_penalty_points, min_points)
 VALUES (1, 0, 'NONE', 10, 0);
@@ -73,6 +43,7 @@ INSERT INTO public.loyalty_programs(
     id, discount, loyalty_type, max_penalty_points, min_points)
 VALUES (5, 15, 'GOLD', 0, 400);
 
+--Company equipments
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
 VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
@@ -104,7 +75,60 @@ VALUES (14, 40, 'Pain Relievers', 'PainAway', 7.00, 4, 1);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id)
 VALUES (15, 25, 'Hand Sanitizers', 'SafeHands', 3.50, 4, 3);
 
+--Roles
+INSERT INTO public.roles(id, name)
+    VALUES (1, 'ROLE_SYSADMIN');
 
+INSERT INTO public.roles(id, name)
+	VALUES (2, 'ROLE_COMPADMIN');
+
+INSERT INTO public.roles(id, name)
+	VALUES (3, 'ROLE_CLIENT');
+
+-- User 1
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (1, 'New York', 'USA', 'admin@email.com', true, 'SystemAdmin', 'Adminovic', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789', 1);
+
+-- User 2
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+     (2, 'New York', 'USA', 'miljana@email.com', true, 'Miljana', 'Johnson', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789', 3);
+
+-- User 3
+INSERT INTO public.users(
+     id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (3, 'Berlin', 'Germany', 'praska@email.com', true, 'Praska', 'Praska', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  '5551234567', 3);
+
+-- User 4
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (4, 'London', 'UK', 'milena@email.com', true, 'Milena', 'Markovic', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '987654321', 3);
+
+
+--System Admin 1
+INSERT INTO public.system_admins(
+	id, user_id)
+	VALUES (1, 1);
+
+--Client 1
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, true, 'General hospital', 'Doctor', 0, 0, 2);
+--Client 2
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, true, 'General hospital', 'Nurse', 0, 0, 3);
+--Client 3
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, true, 'General hospital', 'Surgeon', 0, 0, 4);
+
+--Company Admins -- this needs to be changed, user composition
 INSERT INTO public.company_admins(
     id, city, country, email, first_name, last_name, password, phone_number, company_id)
 VALUES
@@ -112,12 +136,12 @@ VALUES
     (2, 'New York', 'USA', 'admin2@company1.com', 'Admin2', 'Johnson', 'password2', '987654321', 1),
     (3, 'New York', 'USA', 'admin3@company1.com', 'Admin3', 'Williams', 'password3', '555666777', 1);
 
-
 INSERT INTO public.company_admins(
     id, city, country, email, first_name, last_name, password, phone_number, company_id)
 VALUES
     (4, 'London', 'UK', 'admin4@company2.com', 'Admin4', 'Brown', 'password4', '333222111', 2),
     (5, 'Berlin', 'Germany', 'admin5@company3.com', 'Admin5', 'Taylor', 'password5', '999888777', 3);
+
 
 
 -- Appointments created by Admin 1
