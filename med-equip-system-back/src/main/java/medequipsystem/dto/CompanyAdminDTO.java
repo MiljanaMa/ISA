@@ -1,9 +1,9 @@
 package medequipsystem.dto;
 
-import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyAdmin;
+import medequipsystem.mapper.Mapper.DTOEntity;
 
-public class CompanyAdminDTO {
+public class CompanyAdminDTO implements DTOEntity {
     private Long id;
     private String email;
     private String password;

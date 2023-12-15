@@ -10,6 +10,5 @@ export interface CompanyProfile {
     location: Location;
     companyAdmins?: CompanyAdmin[]; 
     companyEquipment? : CompanyEquipment[]; 
-    appointments? : Appointment[]; 
-
+   
 }

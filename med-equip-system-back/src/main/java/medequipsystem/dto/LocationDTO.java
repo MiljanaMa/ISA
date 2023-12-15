@@ -1,8 +1,9 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.Location;
+import medequipsystem.mapper.Mapper.DTOEntity;
 
-public class LocationDTO {
+public class LocationDTO implements DTOEntity {
     private Long id;
     private String street;
     private String streetNumber;

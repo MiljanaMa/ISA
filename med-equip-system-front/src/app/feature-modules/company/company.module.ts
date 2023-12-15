@@ -4,6 +4,7 @@ import { CompanyProfileComponent } from './company-profile/company-profile.compo
 import { MatTableModule } from '@angular/material/table';
 import { LayoutModule } from 'src/app/layout/layout.module';
 import { FormsModule } from '@angular/forms';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MatTableModule, 
     LayoutModule, 
-    FormsModule
+    FormsModule, 
+    FullCalendarModule, 
   
   ], 
 })

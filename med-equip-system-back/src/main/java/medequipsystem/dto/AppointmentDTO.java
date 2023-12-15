@@ -2,9 +2,11 @@ package medequipsystem.dto;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.enums.AppointmentStatus;
+import medequipsystem.mapper.Mapper.DTOEntity;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-public class AppointmentDTO {
+public class AppointmentDTO implements DTOEntity {
 
     private Long id;
     private LocalDate date;
@@ -13,18 +15,20 @@ public class AppointmentDTO {
 
     private AppointmentStatus status;
 
+    private CompanyAdminDTO companyAdmin;
+
     public AppointmentDTO(){
 
     }
 
-    public AppointmentDTO(Appointment a) {
+    /*public AppointmentDTO(Appointment a) {
         this.id = a.getId();
         this.date = a.getDate();
         this.startTime = a.getStartTime();
         this.endTime = a.getEndTime();
         this.status = a.status;
 
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -64,5 +68,13 @@ public class AppointmentDTO {
 
     public void setStatus(AppointmentStatus status) {
         this.status = status;
+    }
+
+    public CompanyAdminDTO getCompanyAdmin() {
+        return companyAdmin;
+    }
+
+    public void setCompanyAdmin(CompanyAdminDTO companyAdmin) {
+        this.companyAdmin = companyAdmin;
     }
 }

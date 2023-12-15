@@ -7,6 +7,7 @@ import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './infrastructure/material/material.module';
 import { CompanyModule } from './feature-modules/company/company.module';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CompanyModule } from './feature-modules/company/company.module';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule, 
-    CompanyModule
+    CompanyModule, 
+    FullCalendarModule
 
   ],
   providers: [],

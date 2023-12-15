@@ -7,6 +7,9 @@ import { CompanyEquipment } from '../model/companyEquipment.model';
 import { Appointment } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { CalendarOptions, EventInput} from '@fullcalendar/core'; 
+
 
 @Component({
   selector: 'app-company-profile',
@@ -22,6 +25,7 @@ export class CompanyProfileComponent implements OnInit {
   oldCompany: Company|undefined; 
 
  
+  calendarOptions: CalendarOptions = {}; 
 
   editMode = false; 
 
@@ -29,7 +33,7 @@ export class CompanyProfileComponent implements OnInit {
   public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
 
- 
+  
  
 
 
@@ -42,9 +46,22 @@ export class CompanyProfileComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);
+
+      this.calendarOptions = {
+        plugins: [timeGridPlugin],
+        initialView: 'timeGridDay', // Display as day view
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'timeGridDay,timeGridWeek' // Add other views if needed
+        },
+        slotDuration: '01:00:00', // Each slot represents 1 hour
+        allDaySlot: false, // Hide the all-day slot
+        //events: this.getAppointmentsAsEvents(), // Now populate calendar events after appointments are fetched
+      };
+      
     });
   }
-
   getCompanyDetails(id: number): void {
     this.companyService.getCompanyById(id).subscribe(
       (data: Company) => {
@@ -54,7 +71,18 @@ export class CompanyProfileComponent implements OnInit {
         console.log(this.company?.companyEquipment);
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
         console.log(this.companyEquipmentDataSource.data); 
-        this.appointmentsDataSource.data = this.company?.appointments || [];
+        
+        this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
+          (appointmentsData : Appointment[] ) => {
+            this.appointmentsDataSource.data = appointmentsData || [];
+            this.initializeCalendar(); 
+        
+            
+          }, 
+          appointmentError => {
+            console.log('Error fetching appointments', appointmentError); 
+          }
+        );
       },
       error => {
         console.error('Error fetching company details:', error);
@@ -62,6 +90,25 @@ export class CompanyProfileComponent implements OnInit {
       }
     );
   }
+
+  initializeCalendar(): void {
+    this.calendarOptions.events = this.getAppointmentsAsEvents(); 
+  }
+
+  getAppointmentsAsEvents(): EventInput[] {
+    console.log(this.appointmentsDataSource.data); 
+
+    return this.appointmentsDataSource.data.map((appointment) => ({
+      
+      title: `Appointment ${appointment.companyAdmin.lastName}`,
+      start: appointment.date + 'T' + appointment.startTime,
+      end: appointment.date + 'T' + appointment.endTime,
+    
+    }));
+   
+  }
+
+
   toggleEditMode() {
   
     this.editMode = !this.editMode;

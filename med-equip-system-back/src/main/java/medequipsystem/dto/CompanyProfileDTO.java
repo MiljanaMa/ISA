@@ -1,11 +1,10 @@
 package medequipsystem.dto;
 
-import medequipsystem.domain.Company;
+import medequipsystem.mapper.Mapper.DTOEntity;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class CompanyProfileDTO {
+public class CompanyProfileDTO implements DTOEntity {
 
     private Long id;
     private String name;
@@ -15,9 +14,6 @@ public class CompanyProfileDTO {
     private Double averageRate;
     private Set<CompanyAdminDTO> companyAdmins;
     private Set<CompanyEquipmentProfileDTO> companyEquipment;
-
-    private Set<AppointmentDTO> appointments;
-
 
     public CompanyProfileDTO() {
     }
@@ -98,12 +94,5 @@ public class CompanyProfileDTO {
         this.companyEquipment = equipment;
     }
 
-    public Set<AppointmentDTO> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<AppointmentDTO> appointments) {
-        this.appointments = appointments;
-    }
 
 }

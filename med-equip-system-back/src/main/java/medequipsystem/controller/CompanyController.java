@@ -1,21 +1,15 @@
 package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.*;
-import medequipsystem.mapper.GenericMapper;
-import medequipsystem.repository.AppointmentRepository;
-import medequipsystem.service.AppointmentService;
+import medequipsystem.mapper.Mapper.DtoUtils;
 import medequipsystem.service.CompanyService;
-import org.apache.coyote.Response;
 import medequipsystem.mapper.CompanyDTOMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -26,26 +20,8 @@ public class CompanyController {
     private CompanyService companyService;
 
     @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
     private CompanyDTOMapper companyDTOMapper;
 
-
-    @Autowired
-    private GenericMapper<Company,CompanyProfileDTO> companyMapper;
-
-    @Autowired
-    private GenericMapper<CompanyEquipment, CompanyEquipmentProfileDTO> equipmentProfileMapper;
-
-    @Autowired
-    private GenericMapper<Appointment, AppointmentDTO> appointmentMapper;
-
-    @Autowired
-    private GenericMapper<Location, LocationDTO> locationMapper;
-
-    @Autowired
-    private GenericMapper<CompanyAdmin, CompanyAdminDTO> adminMapper;
 
 
     @GetMapping(value = "/all")
@@ -82,13 +58,8 @@ public class CompanyController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<CompanyProfileDTO> getById(@PathVariable Long id) {
         Company c = companyService.getById(id);
-        Set<Appointment> appointments = appointmentService.getByCompany(id);
 
-        CompanyProfileDTO dto = companyMapper.toDto(c);
-        dto.setCompanyAdmins(adminMapper.toDto(c.getCompanyAdmins()));
-        dto.setLocation(locationMapper.toDto(c.getLocation()));
-        dto.setCompanyEquipment(equipmentProfileMapper.toDto(c.getEquipment()));
-        dto.setAppointments(appointmentMapper.toDto(appointments));
+        CompanyProfileDTO dto = (CompanyProfileDTO) new DtoUtils().convertToDto(c, new CompanyProfileDTO());
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
