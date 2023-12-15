@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
+import { ClientRegistration } from '../model/client-registration.model';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { User, UserType } from '../model/user.model';
-import { LayoutService } from '../layout.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class RegistrationComponent {
-
-  public user: User | undefined;
-  public userForm: FormGroup;
+export class RegisterComponent {
+  public client: ClientRegistration | undefined;
+  public clientForm: FormGroup;
   public hide: boolean = true;
   public hideCheck: boolean = true;
   
@@ -25,9 +24,9 @@ export class RegistrationComponent {
     return null;
   };
 
-  constructor(private layoutService: LayoutService, private router: Router)
+  constructor(private authService: AuthService, private router: Router)
   {
-    this.userForm = new FormGroup({
+    this.clientForm = new FormGroup({
       id: new FormControl(-1, [Validators.required]),
       email: new FormControl('',[
         Validators.required,
@@ -41,38 +40,32 @@ export class RegistrationComponent {
       phoneNumber: new FormControl('', [Validators.required, this.notEmptyString]),
       jobTitle: new FormControl('', [Validators.required, this.notEmptyString]),
       hospitalInfo: new FormControl('', [Validators.required, this.notEmptyString]),
-      userType: new FormControl(UserType.CUSTOMER, [Validators.required])
     });
   }
 
   register(): void{
-    if(this.userForm.get('email')?.invalid){
+    if(this.clientForm.get('email')?.invalid){
       window.alert("Email is not in the correct form.")
-    }else if (!this.userForm.valid) {
+    }else if (!this.clientForm.valid) {
       window.alert("All fields are required.");
-    }else if(this.userForm.value.password !== this.userForm.value.passwordCheck){
+    }else if(this.clientForm.value.password !== this.clientForm.value.passwordCheck){
       window.alert("Passwords don't match.");
     }else{
-      let  user: User = {
+      let  client: ClientRegistration = {
         id: 0,
-        email: this.userForm.value.email,
-        password: this.userForm.value.password,
-        firstName: this.userForm.value.firstName,
-        lastName: this.userForm.value.lastName,
-        city: this.userForm.value.city,
-        country: this.userForm.value.country,
-        phoneNumber: this.userForm.value.phoneNumber,
-        jobTitle: this.userForm.value.jobTitle,
-        hospitalInfo: this.userForm.value.hospitalInfo,
-        userType: UserType.CUSTOMER,
-        penaltyPoints: 0,
-        points: 0,
-        loyaltyType: 'NONE',
-        discount: 0.0
+        email: this.clientForm.value.email,
+        password: this.clientForm.value.password,
+        firstName: this.clientForm.value.firstName,
+        lastName: this.clientForm.value.lastName,
+        city: this.clientForm.value.city,
+        country: this.clientForm.value.country,
+        phoneNumber: this.clientForm.value.phoneNumber,
+        jobTitle: this.clientForm.value.jobTitle,
+        hospitalInfo: this.clientForm.value.hospitalInfo
       }
       
-      this.layoutService.addUser(user).subscribe({
-        next: (user) => { 
+      this.authService.registerClient(client).subscribe({
+        next: (client) => { 
           window.alert("The activation link has been sent to your email. Please confirm your email address and activate your account.");
          // this.router.navigate(['/profile', user.id]);       
         },

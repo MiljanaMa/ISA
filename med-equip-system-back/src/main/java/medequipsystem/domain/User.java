@@ -1,77 +1,57 @@
 package medequipsystem.domain;
 
-import medequipsystem.domain.enums.UserType;
-
 import javax.persistence.*;
+
+import java.sql.Timestamp;
+import java.util.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails{
     @Id
     @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 30, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
     @Column(name="id", unique=true, nullable=false)
     private Long id;
+
     @Column(name = "email", nullable = false)
     private String email;
+
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "firstName", nullable = false)
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "lastName", nullable = false)
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
     @Column(name = "city", nullable = false)
     private String city;
+
     @Column(name = "country", nullable = false)
-    private String country; //change this later (city + country)
-    @Column(name = "phoneNumber", nullable = false)
+    private String country;
+
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-    @Column(name = "jobTitle", nullable = false)
-    private String jobTitle;
-    @Column(name = "hospitalInfo", nullable = false)
-    private String hospitalInfo;
-    @Column(name = "userType", nullable = false)
-    private UserType userType;
-    @Column(name = "penalPoints", nullable = true)
-    private int penaltyPoints;
-    @Column(name = "points", nullable = true)
-    private int points;
-    @Column(name = "emailConfirmed", nullable = false)
-    private boolean emailConfirmed;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     public User() {}
 
-    public User(String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, String jobTitle, String hospitalInfo, UserType userType,
-                int penaltyPoints, int points) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.jobTitle = jobTitle;
-        this.hospitalInfo = hospitalInfo;
-        this.userType = userType;
-        this.penaltyPoints = penaltyPoints;
-        this.points = points;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getPenaltyPoints() {
-        return penaltyPoints;
-    }
-
-    public void setPenaltyPoints(int penaltyPoints) {
-        this.penaltyPoints = penaltyPoints;
-    }
     public Long getId() {
         return id;
     }
@@ -93,6 +73,8 @@ public class User {
     }
 
     public void setPassword(String password) {
+        Timestamp now = new Timestamp(new Date().getTime());
+        this.setLastPasswordResetDate(now);
         this.password = password;
     }
 
@@ -136,36 +118,64 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
-    public String getHospitalInfo() {
-        return hospitalInfo;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public void setHospitalInfo(String hospitalInfo) {
-        this.hospitalInfo = hospitalInfo;
+    public Role getRole() {
+        return role;
     }
 
-    public UserType getUserType() {
-        return userType;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public boolean isEmailConfirmed() {
-        return emailConfirmed;
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(this.role);
+        return roles;
     }
 
-    public void setEmailConfirmed(boolean emailConfirmed) {
-        this.emailConfirmed = emailConfirmed;
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password);
     }
 }
 
