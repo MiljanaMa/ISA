@@ -109,11 +109,34 @@ INSERT INTO public.users(
 VALUES
     (4, 'London', 'UK', 'milena@email.com', true, 'Milena', 'Markovic', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '987654321', 3);
 
+-- User 5 - client
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (5, 'Tokyo', 'Japan', 'anastano@email.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23232323', 3);
+
+-- User 6 - system admin
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (6, 'Tokyo', 'Japan', 'asa@email.com', true, 'Anasta', 'No', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '233233434', 1);
+
+-- User 7 - company admin
+INSERT INTO public.users(
+    id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
+VALUES
+    (7, 'Tokyo', 'Japan', 'aca@email.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23323555', 2);
+
 
 --System Admin 1
 INSERT INTO public.system_admins(
-	id, user_id)
-	VALUES (1, 1);
+	id, user_id, is_main, is_initial_password_changed)
+	VALUES (1, 1, true, true);
+
+--System Admin 2
+INSERT INTO public.system_admins(
+	id, user_id, is_main, is_initial_password_changed)
+	VALUES (2, 6, false, true);
 
 --Client 1
 INSERT INTO public.clients(
@@ -127,6 +150,10 @@ INSERT INTO public.clients(
 INSERT INTO public.clients(
 	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
 	VALUES (3, true, 'General hospital', 'Surgeon', 0, 0, 4);
+--Client 4
+INSERT INTO public.clients(
+	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (4, true, 'General hospital', 'Radiologist', 0, 0, 5);
 
 --Company Admins -- this needs to be changed, user composition
 INSERT INTO public.company_admins(
