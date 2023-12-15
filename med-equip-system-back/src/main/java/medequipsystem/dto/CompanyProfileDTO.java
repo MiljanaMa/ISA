@@ -23,7 +23,7 @@ public class CompanyProfileDTO {
     }
 
 
-    public CompanyProfileDTO(Company company, Set<AppointmentDTO> appointments){
+    /*public CompanyProfileDTO(Company company, Set<AppointmentDTO> appointments){
 
         id = company.getId();
         name = company.getName();
@@ -39,7 +39,7 @@ public class CompanyProfileDTO {
 
         this.appointments = appointments;
 
-    }
+    }*/
 
 
     public Long getId() {

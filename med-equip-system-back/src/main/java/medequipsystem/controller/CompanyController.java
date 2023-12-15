@@ -1,6 +1,7 @@
 package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.*;
+import medequipsystem.mapper.GenericMapper;
 import medequipsystem.repository.AppointmentRepository;
 import medequipsystem.service.AppointmentService;
 import medequipsystem.service.CompanyService;
@@ -29,6 +30,22 @@ public class CompanyController {
 
     @Autowired
     private CompanyDTOMapper companyDTOMapper;
+
+
+    @Autowired
+    private GenericMapper<Company,CompanyProfileDTO> companyMapper;
+
+    @Autowired
+    private GenericMapper<CompanyEquipment, CompanyEquipmentProfileDTO> equipmentProfileMapper;
+
+    @Autowired
+    private GenericMapper<Appointment, AppointmentDTO> appointmentMapper;
+
+    @Autowired
+    private GenericMapper<Location, LocationDTO> locationMapper;
+
+    @Autowired
+    private GenericMapper<CompanyAdmin, CompanyAdminDTO> adminMapper;
 
 
     @GetMapping(value = "/all")
@@ -67,10 +84,16 @@ public class CompanyController {
         Company c = companyService.getById(id);
         Set<Appointment> appointments = appointmentService.getByCompany(id);
 
-        CompanyProfileDTO dto = new CompanyProfileDTO(c, appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
+        CompanyProfileDTO dto = companyMapper.toDto(c);
+        dto.setCompanyAdmins(adminMapper.toDto(c.getCompanyAdmins()));
+        dto.setLocation(locationMapper.toDto(c.getLocation()));
+        dto.setCompanyEquipment(equipmentProfileMapper.toDto(c.getEquipment()));
+        dto.setAppointments(appointmentMapper.toDto(appointments));
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+
     /*
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
