@@ -1,5 +1,7 @@
 package medequipsystem.dto;
 
+import medequipsystem.domain.SystemAdmin;
+
 public class SystemAdminDTO {
     private Long id;
     private String email;
@@ -11,10 +13,22 @@ public class SystemAdminDTO {
     private String phoneNumber;
     private boolean isMain;
     private boolean isInitialPasswordChanged;
+   // private Long userId;
 
     public SystemAdminDTO(){}
 
-
+    public SystemAdminDTO(SystemAdmin systemAdmin){
+        this.id = systemAdmin.getId();
+        this.email = systemAdmin.getUser().getEmail();
+        this.password = systemAdmin.getUser().getPassword();
+        this.firstName = systemAdmin.getUser().getFirstName();
+        this.lastName = systemAdmin.getUser().getLastName();
+        this.city = systemAdmin.getUser().getCity();
+        this.country = systemAdmin.getUser().getCountry();
+        this.phoneNumber = systemAdmin.getUser().getPhoneNumber();
+        this.isMain = systemAdmin.isMain();
+        this.isInitialPasswordChanged = systemAdmin.isInitialPasswordChanged();
+    }
 
     public Long getId() {
         return id;
@@ -95,4 +109,12 @@ public class SystemAdminDTO {
     public void setInitialPasswordChanged(boolean initialPasswordChanged) {
         isInitialPasswordChanged = initialPasswordChanged;
     }
+
+   /* public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }*/
 }

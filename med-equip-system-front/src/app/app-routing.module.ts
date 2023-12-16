@@ -9,6 +9,7 @@ import { CompanyAdminCreationComponent } from './layout/company-admin-creation/c
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ClientProfileComponent } from './client/client-profile/client-profile.component';
+import { SystemAdminCreationComponent } from './system-admin/system-admin-creation/system-admin-creation.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -20,7 +21,9 @@ const routes: Routes = [
   { path: 'company-profile/:id', component: CompanyProfileComponent },
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
   {path: 'companyadminCreation', component: CompanyAdminCreationComponent},
+  {path: 'systemAdminCreation', component: SystemAdminCreationComponent},
   
+
 ];
 
 @NgModule({

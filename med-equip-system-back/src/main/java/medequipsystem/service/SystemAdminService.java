@@ -1,9 +1,9 @@
 package medequipsystem.service;
 
+import medequipsystem.domain.Client;
 import medequipsystem.domain.SystemAdmin;
 import medequipsystem.domain.User;
 import medequipsystem.dto.SystemAdminDTO;
-import medequipsystem.mapper.SystemAdminDTOMapper;
 import medequipsystem.repository.RoleRepository;
 import medequipsystem.repository.SystemAdminRepository;
 import medequipsystem.repository.UserRepository;
@@ -26,8 +26,7 @@ public class SystemAdminService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private SystemAdminDTOMapper systemAdminDTOMapper;
+
 
     public List<SystemAdmin> getAll(){
         return this.systemAdminRepository.findAll();
@@ -39,11 +38,15 @@ public class SystemAdminService {
     }
 
     public SystemAdmin getByUserId(Long userId){
-        return  this.systemAdminRepository.findByUserId(userId);
+        SystemAdmin systemAdmin = systemAdminRepository.findByUserId(userId);
+        User user = userRepository.getById(userId);
+        systemAdmin.setUser(user);
+        return systemAdmin;
+        //return  this.systemAdminRepository.findByUserId(userId);
     }
 
     public SystemAdmin create(SystemAdminDTO systemAdminDTO){
-        SystemAdmin systemAdmin = systemAdminDTOMapper.fromDTOtoCompanyAdmin(systemAdminDTO);
+        SystemAdmin systemAdmin =  mapDtoToDomain(systemAdminDTO);
         for(User user: userRepository.findAll()) {
             if (systemAdmin.getUser().getEmail().equals(user.getEmail())) {
                 return null;
@@ -87,6 +90,25 @@ public class SystemAdminService {
         systemAdmin.setUser(user);
 
         return this.systemAdminRepository.save(systemAdmin);
+    }
+
+    public SystemAdmin mapDtoToDomain(SystemAdminDTO systemAdminDTO){
+        User user = new User();
+        user.setEmail(systemAdminDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(systemAdminDTO.getPassword()));
+        user.setFirstName(systemAdminDTO.getFirstName());
+        user.setLastName(systemAdminDTO.getLastName());
+        user.setCity(systemAdminDTO.getCity());
+        user.setCountry(systemAdminDTO.getCountry());
+        user.setPhoneNumber(systemAdminDTO.getPhoneNumber());
+        user.setEnabled(true);
+        user.setRole(roleRepository.findByName("ROLE_SYSADMIN"));
+
+        SystemAdmin systemAdmin = new SystemAdmin();
+        systemAdmin.setMain(systemAdminDTO.isMain());
+        systemAdmin.setInitialPasswordChanged(systemAdminDTO.isInitialPasswordChanged());
+        systemAdmin.setUser(user);
+        return systemAdmin;
     }
 
 }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Company } from './model/company.model';
 import { CompanyAdmin } from './model/companyAdmin.model';
 import { CompanyEquipment } from './model/equipment.model';
+import { SystemAdmin } from '../system-admin/model/system-admin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -45,4 +46,6 @@ export class LayoutService {
   getFreeAdmins(): Observable<Array<CompanyAdmin>>{
     return this.http.get<Array<CompanyAdmin>>(`http://localhost:8092/api/companyadmins/free`);
   }
+
+  
 }

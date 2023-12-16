@@ -4,7 +4,6 @@ import medequipsystem.domain.Role;
 import medequipsystem.domain.SystemAdmin;
 import medequipsystem.domain.User;
 import medequipsystem.dto.SystemAdminDTO;
-import medequipsystem.mapper.SystemAdminDTOMapper;
 import medequipsystem.repository.RoleRepository;
 import medequipsystem.service.SystemAdminService;
 import medequipsystem.service.UserService;
@@ -16,19 +15,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/systemadmins")
 public class SystemAdminController {
     @Autowired
     private SystemAdminService systemAdminService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private SystemAdminDTOMapper systemAdminDTOMapper;
     @Autowired
     private RoleRepository roleRepository;
 
@@ -38,7 +38,7 @@ public class SystemAdminController {
         List<SystemAdmin> systemAdmins = systemAdminService.getAll();
         List<SystemAdminDTO> systemAdminDTOS = new ArrayList<>();
         for(SystemAdmin sa : systemAdmins){
-            systemAdminDTOS.add(systemAdminDTOMapper.fromSystemAdminToDTO(sa));
+            systemAdminDTOS.add(new SystemAdminDTO(sa));
         }
 
         return new ResponseEntity<>(systemAdminDTOS, HttpStatus.OK);
@@ -48,12 +48,10 @@ public class SystemAdminController {
     @PreAuthorize("hasRole('SYSADMIN')")
     public ResponseEntity<SystemAdminDTO> create(@RequestBody SystemAdminDTO systemAdminDTO){
         try {
-            // Convert SystemAdminDTO to SystemAdmin
             SystemAdmin systemAdminToCreate = new SystemAdmin();
             systemAdminToCreate.setMain(systemAdminDTO.isMain());
             systemAdminToCreate.setInitialPasswordChanged(systemAdminDTO.isInitialPasswordChanged());
 
-            // Create a new User
             User newUser = new User();
             newUser.setEmail(systemAdminDTO.getEmail());
             newUser.setPassword(systemAdminDTO.getPassword());
@@ -64,19 +62,38 @@ public class SystemAdminController {
             newUser.setPhoneNumber(systemAdminDTO.getPhoneNumber());
             newUser.setEnabled(true);
 
-            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssX");
-            String formattedTimestamp = dateFormat.format(currentTimestamp);
-            newUser.setLastPasswordResetDate(Timestamp.valueOf(formattedTimestamp));
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedTimestamp = currentDateTime.format(formatter);
+            Timestamp timestamp = Timestamp.valueOf(formattedTimestamp);
+            newUser.setLastPasswordResetDate(timestamp);
 
             Role role = roleRepository.findByName("ROLE_SYSADMIN");
+
             newUser.setRole(role);
 
             systemAdminToCreate.setUser(newUser);
-            SystemAdmin savedSystemAdmin = systemAdminService.create(systemAdminDTOMapper.fromSystemAdminToDTO(systemAdminToCreate));
 
-            SystemAdminDTO savedSystemAdminDTO = systemAdminDTOMapper.fromSystemAdminToDTO(savedSystemAdmin);
+            SystemAdmin savedSystemAdmin = systemAdminService.create(new SystemAdminDTO(systemAdminToCreate));
+            /*System.out.println("\nprovera cuvanja -- 1");
+            System.out.println("id " + savedSystemAdmin.getId().toString());
+            System.out.println("user id " + savedSystemAdmin.getUser().getId().toString());
+            System.out.println("user id " + savedSystemAdmin.getUser().getEmail());
+            System.out.println("user city " + savedSystemAdmin.getUser().getCity());
+            System.out.println("user role.id " + savedSystemAdmin.getUser().getRole().getId().toString());
+            System.out.println("user role.name " + savedSystemAdmin.getUser().getRole().getName());
+            System.out.println("main " + savedSystemAdmin.isMain());
+            System.out.println("is init pass changed " + savedSystemAdmin.isInitialPasswordChanged());
+            */
 
+            SystemAdminDTO savedSystemAdminDTO = new SystemAdminDTO(savedSystemAdmin);
+            /*System.out.println("\nprovera cuvanja -- 2");
+            System.out.println("id " + savedSystemAdminDTO.getId().toString());
+            System.out.println("user id " + savedSystemAdminDTO.getEmail());
+            System.out.println("user city " + savedSystemAdminDTO.getCity());
+            System.out.println("main " + savedSystemAdminDTO.isMain());
+            System.out.println("is init pass changed " + savedSystemAdminDTO.isInitialPasswordChanged());
+            */
             return new ResponseEntity<>(savedSystemAdminDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             System.out.println("System Admin not created");
@@ -90,7 +107,13 @@ public class SystemAdminController {
         SystemAdmin systemAdmin = systemAdminService.update(systemAdminDTO);
         if(systemAdmin == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(systemAdminDTOMapper.fromSystemAdminToDTO(systemAdmin), HttpStatus.OK);
+        return new ResponseEntity<>(new SystemAdminDTO(systemAdmin), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getbyuserid/{id}")
+    public ResponseEntity<SystemAdminDTO> getByUserId(@PathVariable Long id){
+        SystemAdmin systemAdmin = systemAdminService.getByUserId(id);
+        return new ResponseEntity<>(new SystemAdminDTO(systemAdmin), HttpStatus.OK);
     }
 
     //TODO: update lozinke, metoda iz servisa, sredi front
