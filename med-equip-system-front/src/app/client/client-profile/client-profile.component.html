@@ -1,0 +1,126 @@
+
+<div>
+    <div class="center">
+        <div class="profile-table">
+            <h1>My profile</h1>
+            <table *ngIf="client && !updateMode && !updatePasswordMode" class="profile-table">
+                <tr>
+                    <td><label>Email:</label></td>
+                    <td class="info">{{client.email}}</td>
+                </tr>
+                <tr>
+                    <td><label>First name:</label></td>
+                    <td class="info">{{client.firstName}}</td>
+                </tr>
+                <tr>
+                    <td><label>Last name:</label></td>
+                    <td class="info">{{client.lastName}}</td>
+                </tr>
+                <tr>
+                    <td><label>City:</label></td>
+                    <td class="info">{{client.city}}</td>
+                </tr>
+                <tr>
+                    <td><label>Country:</label></td>
+                    <td class="info">{{client.country}}</td>
+                </tr>
+                <tr>
+                    <td><label>Phone number:</label></td>
+                    <td class="info">{{client.phoneNumber}}</td>
+                </tr>
+                <tr>
+                    <td><label>Job title:</label></td>
+                    <td class="info">{{client.jobTitle}}</td>
+                </tr>
+                <tr>
+                    <td><label>Hospital information:</label></td>
+                    <td class="info">{{client.hospitalInfo}}</td>
+                </tr>
+                <tr>
+                    <td><label>Penalty points:</label></td>
+                    <td class="info">{{client.penaltyPoints}}</td>
+                </tr>
+                <tr>
+                    <td><label>Points:</label></td>
+                    <td class="info">{{client.points}}</td>
+                </tr>
+                <tr>
+                    <td><label>Loyalty Type:</label></td>
+                    <td class="info">{{client.loyaltyType}}</td>
+                </tr>
+                <tr>
+                    <td><label>Discount:</label></td>
+                    <td class="info">{{client.discount}}</td>
+                </tr>
+                <tr>
+                    <td><button class="primary" type="button" (click)="showUpdateForm()" *ngIf="!updateMode && !updatePasswordMode">Change info</button></td>
+                    <td><button class="primary" type="button" (click)="showPasswordForm()" *ngIf="!updateMode && !updatePasswordMode">Change password</button></td>
+                </tr>
+            </table>
+            <form *ngIf="updateMode" [formGroup]="clientForm" (ngSubmit)="update()" class="custom-form">
+                <table class="form-table">
+                    <tr>
+                        <td><label>First name: </label></td>
+                        <td><input type="text" formControlName="firstName" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><label>Last name: </label></td>
+                        <td><input type="text" formControlName="lastName" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><label>City: </label></td>
+                        <td><input type="text" formControlName="city" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><label>Country: </label></td>
+                        <td><input type="text" formControlName="country" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><label>Phone number: </label></td>
+                        <td><input type="text" formControlName="phoneNumber" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><label>Job title: </label></td>
+                        <td><input type="text" formControlName="jobTitle" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>Hospital information: </label></td>
+                        <td><input type="text" formControlName="hospitalInfo"/></td>
+                    </tr>
+                    <tr>
+                        <td><button class="primary" type="button" (click)="update()">Update</button></td>
+                        <td><button class="primary" type="button" (click)="cancelUpdate()" *ngIf="updateMode">Cancel</button></td>
+                    </tr>
+                </table>
+            </form>
+            <form *ngIf="updatePasswordMode" [formGroup]="passwordForm" (ngSubmit)="update()" class="custom-form">
+                <table class="form-table">
+                    <tr>
+                        <td><label>Old Password: </label></td>
+                        <td><input type="password" formControlName="oldPassword" [type]="hideOld ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isOldPasswordVisible()">{{hideOld ? 'visibility_off' : 'visibility'}}</mat-icon></td>
+                    </tr>
+                    <tr>
+                        <td><label>New Password: </label></td>
+                        <td><input type="password" formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isNewPasswordVisible()">{{hideNew ? 'visibility_off' : 'visibility'}}</mat-icon></td>
+                    </tr>
+                    <tr>
+                        <td><label>New Password check: </label></td>
+                        <td><input type="password" formControlName="passwordCheck" [type]="hideCheck ? 'password' : 'text'" required/></td>
+                        <td><mat-icon class="placeholder" (click)="isCheckPasswordVisible()">{{hideCheck ? 'visibility_off' : 'visibility'}}</mat-icon></td>
+                    </tr>
+                    <tr>
+                        <td><button class="primary" type="button" (click)="updatePassword()">Update</button></td>
+                        <td><button class="primary" type="button" (click)="cancelUpdate()">Cancel</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

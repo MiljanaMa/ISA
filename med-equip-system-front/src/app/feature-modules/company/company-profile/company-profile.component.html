@@ -1,0 +1,126 @@
+<div>
+<div *ngIf="companyId && !reservationMode" class="content-container">
+    
+    <div class="company-details">
+        <div class="company-info">
+            <h2>
+                <ng-container *ngIf="!editMode; else editName">
+                    {{ company?.name }}
+                  </ng-container>
+                  <ng-template #editName>
+                    <input type="text" *ngIf="company" [(ngModel)]="company.name" />
+
+                  </ng-template>
+
+                <button style="background-color:  #007bff;" (click)="toggleEditMode()">
+                    <i class="fas fa-edit"></i> 
+                  </button>
+               
+            </h2>
+        
+            <p>
+                <ng-container *ngIf="!editMode; else editRating">
+                    <b>Average Rate:</b> {{ company?.averageRate }}
+                </ng-container>
+                <ng-template #editRating>
+                    <input type="number" *ngIf="company" [(ngModel)]="company.averageRate" />
+                </ng-template>
+            </p>
+            
+            <p>
+                <ng-container *ngIf="!editMode; else editDescription">
+                    <b>Description:</b> {{ company?.description }}
+                </ng-container>
+                <ng-template #editDescription>
+                    <input type="text" *ngIf="company" [(ngModel)]="company.description" />
+                </ng-template>
+            </p>
+            <p><b>Location:</b> {{ company?.location?.street }} {{ company?.location?.streetNumber }}, {{ company?.location?.city }}, {{ company?.location?.country }}</p>
+            <button  *ngIf="editMode" (click)="saveChanges()">
+                <i class="fas fa-save"></i> Save
+            </button>
+            
+        </div>
+        <div class="map-container">
+            <app-company-map
+            [companyLocation]="company?.location"
+            [editable] = "editMode"
+            *ngIf="company?.location"
+            (locationUpdated)="onLocationUpdated($event)">
+        </app-company-map>
+          
+        </div>
+    </div>
+    
+  
+  
+    <div>
+        <button (click)="changeReservationMode(true)">Finish reservation</button>
+        <h3><b>Equipment:</b></h3>
+        <div class="equipment-container">
+            <div *ngFor="let equipment of equipments" class="equipment-card">
+                <h3>{{ equipment.name }}</h3>
+                <p>Type: {{ equipment.type }}</p>
+                <p>Price: {{ equipment.price }}</p>
+                <p>Description: {{ equipment.description }}</p>
+                <p>Available: {{ equipment.count }}</p>
+                <button (click)="addToReservation(equipment)">Add to reservation</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3><b>Appointments:</b></h3>
+        <table mat-table [dataSource]="appointmentsDataSource">
+            <!-- Define columns for Appointments -->
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Date </th>
+                <td mat-cell *matCellDef="let appointment"> {{ appointment.date }} </td>
+            </ng-container>
+            <ng-container matColumnDef="startTime">
+                <th mat-header-cell *matHeaderCellDef> Start Time </th>
+                <td mat-cell *matCellDef="let appointment"> {{ appointment.startTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="endTime">
+                <th mat-header-cell *matHeaderCellDef> End Time </th>
+                <td mat-cell *matCellDef="let appointment"> {{ appointment.endTime }} </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let appointment"> {{ appointment.status }} </td>
+            </ng-container>
+
+            <!-- Set column definitions -->
+            <tr mat-header-row *matHeaderRowDef="['date', 'startTime', 'endTime', 'status']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['date', 'startTime', 'endTime', 'status']"></tr>
+        </table>
+    </div>
+
+    <div *ngIf = "editMode">
+        <h3><b>Company Admins:</b></h3>
+        <table mat-table [dataSource]="companyAdminsDataSource">
+            <!-- Define columns for Company Admins -->
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let admin"> {{ admin.email }} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let admin"> {{ admin.firstName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="lastname">
+                <th mat-header-cell *matHeaderCellDef> Lastname </th>
+                <td mat-cell *matCellDef="let admin"> {{ admin.lastName }} </td>
+            </ng-container>
+    
+            <!-- Set column definitions -->
+            <tr mat-header-row *matHeaderRowDef="[ 'email', 'name', 'lastname']"></tr>
+            <tr mat-row *matRowDef="let row; columns: [ 'email', 'name', 'lastname']"></tr>
+        </table>
+    </div>
+</div>
+<div *ngIf="reservationMode">
+    <xp-reservation-creation [reservationItems]="reservationItems" [availableAppointments]="availableAppointments" (itemsUpdated)="itemsUpdated($event)" (reservationModeChanged)="changeReservationMode($event)"></xp-reservation-creation>
+</div>
+</div>
+
