@@ -55,8 +55,8 @@ export class SystemAdminCreationComponent {
         city: this.adminForm.value.city,
         country: this.adminForm.value.country,
         phoneNumber: this.adminForm.value.phoneNumber,
-        isMain: false,
-        isInititialPasswordChanged: false
+        main: false,
+        inititialPasswordChanged: false
       }
       
       this.systemAdminService.addSystemAdmin(admin).subscribe({

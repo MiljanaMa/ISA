@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit{
         console.log('system admin whole:' , systemAdmin);
         this.systemAdmin = systemAdmin;
         console.log("this.systemAdmin: ", this.systemAdmin);
-        if(this.systemAdmin.isMain){  // skrnavo, ali mora ovako za sad
+        if(this.systemAdmin.main){  // skrnavo, ali mora ovako za sad
           this.isMainAdmin = true;
         }
       },

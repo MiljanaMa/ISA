@@ -7,6 +7,6 @@ export interface SystemAdmin{
     city: string;
     country: string;
     phoneNumber: string;
-    isMain: boolean; //sa isMain nije radilo jer 'is' samo izbaci, pa ne moze da se pristupi sa systemAdmi.isMain vec sa .main
-    isInititialPasswordChanged: boolean;
+    main: boolean; //sa isMain nije radilo jer 'is' samo izbaci, pa ne moze da se pristupi sa systemAdmi.isMain vec sa .main
+    inititialPasswordChanged: boolean;
 }
