@@ -103,7 +103,6 @@ public class SystemAdminService {
         user.setPhoneNumber(systemAdminDTO.getPhoneNumber());
         user.setEnabled(true);
         user.setRole(roleRepository.findByName("ROLE_SYSADMIN"));
-
         SystemAdmin systemAdmin = new SystemAdmin();
         systemAdmin.setMain(systemAdminDTO.isMain());
         systemAdmin.setInitialPasswordChanged(systemAdminDTO.isInitialPasswordChanged());
