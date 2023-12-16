@@ -226,6 +226,8 @@ export class CompanyProfileComponent implements OnInit {
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
         console.log(this.companyEquipmentDataSource.data); 
 
+  
+
         this.calendarOptions.businessHours =  {
         
           daysOfWeek: [0, 1, 2, 3, 4, 5, 6], 
@@ -261,7 +263,6 @@ export class CompanyProfileComponent implements OnInit {
   
   
   getAppointmentsAsEvents(): EventInput[] {
-    console.log(this.appointmentsDataSource.data); 
     
     return this.appointmentsDataSource.data.map((appointment) => ({
       

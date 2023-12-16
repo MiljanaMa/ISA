@@ -106,11 +106,11 @@ public class Company {
         this.averageRate = averageRate;
     }
 
-    public Set<CompanyEquipment> getEquipment() {
+    public Set<CompanyEquipment> getCompanyEquipment() {
         return equipment;
     }
 
-    public void setEquipment(Set<CompanyEquipment> equipment) {
+    public void setCompanyEquipment(Set<CompanyEquipment> equipment) {
         this.equipment = equipment;
     }
 
