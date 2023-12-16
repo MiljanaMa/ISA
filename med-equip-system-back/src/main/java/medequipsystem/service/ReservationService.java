@@ -1,11 +1,9 @@
 package medequipsystem.service;
 
-import medequipsystem.domain.Appointment;
-import medequipsystem.domain.Reservation;
-import medequipsystem.domain.ReservationItem;
-import medequipsystem.domain.User;
+import medequipsystem.domain.*;
 import medequipsystem.domain.enums.ReservationStatus;
 import medequipsystem.repository.AppointmentRepository;
+import medequipsystem.repository.ClientRepository;
 import medequipsystem.repository.ReservationRepository;
 import medequipsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +18,13 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
 
 
     public Reservation create(Appointment appointment, Set<ReservationItem> reservationItems, Long userId){
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Client> userOptional = clientRepository.findById(userId);
         //ako je appointment id null onda provjeri je li okej termin, ako je termin koji se dobije reserved throuw exception
         Optional<Appointment> appointmentOptional = appointmentRepository.findById(appointment.getId());
         //if( appointmentOptional == null)

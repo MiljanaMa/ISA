@@ -18,7 +18,7 @@ public class Reservation {
     public ReservationStatus status;
     @ManyToOne()
     @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private User client;
+    private Client client;
     @ManyToOne(optional = true)
     @JoinColumn(name = "appointment_id", referencedColumnName = "id")
     private Appointment appointment;
@@ -30,7 +30,7 @@ public class Reservation {
 
     public Reservation() {}
 
-    public Reservation(Long id, ReservationStatus status, User client, Appointment appointment, Set<ReservationItem> reservationItems) {
+    public Reservation(Long id, ReservationStatus status, Client client, Appointment appointment, Set<ReservationItem> reservationItems) {
         this.id = id;
         this.status = status;
         this.client = client;
@@ -54,11 +54,11 @@ public class Reservation {
         this.status = status;
     }
 
-    public User getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public void setClient(User client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 

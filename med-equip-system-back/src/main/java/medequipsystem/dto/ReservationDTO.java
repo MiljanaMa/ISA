@@ -12,7 +12,7 @@ public class ReservationDTO {
     @JsonProperty("status")
     private ReservationStatus status;
     @JsonProperty("client")
-    private UserDTO client;
+    private ClientDTO client;
 
     @JsonProperty("appointment")
     private AppointmentDTO appointment;
@@ -50,11 +50,11 @@ public class ReservationDTO {
         this.status = status;
     }
 
-    public UserDTO getClient() {
+    public ClientDTO getClient() {
         return client;
     }
 
-    public void setClient(UserDTO client) {
+    public void setClient(ClientDTO client) {
         this.client = client;
     }
 

@@ -30,7 +30,7 @@ public class ReservationController {
     private GenericMapper<CompanyEquipment, CompanyEquipmentDTO> companyEquipmentMapper;
 
     @Autowired
-    private GenericMapper<User, UserDTO> userMapper;
+    private GenericMapper<Client, ClientDTO> userMapper;
     @Autowired
     private GenericMapper<Appointment, AppointmentDTO> appointmentMapper;
 
