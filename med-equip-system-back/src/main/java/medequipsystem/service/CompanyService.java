@@ -70,11 +70,12 @@ public class CompanyService {
         System.out.println("admin ids count: " + companyAdminIds.size());
 
         Company savedCompany =  companyRepository.save(company);
+        System.out.println("admin ids: " + companyAdminIds);
+        System.out.println("saved company id: " + savedCompany.getId());
+
 
         for(Long adminId : companyAdminIds){
-            CompanyAdmin ca = companyAdminService.getById(adminId);
-            ca.setCompany(savedCompany);
-            companyAdminService.update(ca);
+            CompanyAdmin ca = companyAdminService.connectWithCompany(adminId, savedCompany);
         }// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
         /*for(CompanyAdmin adminToUpdatCompany : savedCompany.getCompanyAdmins()){

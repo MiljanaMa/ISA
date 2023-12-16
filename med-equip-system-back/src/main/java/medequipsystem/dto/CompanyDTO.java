@@ -15,7 +15,7 @@ public class CompanyDTO {
         private Set<CompanyAdminRegistrationDTO> companyAdmins;
         //private Set<CompanyEquipmentDTO> equipment;
 
-        
+
   
         public CompanyDTO() {
         }

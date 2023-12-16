@@ -85,6 +85,18 @@ public class CompanyAdminService {
         return this.companyAdminRepository.getById(id);
     }
 
+    public CompanyAdmin getByUserId(Long userId){
+        return this.companyAdminRepository.findByUserId(userId);
+    }
+
+    public CompanyAdmin connectWithCompany(Long adminsUserId, Company company){
+        CompanyAdmin companyAdmin = getByUserId(adminsUserId);
+        System.out.println("get admin by id: "+ companyAdmin.getId().toString());
+        companyAdmin.setCompany(company);
+        return this.companyAdminRepository.save(companyAdmin);
+
+    }
+
    /* public CompanyAdmin mapDtoToDomain(CompanyAdminRegistrationDTO companyAdminDTO){
         User user = new User();
         user.setEmail(companyAdminDTO.getEmail());
@@ -107,5 +119,6 @@ public class CompanyAdminService {
         return companyAdmin;
     }
     */
+
 
 }
