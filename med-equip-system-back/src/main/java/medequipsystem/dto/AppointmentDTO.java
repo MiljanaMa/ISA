@@ -10,7 +10,6 @@ public class AppointmentDTO {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-
     private AppointmentStatus status;
 
     public AppointmentDTO(){

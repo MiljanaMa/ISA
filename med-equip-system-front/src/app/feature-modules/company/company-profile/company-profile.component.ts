@@ -4,9 +4,10 @@ import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 import { CompanyEquipment } from '../model/companyEquipment.model';
-import { Appointment } from '../model/appointment.model';
+import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { ReservationItem } from '../model/reservationCreation.model';
 
 @Component({
   selector: 'app-company-profile',
@@ -19,16 +20,19 @@ import { MatTableDataSource } from '@angular/material/table';
 export class CompanyProfileComponent implements OnInit {
   companyId?: number;
   company: Company|undefined;
-  oldCompany: Company|undefined; 
+  oldCompany: Company|undefined;
 
  
 
-  editMode = false; 
+  editMode = false;
+  reservationMode = false; 
 
   public companyAdminsDataSource = new MatTableDataSource<CompanyAdmin>();
   public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
-
+  public equipments: CompanyEquipment[] = [];
+  public reservationItems: ReservationItem[] = [];
+  public availableAppointments: Appointment[] = [];
  
  
 
@@ -51,10 +55,10 @@ export class CompanyProfileComponent implements OnInit {
         this.company = data;
         console.log(data); 
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
-        console.log(this.company?.companyEquipment);
-        this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
-        console.log(this.companyEquipmentDataSource.data); 
+        this.equipments = this.company?.companyEquipment || [];
         this.appointmentsDataSource.data = this.company?.appointments || [];
+        let appointments = this.company.appointments || [];
+        this.availableAppointments = appointments.filter(a => a.status === AppointmentStatus.AVAILABLE);
       },
       error => {
         console.error('Error fetching company details:', error);
@@ -84,6 +88,30 @@ export class CompanyProfileComponent implements OnInit {
    
       this.company!.location = updatedLocation;
    
+  }
+  itemsUpdated(updatedItems: ReservationItem[]): void {
+    this.reservationItems = updatedItems;
+  }
+  changeReservationMode(mode: boolean): void {
+    this.reservationMode = mode;
+  }
+
+  isEquipmentInItems(targetId: number): boolean {
+    return this.reservationItems.some(i => i.equipment.id === targetId);
+  }
+
+  addToReservation(equipment: CompanyEquipment):void {
+    if(this.isEquipmentInItems(equipment.id)){
+      alert("This equipment is already in reservation");
+      return;
+    }
+    let reservationItem = {
+      id: 0,
+      count: 1,
+      equipment: equipment,
+    };
+    this.reservationItems.push(reservationItem);
+    alert("Equipment added to reservation");
   }
 
   }
