@@ -5,42 +5,22 @@ import javax.persistence.*;
 @Table(name = "system_admins")
 public class SystemAdmin {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "seqGenSystemAdmin", sequenceName = "seqSystemAdmin", initialValue = 5, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGenSystemAdmin")
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "is_main", nullable = false)
+    private boolean isMain;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "city", nullable = false)
-    private String city;
-    @Column(name = "country", nullable = false)
-    private String country;
-
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber;
-
+    @Column(name = "is_initial_password_changed", nullable = false)
+    private boolean isInitialPasswordChanged;
 
     public SystemAdmin() { }
-
-    public SystemAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-    }
 
     public Long getId() {
         return id;
@@ -50,60 +30,27 @@ public class SystemAdmin {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getPassword() {
-        return password;
+    public boolean isMain() {
+        return isMain;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setMain(boolean main) {
+        isMain = main;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public boolean isInitialPasswordChanged() {
+        return isInitialPasswordChanged;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setInitialPasswordChanged(boolean initialPasswordChanged) {
+        isInitialPasswordChanged = initialPasswordChanged;
     }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
 }

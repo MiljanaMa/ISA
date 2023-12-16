@@ -1,7 +1,7 @@
 package medequipsystem.service;
 
 import medequipsystem.repository.EmailTokenRepository;
-import medequipsystem.token.EmailToken;
+import medequipsystem.util.EmailToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -5,13 +5,14 @@ import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 public class CompanyAdminDTO implements DTOEntity {
     private Long id;
-    private String email;
+    private UserDTO userDTO;
+    /*private String email;
     private String password;
     private String firstName;
     private String lastName;
     private String city;
     private String country;
-    private String phoneNumber;
+    private String phoneNumber;*/
     private CompanyDTO companyDTO;
     private Long companyId;
     //private CompanyDTO companyDTO; stack overflow goes brrr
@@ -19,7 +20,7 @@ public class CompanyAdminDTO implements DTOEntity {
     public CompanyAdminDTO() {
     }
 
-    public CompanyAdminDTO(Long id, String email, String password, String firstName, String lastName,
+    /*public CompanyAdminDTO(Long id, String email, String password, String firstName, String lastName,
                            String city, String country, String phoneNumber, Long companyId) {
         this.id = id;
         this.email = email;
@@ -32,17 +33,18 @@ public class CompanyAdminDTO implements DTOEntity {
         //this.companyDTO = companyDto;
         this.companyId = companyId;
 
-    }
+    }*/
 
     public CompanyAdminDTO(CompanyAdmin companyAdmin) {
         this.id = companyAdmin.getId();
-        this.email = companyAdmin.getEmail();
-        this.password = companyAdmin.getPassword();
-        this.firstName = companyAdmin.getFirstName();
-        this.lastName = companyAdmin.getLastName();
-        this.city = companyAdmin.getCity();
-        this.country = companyAdmin.getCountry();
-        this.phoneNumber = companyAdmin.getPhoneNumber();
+        //this.userDTO.setId(companyAdmin.);
+        this.userDTO.setEmail(companyAdmin.getUser().getEmail());
+        this.userDTO.setPassword(companyAdmin.getUser().getPassword());
+        this.userDTO.setFirstName(companyAdmin.getUser().getFirstName());
+        this.userDTO.setLastName(companyAdmin.getUser().getLastName());
+        this.userDTO.setCity(companyAdmin.getUser().getCity());
+        this.userDTO.setCountry(companyAdmin.getUser().getCountry());
+        this.userDTO.setPhoneNumber(companyAdmin.getUser().getPhoneNumber());
         this.companyId = companyAdmin.getCompany().getId();
         //this.companyDTO = companyAdmin.getCompany() != null ? new CompanyDTO(companyAdmin.getCompany()) : null;
     }
@@ -54,7 +56,7 @@ public class CompanyAdminDTO implements DTOEntity {
     public void setId(Long id) {
         this.id = id;
     }
-
+/*
     public String getEmail() {
         return email;
     }
@@ -110,7 +112,7 @@ public class CompanyAdminDTO implements DTOEntity {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+*/
     /*public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
@@ -127,4 +129,11 @@ public class CompanyAdminDTO implements DTOEntity {
         this.companyId = companyId;
     }
 
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
+    }
 }

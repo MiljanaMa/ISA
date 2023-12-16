@@ -1,0 +1,23 @@
+<div class="center">
+    <form [formGroup] = "loginForm" (ngSubmit)="login()" class="custom-form">
+        <h1>Login here</h1>
+        <table class="form-table">
+            <tr>
+                <td><label>Email: </label></td>
+                <td>
+                    <input type="email" formControlName="email" required/>             
+                </td>
+    
+            </tr>
+        
+            <tr>
+                <td><label>Password: </label></td>
+                <td><input type="password" formControlName="password" required/></td>
+               <!-- <td><mat-icon class="placeholder" (click)="isPasswordVisible()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon></td> -->
+            </tr>
+
+            <tr><input type="submit"/></tr>
+        </table>
+    </form>
+</div>
+        

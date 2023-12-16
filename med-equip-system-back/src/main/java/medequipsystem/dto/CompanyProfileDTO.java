@@ -1,7 +1,14 @@
 package medequipsystem.dto;
 
-import medequipsystem.mapper.MapperUtils.DTOEntity;
 
+import medequipsystem.mapper.MapperUtils.DTOEntity;
+import medequipsystem.domain.Company;
+import medequipsystem.domain.CompanyAdmin;
+
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CompanyProfileDTO implements DTOEntity {
@@ -12,7 +19,9 @@ public class CompanyProfileDTO implements DTOEntity {
     private String description;
 
     private Double averageRate;
-    private Set<CompanyAdminDTO> companyAdmins;
+    //private Set<CompanyAdminDTO> companyAdmins;
+    private Set<CompanyAdminRegistrationDTO> companyAdmins;
+
     private Set<CompanyEquipmentProfileDTO> companyEquipment;
 
     private String workingHours;
@@ -28,9 +37,20 @@ public class CompanyProfileDTO implements DTOEntity {
         description = company.getDescription();
         averageRate = company.getAverageRate();
         location = new LocationDTO(company.getLocation());
-        companyAdmins = company.getCompanyAdmins().stream()
+
+        /*companyAdmins = company.getCompanyAdmins().stream()
                         .map(CompanyAdminDTO::new)
                         .collect(Collectors.toSet());
+          companyAdmins = company.getCompanyAdmins();
+
+        */
+        Set<CompanyAdminRegistrationDTO> adminDtos = new HashSet<>(); // dto with all user data
+        Set<CompanyAdmin> admins = company.getCompanyAdmins();
+        for(CompanyAdmin ca : admins){
+            adminDtos.add(new CompanyAdminRegistrationDTO(ca));
+        }
+        companyAdmins = adminDtos;
+
         companyEquipment = company.getEquipment().stream()
                         .map(CompanyEquipmentProfileDTO::new)
                         .collect(Collectors.toSet());
@@ -88,11 +108,11 @@ public class CompanyProfileDTO implements DTOEntity {
         this.averageRate = averageRate;
     }
 
-    public Set<CompanyAdminDTO> getCompanyAdmins() {
+    public Set<CompanyAdminRegistrationDTO> getCompanyAdmins() {
         return companyAdmins;
     }
 
-    public void setCompanyAdmins(Set<CompanyAdminDTO> companyAdmins) {
+    public void setCompanyAdmins(Set<CompanyAdminRegistrationDTO> companyAdmins) {
         this.companyAdmins = companyAdmins;
     }
 

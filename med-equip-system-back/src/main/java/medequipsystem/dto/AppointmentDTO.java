@@ -12,7 +12,6 @@ public class AppointmentDTO implements DTOEntity {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-
     private AppointmentStatus status;
 
     private CompanyAdminDTO companyAdmin;

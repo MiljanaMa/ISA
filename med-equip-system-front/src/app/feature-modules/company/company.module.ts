@@ -15,10 +15,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { CompanyProfileAdminComponent } from './company-profile-admin/company-profile-admin.component'; 
 
 
+import { ReservationCreationComponent } from './reservation-creation/reservation-creation.component';
+
+
 @NgModule({
   declarations: [
     CompanyProfileComponent,
     CompanyProfileAdminComponent, 
+    ReservationCreationComponent, 
   ],
   imports: [
     CommonModule,

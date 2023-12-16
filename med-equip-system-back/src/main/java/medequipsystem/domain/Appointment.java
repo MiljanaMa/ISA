@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "appointments")
@@ -27,7 +29,7 @@ public class Appointment {
 
     @Column(name="status", nullable = false)
     public AppointmentStatus status;
-
+  
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private CompanyAdmin companyAdmin;
@@ -80,6 +82,7 @@ public class Appointment {
     public void setCompanyAdmin(CompanyAdmin companyAdmin) {
         this.companyAdmin = companyAdmin;
     }
+
 
     public Appointment(Long id, LocalDate date, LocalTime startTime, LocalTime endTime, AppointmentStatus status, CompanyAdmin companyAdmin) {
         this.id = id;

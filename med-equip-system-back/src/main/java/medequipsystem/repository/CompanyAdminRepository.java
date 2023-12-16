@@ -11,4 +11,6 @@ import java.util.Set;
 @Repository
 public interface CompanyAdminRepository extends JpaRepository<CompanyAdmin, Long> {
 
+    CompanyAdmin findByUserId(Long userId);
+
 }

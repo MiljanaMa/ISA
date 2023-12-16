@@ -13,7 +13,7 @@ public class CompanyDTO implements DTOEntity {
         private LocationDTO location;
         private String description;
         private Double averageRate;
-        private Set<CompanyAdminDTO> companyAdmins;
+        private Set<CompanyAdminRegistrationDTO> companyAdmins;
         //private Set<CompanyEquipmentDTO> equipment;
 
         private String workingHours;
@@ -98,11 +98,11 @@ public class CompanyDTO implements DTOEntity {
                 this.averageRate = averageRate;
         }
 
-       public Set<CompanyAdminDTO> getCompanyAdmins() {
+       public Set<CompanyAdminRegistrationDTO> getCompanyAdmins() {
                 return companyAdmins;
         }
 
-        public void setCompanyAdmins(Set<CompanyAdminDTO> companyAdmins) {
+        public void setCompanyAdmins(Set<CompanyAdminRegistrationDTO> companyAdmins) {
                 this.companyAdmins = companyAdmins;
         }
         /*

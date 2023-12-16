@@ -1,3 +1,4 @@
+
 import { Time } from "@angular/common";
 import { CompanyAdmin } from "src/app/layout/model/companyAdmin.model";
 
@@ -12,6 +13,8 @@ export interface Appointment {
 }
 
 export enum AppointmentStatus {
-    Reserved = 'RESERVED',
-    Available = 'AVAILABLE'
+
+    RESERVED = 'RESERVED',
+    AVAILABLE = 'AVAILABLE'
 }
+

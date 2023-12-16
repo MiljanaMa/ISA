@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../layout.service';
 import { Company } from '../model/company.model';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   public selectedRating: number = 0;
   public inputSearch: string = '';
 
-  constructor(private layoutService: LayoutService, private router: Router) { }
+  constructor(private layoutService: LayoutService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getAllCompanies();
