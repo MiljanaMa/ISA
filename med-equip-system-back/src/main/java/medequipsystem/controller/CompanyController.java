@@ -1,7 +1,7 @@
 package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.*;
-import medequipsystem.mapper.Mapper.DtoUtils;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.CompanyService;
 import medequipsystem.mapper.CompanyDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;

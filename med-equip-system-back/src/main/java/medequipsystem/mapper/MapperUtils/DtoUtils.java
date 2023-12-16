@@ -1,4 +1,4 @@
-package medequipsystem.mapper.Mapper;
+package medequipsystem.mapper.MapperUtils;
 
 import org.modelmapper.ModelMapper;
 

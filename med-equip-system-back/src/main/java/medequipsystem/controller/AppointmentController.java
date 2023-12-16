@@ -3,7 +3,7 @@ package medequipsystem.controller;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.dto.AppointmentDTO;
-import medequipsystem.mapper.Mapper.DtoUtils;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +19,11 @@ public class AppointmentController {
 
     @Autowired
     AppointmentService appointmentService;
-    /*@PostMapping(value = "/create")
-    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
-
-        return new ResponseEntity<AppointmentDTO>();
-    }*/
+    @PostMapping(value = "/create")
+    public ResponseEntity<Void> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
+        Appointment appointment = (Appointment) new DtoUtils().convertToEntity(new Object(), appointmentDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping(value = "/company/{id}")
     public ResponseEntity<Set<AppointmentDTO>> getAppointmentsForCompany(@PathVariable Long id){

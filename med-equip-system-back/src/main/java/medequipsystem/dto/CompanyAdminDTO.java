@@ -1,7 +1,7 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.CompanyAdmin;
-import medequipsystem.mapper.Mapper.DTOEntity;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 public class CompanyAdminDTO implements DTOEntity {
     private Long id;

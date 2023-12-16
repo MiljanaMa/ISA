@@ -4,12 +4,11 @@ import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 import { CompanyEquipment } from '../model/companyEquipment.model';
-import { Appointment } from '../model/appointment.model';
+import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions, EventInput} from '@fullcalendar/core'; 
-
 
 @Component({
   selector: 'app-company-profile',
@@ -49,15 +48,15 @@ export class CompanyProfileComponent implements OnInit {
 
       this.calendarOptions = {
         plugins: [timeGridPlugin],
-        initialView: 'timeGridDay', // Display as day view
+        initialView: 'timeGridDay', 
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'timeGridDay,timeGridWeek' // Add other views if needed
+          right: 'timeGridDay,timeGridWeek'
         },
-        slotDuration: '01:00:00', // Each slot represents 1 hour
-        allDaySlot: false, // Hide the all-day slot
-        //events: this.getAppointmentsAsEvents(), // Now populate calendar events after appointments are fetched
+        slotDuration: '01:00:00', 
+        allDaySlot: false,
+       
       };
       
     });
@@ -92,17 +91,20 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   initializeCalendar(): void {
+
     this.calendarOptions.events = this.getAppointmentsAsEvents(); 
   }
-
+  
+  
   getAppointmentsAsEvents(): EventInput[] {
     console.log(this.appointmentsDataSource.data); 
-
+    
     return this.appointmentsDataSource.data.map((appointment) => ({
       
-      title: `Appointment ${appointment.companyAdmin.lastName}`,
+      title: `Admin: ${appointment.companyAdmin.firstName} ${appointment.companyAdmin.lastName}`,
       start: appointment.date + 'T' + appointment.startTime,
       end: appointment.date + 'T' + appointment.endTime,
+      color: appointment.status === AppointmentStatus.Reserved ? 'red': 'green'
     
     }));
    

@@ -2,7 +2,7 @@ package medequipsystem.dto;
 
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.enums.EquipmentType;
-import medequipsystem.mapper.Mapper.DTOEntity;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 public class CompanyEquipmentProfileDTO implements DTOEntity {
 

@@ -1,7 +1,7 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.Location;
-import medequipsystem.mapper.Mapper.DTOEntity;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 public class LocationDTO implements DTOEntity {
     private Long id;

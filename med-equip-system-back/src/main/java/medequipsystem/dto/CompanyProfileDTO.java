@@ -1,6 +1,6 @@
 package medequipsystem.dto;
 
-import medequipsystem.mapper.Mapper.DTOEntity;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 import java.util.Set;
 
