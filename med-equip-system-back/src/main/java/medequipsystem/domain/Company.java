@@ -25,6 +25,18 @@ public class Company {
     private String description;
     @Column(name = "avgRate", nullable = false)
     private Double averageRate;
+
+    @Column(name = "working_hours", nullable = false)
+    private String workingHours;
+
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
+    }
+
     @JsonIgnore
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CompanyAdmin> companyAdmins = new HashSet<>();

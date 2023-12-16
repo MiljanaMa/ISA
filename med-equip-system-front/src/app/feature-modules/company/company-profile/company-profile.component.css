@@ -5,6 +5,11 @@ label {
   margin-top: 2px;
 }
 
+.fc-bgevent-businessHours {
+  background-color: lightgreen !important;
+}
+
+
 .primary {
   background-color: #007bff;
   /* Replace with your desired primary color */

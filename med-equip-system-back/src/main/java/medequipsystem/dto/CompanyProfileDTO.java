@@ -15,6 +15,8 @@ public class CompanyProfileDTO implements DTOEntity {
     private Set<CompanyAdminDTO> companyAdmins;
     private Set<CompanyEquipmentProfileDTO> companyEquipment;
 
+    private String workingHours;
+
     public CompanyProfileDTO() {
     }
 
@@ -56,6 +58,14 @@ public class CompanyProfileDTO implements DTOEntity {
 
     public LocationDTO getLocation() {
         return location;
+    }
+
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
     }
 
     public void setLocation(LocationDTO location) {

@@ -26,6 +26,8 @@
                 </ng-template>
             </p>
             
+           
+
             <p>
                 <ng-container *ngIf="!editMode; else editDescription">
                     <b>Description:</b> {{ company?.description }}
@@ -98,9 +100,58 @@
     
     
     <div> 
+        <form (ngSubmit)="onFormSubmit()" *ngIf = "addMode" style="margin-bottom: 20px; margin-top: 20px">
+            <mat-form-field appearance="fill" style ="width: 200px;">
+              <mat-label>Select Admin</mat-label>
+              <mat-select [(ngModel)]="selectedAdmin" name="selectedAdmin">
+                <mat-option *ngFor="let admin of adminsList" [value]="admin">
+                    {{ admin.firstName + ' ' + admin.lastName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          
+            <div style="padding-top: 8px;">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" [min]="minDate" readonly [(ngModel)]="selectedDate" name="selectedDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  
+                  
+                  
+                  
+                  
+            </div>
+          
+            <div style="display: flex; gap: 8px; padding-top: 8px;">
+                <mat-form-field appearance="fill" style="width: 200px;">
+                    <input matInput type="text" placeholder="Start (HH:mm)" pattern="[0-2][0-9]:[0-5][0-9]" [(ngModel)]="startTime" name="startTime" required #startTimeInput="ngModel">
+                    <mat-error *ngIf="startTimeInput.invalid && (startTimeInput.dirty || startTimeInput.touched)">
+                        Start time should be in HH:mm format
+                    </mat-error>
+                </mat-form-field>
+            
+                <mat-form-field appearance="fill" style="width: 200px;">
+                    <input matInput type="text" placeholder="End (HH:mm)" pattern="[0-2][0-9]:[0-5][0-9]" [(ngModel)]="endTime" name="endTime" required #endTimeInput="ngModel">
+                    <mat-error *ngIf="endTimeInput.invalid && (endTimeInput.dirty || endTimeInput.touched)">
+                        End time should be in HH:mm format
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+          
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid()" style="margin-top: 16px;">
+                Submit
+              </button>
+              
+          </form>
+          
+          
         <full-calendar [options]="calendarOptions" class = "full-calendar"
         
         ></full-calendar>
+    
+          
     </div>
   
 </div>

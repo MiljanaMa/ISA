@@ -11,16 +11,16 @@ INSERT INTO public.locations (
 ) VALUES ( 3, 'Tokyo', 'Japan', 35.6895, 139.6917, 789, '100-0001', 'Chiyoda');
 
 INSERT INTO public.companies (
-    id, avg_rate, description, name, loc_id
-) VALUES ( 1, 4.5, 'A leading technology company in New York.', 'Tech Innovators', 1);
+    id, avg_rate, description, name, loc_id, working_hours
+) VALUES ( 1, 4.5, 'A leading technology company in New York.', 'Tech Innovators', 1, '8:00-21:00');
 
 INSERT INTO public.companies (
-    id, avg_rate, description, name, loc_id
-) VALUES ( 2, 3.8, 'Premier design agency.', 'Creative Solutions', 2);
+    id, avg_rate, description, name, loc_id, working_hours
+) VALUES ( 2, 3.8, 'Premier design agency.', 'Creative Solutions', 2, '9:00-20:00');
 
 INSERT INTO public.companies (
-    id, avg_rate, description, name, loc_id
-) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3);
+    id, avg_rate, description, name, loc_id, working_hours
+) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3, '10:00-18:00');
 -- User 1
 INSERT INTO public.users(
     id, city, country, email, first_name, hospital_info, job_title, last_name, password, penal_points, phone_number, user_type, points, email_confirmed)

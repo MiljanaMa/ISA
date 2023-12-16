@@ -10,5 +10,6 @@ export interface CompanyProfile {
     location: Location;
     companyAdmins?: CompanyAdmin[]; 
     companyEquipment? : CompanyEquipment[]; 
+    workingHours: string; 
    
 }

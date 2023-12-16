@@ -27,4 +27,8 @@ export class CompanyService {
   getAppointmentsByCompany(companyId: number): Observable<Appointment[]>{
     return this.http.get<Appointment[]>(`http://localhost:8092/api/appointments/company/${companyId}`);
   }
+  
+  createAppointment(appointment: Appointment): Observable<Appointment>{
+    return this.http.post<Appointment>(`http://localhost:8092/api/appointments/create`, appointment);  
+  }
 }

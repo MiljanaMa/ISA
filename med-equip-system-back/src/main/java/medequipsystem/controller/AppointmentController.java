@@ -20,9 +20,11 @@ public class AppointmentController {
     @Autowired
     AppointmentService appointmentService;
     @PostMapping(value = "/create")
-    public ResponseEntity<Void> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        Appointment appointment = (Appointment) new DtoUtils().convertToEntity(new Object(), appointmentDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
+        Appointment appointment = (Appointment) new DtoUtils().convertToEntity(new Appointment(), appointmentDTO);
+        Appointment result = appointmentService.createAppointment(appointment);
+        AppointmentDTO dto = (AppointmentDTO) new DtoUtils().convertToDto(result, new AppointmentDTO());
+        return new ResponseEntity<>(dto , HttpStatus.OK);
     }
 
     @GetMapping(value = "/company/{id}")
