@@ -15,6 +15,11 @@ public class CompanyAdmin {
     @Column(name="id", unique=true, nullable=false)
     private Long id;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    /*
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -34,7 +39,7 @@ public class CompanyAdmin {
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-
+*/
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = true)
@@ -44,7 +49,7 @@ public class CompanyAdmin {
     public CompanyAdmin() {
     }
 
-    public CompanyAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, Company company) {
+    /*public CompanyAdmin(Long id, String email, String password, String firstName, String lastName, String city, String country, String phoneNumber, Company company) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -54,7 +59,7 @@ public class CompanyAdmin {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.company = company;
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -63,7 +68,7 @@ public class CompanyAdmin {
     public void setId(Long id) {
         this.id = id;
     }
-
+/*
     public String getEmail() {
         return email;
     }
@@ -118,6 +123,15 @@ public class CompanyAdmin {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+*/
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Company getCompany() {

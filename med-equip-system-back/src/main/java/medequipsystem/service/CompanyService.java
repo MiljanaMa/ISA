@@ -2,6 +2,7 @@ package medequipsystem.service;
 
 import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyAdminDTO;
+import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
 import medequipsystem.mapper.CompanyAdminDTOMapper;
@@ -10,10 +11,7 @@ import medequipsystem.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,23 +55,32 @@ public class CompanyService {
         locationRepository.save(location);
         company.setLocation(location);
 
+        List<Long> companyAdminIds = new ArrayList<>();
+
         if (companyDTO.getCompanyAdmins() != null && !companyDTO.getCompanyAdmins().isEmpty()) {
             Set<CompanyAdmin> companyAdmins = new HashSet<>();
 
-            for (CompanyAdminDTO adminDTO : companyDTO.getCompanyAdmins()) {
+            for (CompanyAdminRegistrationDTO adminDTO : companyDTO.getCompanyAdmins()) {
+                companyAdminIds.add(adminDTO.getId());
                 CompanyAdmin ca = companyAdminService.getById(adminDTO.getId());
                 companyAdmins.add(ca); //dodaj kompaniji admina koji je pronadjen preko id-a iz liste admina prosledjenih iz companyDto
-
             }
             company.setCompanyAdmins(companyAdmins);
         }
+        System.out.println("admin ids count: " + companyAdminIds.size());
 
         Company savedCompany =  companyRepository.save(company);
 
-        for(CompanyAdmin adminToUpdate : savedCompany.getCompanyAdmins()){
-            adminToUpdate.setCompany(savedCompany);
-            adminToUpdate = companyAdminService.update(adminToUpdate);
-        }
+        for(Long adminId : companyAdminIds){
+            CompanyAdmin ca = companyAdminService.getById(adminId);
+            ca.setCompany(savedCompany);
+            companyAdminService.update(ca);
+        }// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+        /*for(CompanyAdmin adminToUpdatCompany : savedCompany.getCompanyAdmins()){
+            adminToUpdatCompany.setCompany(savedCompany);
+            adminToUpdatCompany = companyAdminService.update(adminToUpdatCompany);
+        }*/
 
         //TODO: ovde bi mozda trebalo da se kompaniji dodeli ova lista povezanih admina, pa da se update... mada mozda i ne mora
         //TODO: trebace mozda da se doradi za opremu
