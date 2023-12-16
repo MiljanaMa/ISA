@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompanyAdminRepository extends JpaRepository<CompanyAdmin, Long> {
+    CompanyAdmin findByUserId(Long userId);
+
 }

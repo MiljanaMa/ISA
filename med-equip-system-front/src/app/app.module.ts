@@ -10,6 +10,7 @@ import { CompanyModule } from './feature-modules/company/company.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './auth/interceptor/token-interceptor';
 import { ClientModule } from './client/client.module';
+import { SystemAdminModule } from './system-admin/system-admin.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { ClientModule } from './client/client.module';
     MaterialModule, 
     CompanyModule,
     AuthModule,
-    ClientModule
+    ClientModule,
+    SystemAdminModule,
+    
 
   ],
   providers: [
