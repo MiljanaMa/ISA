@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CompanyProfile } from './model/company-profile-model';
+import { CompanyEquipment } from './model/companyEquipment.model';
+import { ReservationCreation } from './model/reservationCreation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +23,8 @@ export class CompanyService {
 
   updateCompany(company: CompanyProfile): Observable<void>{
     return this.http.put<void>(`${this.baseUrl}/update/${company.id}`, company);
+  }
+  makeReservation(reservation: ReservationCreation): Observable<void>{
+    return this.http.post<void>(`http://localhost:8092/api/reservations/create`, reservation);
   }
 }

@@ -1,4 +1,5 @@
-<div *ngIf="companyId" class="content-container">
+<div>
+<div *ngIf="companyId && !reservationMode" class="content-container">
     
     <div class="company-details">
         <div class="company-info">
@@ -54,22 +55,18 @@
   
   
     <div>
+        <button (click)="changeReservationMode(true)">Finish reservation</button>
         <h3><b>Equipment:</b></h3>
-        <table mat-table [dataSource]="companyEquipmentDataSource">
-            <!-- Define columns for Equipment -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let equipment"> {{ equipment.name }} </td>
-            </ng-container>
-            <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef> Description </th>
-                <td mat-cell *matCellDef="let equipment"> {{ equipment.description }} </td>
-            </ng-container>
-
-            <!-- Set column definitions -->
-            <tr mat-header-row *matHeaderRowDef="['name', 'description']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['name', 'description']"></tr>
-        </table>
+        <div class="equipment-container">
+            <div *ngFor="let equipment of equipments" class="equipment-card">
+                <h3>{{ equipment.name }}</h3>
+                <p>Type: {{ equipment.type }}</p>
+                <p>Price: {{ equipment.price }}</p>
+                <p>Description: {{ equipment.description }}</p>
+                <p>Available: {{ equipment.count }}</p>
+                <button (click)="addToReservation(equipment)">Add to reservation</button>
+            </div>
+        </div>
     </div>
 
     <div>
@@ -121,6 +118,9 @@
             <tr mat-row *matRowDef="let row; columns: [ 'email', 'name', 'lastname']"></tr>
         </table>
     </div>
-    
+</div>
+<div *ngIf="reservationMode">
+    <xp-reservation-creation [reservationItems]="reservationItems" [availableAppointments]="availableAppointments" (itemsUpdated)="itemsUpdated($event)" (reservationModeChanged)="changeReservationMode($event)"></xp-reservation-creation>
+</div>
 </div>
 

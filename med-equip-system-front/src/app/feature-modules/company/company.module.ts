@@ -4,10 +4,12 @@ import { CompanyProfileComponent } from './company-profile/company-profile.compo
 import { MatTableModule } from '@angular/material/table';
 import { LayoutModule } from 'src/app/layout/layout.module';
 import { FormsModule } from '@angular/forms';
+import { ReservationCreationComponent } from './reservation-creation/reservation-creation.component';
 
 @NgModule({
   declarations: [
-    CompanyProfileComponent, 
+    CompanyProfileComponent,
+    ReservationCreationComponent, 
   ],
   imports: [
     CommonModule,
