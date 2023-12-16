@@ -103,8 +103,8 @@ public class CompanyController {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Void> updateCompany(@RequestBody CompanyProfileDTO companyDTO) {
-        CompanyDTO dto = new CompanyDTO(companyDTO.getId(), companyDTO.getName(), companyDTO.getLocation(), companyDTO.getDescription(), companyDTO.getAverageRate());
-        Company updatedCompany = companyService.createOrUpdate(dto);
+        Company company = (Company) new DtoUtils().convertToEntity( new Company(), companyDTO);
+        companyService.Update(company);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

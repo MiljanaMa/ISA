@@ -21,8 +21,8 @@ INSERT INTO public.companies (
 ) VALUES ( 2, 3.8, 'Premier design agency.', 'Creative Solutions', 2, '9:00-20:00');
 
 INSERT INTO public.companies (
-    id, avg_rate, description, name, loc_id
-) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3);
+    id, avg_rate, description, name, loc_id, working_hours
+) VALUES ( 3, 4.2, 'Tokyo-based global consulting firm.', 'Global Consultants', 3, '10:00-17:00');
 
 
 --Loyalty programs

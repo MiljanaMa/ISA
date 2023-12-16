@@ -33,7 +33,7 @@ export class CompanyService {
   
   createAppointment(appointment: Appointment): Observable<Appointment>{
     return this.http.post<Appointment>(`http://localhost:8092/api/appointments/create`, appointment);  
-
+  }
   makeReservation(reservation: ReservationCreation): Observable<void>{
     return this.http.post<void>(`http://localhost:8092/api/reservations/create`, reservation);
 

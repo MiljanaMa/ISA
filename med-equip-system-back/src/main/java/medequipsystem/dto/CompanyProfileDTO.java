@@ -43,7 +43,7 @@ public class CompanyProfileDTO implements DTOEntity {
                         .collect(Collectors.toSet());
           companyAdmins = company.getCompanyAdmins();
 
-        */
+
         Set<CompanyAdminRegistrationDTO> adminDtos = new HashSet<>(); // dto with all user data
         Set<CompanyAdmin> admins = company.getCompanyAdmins();
         for(CompanyAdmin ca : admins){

@@ -62,7 +62,7 @@ export class CompanyProfileAdminComponent implements OnInit {
         date: this.formatDateToYYYYMMDD(this.selectedDate), 
         startTime: this.startTime+":00", 
         endTime: this.endTime + ":00", 
-        status: AppointmentStatus.Available, 
+        status: AppointmentStatus.AVAILABLE, 
         companyAdmin: this.selectedAdmin
 
       }
@@ -81,12 +81,12 @@ export class CompanyProfileAdminComponent implements OnInit {
 
     this.addMode = false; 
   }
-  formatDateToYYYYMMDD(date: Date): string {
+  formatDateToYYYYMMDD(date: Date): Date{
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-based
     const day = ('0' + date.getDate()).slice(-2);
   
-    return `${year}-${month}-${day}`;
+    return new Date(`${year}-${month}-${day}`);
     
   }
 
@@ -266,7 +266,7 @@ export class CompanyProfileAdminComponent implements OnInit {
       title: `Admin: ${appointment.companyAdmin?.firstName} ${appointment.companyAdmin?.lastName}`,
       start: appointment.date + 'T' + appointment.startTime,
       end: appointment.date + 'T' + appointment.endTime,
-      color: appointment.status === AppointmentStatus.Reserved ? 'red': 'green'
+      color: appointment.status === AppointmentStatus.RESERVED ? 'red': 'green'
     
     }));
    

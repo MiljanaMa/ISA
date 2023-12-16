@@ -56,9 +56,18 @@ export class CompanyProfileComponent implements OnInit {
         console.log(data); 
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
         this.equipments = this.company?.companyEquipment || [];
-        this.appointmentsDataSource.data = this.company?.appointments || [];
-        let appointments = this.company.appointments || [];
-        this.availableAppointments = appointments.filter(a => a.status === AppointmentStatus.AVAILABLE);
+        this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
+          (appointmentsData : Appointment[] ) => {
+            this.appointmentsDataSource.data = appointmentsData || [];
+            
+            this.appointmentsDataSource.data = this.appointmentsDataSource.data.filter(a => a.status === AppointmentStatus.AVAILABLE);
+        
+            
+          }, 
+          appointmentError => {
+            console.log('Error fetching appointments', appointmentError); 
+          }
+        );
       },
       error => {
         console.error('Error fetching company details:', error);
