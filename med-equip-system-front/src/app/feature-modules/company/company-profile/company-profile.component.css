@@ -41,6 +41,37 @@ label {
 button{
   background-color: #007bff;
   color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.equipment-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.equipment-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.equipment-card h3 {
+  margin-bottom: 5px;
+  color: #7149b1;
+  font-weight: bold;
+}
+
+.equipment-card p {
+  margin: 0;
+  color: #3d3b3b;
 }
 
 

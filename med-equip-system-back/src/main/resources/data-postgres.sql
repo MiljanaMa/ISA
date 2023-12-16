@@ -107,7 +107,7 @@ VALUES
 INSERT INTO public.users(
     id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
 VALUES
-    (4, 'London', 'UK', 'milena@email.com', true, 'Milena', 'Markovic', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '987654321', 3);
+    (4, 'London', 'UK', 'milenamarkovickg@gmail.com', true, 'Milena', 'Markovic', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '987654321', 3);
 
 -- User 5 - client
 INSERT INTO public.users(
@@ -146,20 +146,21 @@ INSERT INTO public.system_admins(
 
 --Client 1
 INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (1, true, 'General hospital', 'Doctor', 0, 0, 2);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, 'General hospital', 'Doctor', 0, 0, 2);
 --Client 2
 INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (2, true, 'General hospital', 'Nurse', 0, 0, 3);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, 'General hospital', 'Nurse', 0, 0, 3);
 --Client 3
 INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (3, true, 'General hospital', 'Surgeon', 0, 0, 4);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, 'General hospital', 'Surgeon', 0, 0, 4);
 --Client 4
 INSERT INTO public.clients(
-	id, email_confirmed, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (4, true, 'General hospital', 'Radiologist', 0, 0, 5);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 5);
+
 
 --Company Admins -- this needs to be changed, user composition
 --INSERT INTO public.company_admins(

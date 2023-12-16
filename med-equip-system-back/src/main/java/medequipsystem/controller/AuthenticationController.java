@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import medequipsystem.domain.Client;
 import medequipsystem.dto.auth.ClientRegistrationDTO;
 import medequipsystem.service.ClientService;
+import medequipsystem.service.EmailService;
+import medequipsystem.service.EmailTokenService;
+import medequipsystem.util.EmailToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +38,11 @@ public class AuthenticationController {
     private UserService userService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private EmailTokenService emailTokenService;
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<Client> addUser(@RequestBody ClientRegistrationDTO clientDto) {
@@ -44,6 +51,15 @@ public class AuthenticationController {
 
         if(client == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        EmailToken emailToken = new EmailToken(client);
+        emailToken = emailTokenService.create(emailToken);
+
+        try {
+            emailService.sendConfirmationMail(emailToken);
+        }catch( Exception e ){
+            System.out.println("Error (sanding mail): " + e.getMessage());
         }
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);
@@ -72,5 +88,24 @@ public class AuthenticationController {
         return this.userService.getByEmail(user.getName());
     }
 
+    @GetMapping (value = "/confirm")
+    public ResponseEntity<String> confirmEmail(@RequestParam("token") String token){
+        EmailToken emailToken = this.emailTokenService.getByToken(token);
+        Client client = emailToken.getClient();
+        clientService.confirmEmail(client);
+
+        return  new ResponseEntity<>(generateResponse(), HttpStatus.OK);
+    }
+
+    public String generateResponse(){
+        return "<!DOCTYPE html>" +
+                "<html>" +
+                "<body>" +
+                "<p>You have succesfully confirmed your email address and activated your account.</p>" +
+                "<p>Here is the link to login page: </p>" +
+                "<a href= \"http://localhost:4200/login" +"\">Go to Login Page</a>" +
+                "</body>" +
+                "</html>";
+    }
 
 }
