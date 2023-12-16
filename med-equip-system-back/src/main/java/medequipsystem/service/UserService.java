@@ -24,37 +24,13 @@ public class UserService {
         return userOptional.orElse(null);
     }
 
-    public User create(User user){
-        for(User u: getAll()) {
-            if(user.getEmail().equals(u.getEmail())){
-                return null;
-            }
-        }
-        try {
-            return this.userRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            // Handle the exception caused by a duplicate key violation
-            // You may want to log the error or take appropriate action
-            System.out.println(e.getMessage());
-            return null;
-        }
-        //return this.userRepository.save(user);
+    public User getByEmail(String email){
+        return this.userRepository.findByEmail(email);
     }
-    public User update(User updatedUser){
-        User user = getById(updatedUser.getId());
+    /*
 
-        if(user == null) return null;
 
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setCity(updatedUser.getCity());
-        user.setCountry(updatedUser.getCountry());
-        user.setPhoneNumber(updatedUser.getPhoneNumber());
-        user.setJobTitle(updatedUser.getJobTitle());
-        user.setHospitalInfo(updatedUser.getHospitalInfo());
 
-        return this.userRepository.save(user);
-    }
     public User updatePassword(long userId, String password){
         User user = getById(userId);
         if(user == null) return null;
@@ -66,5 +42,5 @@ public class UserService {
         user.setEmailConfirmed(true);
         return this.userRepository.save(user);
     }
-
+*/
 }
