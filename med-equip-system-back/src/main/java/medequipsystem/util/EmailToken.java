@@ -1,5 +1,6 @@
-package medequipsystem.token;
+package medequipsystem.util;
 
+import medequipsystem.domain.Client;
 import medequipsystem.domain.User;
 
 import javax.persistence.Entity;
@@ -23,14 +24,14 @@ public class EmailToken {
     private LocalDateTime creationDate;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+    @JoinColumn(name = "clientId", nullable = false)
+    private Client client;
 
     public EmailToken(){}
 
 
-    public EmailToken(User user) {
-        this.user = user;
+    public EmailToken(Client client) {
+        this.client = client;
         this.creationDate = LocalDateTime.now();
         this.token = UUID.randomUUID().toString();
     }
@@ -59,12 +60,12 @@ public class EmailToken {
         this.creationDate = creationDate;
     }
 
-    public User getUser() {
-        return user;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 }

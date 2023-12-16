@@ -96,8 +96,8 @@ ADD THIS SHIT
                 "<html>" +
                 "<body>" +
                 "<p>You have succesfully confirmed your email address and activated your account.</p>" +
-                "<p>Here is the link to your profile: </p>" +
-                "<a href= \"http://localhost:4200/profile/" + userId + "\">Go to Profile</a>" +
+                "<p>Here is the link to login page: </p>" +
+                "<a href= \"http://localhost:4200/login" + userId + "\">Go to Login</a>" +
                 "</body>" +
                 "</html>";
     }

@@ -95,16 +95,21 @@ public class ClientService {
         user.setCity(clientDTO.getCity());
         user.setCountry(clientDTO.getCountry());
         user.setPhoneNumber(clientDTO.getPhoneNumber());
-        user.setEnabled(true);
+        user.setEnabled(false);
         user.setRole(roleRepository.findByName("ROLE_CLIENT"));
 
         Client client = new Client();
         client.setJobTitle(clientDTO.getJobTitle());
         client.setHospitalInfo(clientDTO.getHospitalInfo());
-        client.setEmailConfirmed(false);
         client.setPenaltyPoints(0);
         client.setPoints(0);
         client.setUser(user);
         return client;
+    }
+
+    public void confirmEmail(Client client){
+       User user = client.getUser();
+       user.setEnabled(true);
+       userRepository.save(user);
     }
 }
