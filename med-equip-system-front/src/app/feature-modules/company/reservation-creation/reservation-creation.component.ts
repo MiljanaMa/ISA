@@ -183,6 +183,10 @@ export class ReservationCreationComponent {
   }
 
   makeReservation(): void {
+    if(this.reservationItems?.length === 0){
+      alert("Choose some equipments to finish reservation");
+      return;
+    }
     if (this.selectedOption === 'predefined') {
       let appointment = this.availableAppointments?.find(a => a.id === Number(this.selectedAppointment));
       if (appointment === undefined) {

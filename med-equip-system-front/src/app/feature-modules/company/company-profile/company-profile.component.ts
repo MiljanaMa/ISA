@@ -9,6 +9,8 @@ import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReservationItem } from '../model/reservationCreation.model';
 import { DatePipe } from '@angular/common';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CurrentUser } from 'src/app/auth/model/current-user.model';
 
 @Component({
   selector: 'app-company-profile',
@@ -22,6 +24,7 @@ export class CompanyProfileComponent implements OnInit {
   companyId?: number;
   company: Company | undefined;
   oldCompany: Company | undefined;
+  currentUser?: CurrentUser;
 
   reservationMode = false;
 
@@ -37,10 +40,20 @@ export class CompanyProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private companyService: CompanyService, private datePipe: DatePipe
+    private companyService: CompanyService, private datePipe: DatePipe,
+    private authService: AuthService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    if (window.localStorage.getItem('jwt')) {
+      await this.authService.setCurrentUser();
+    }
+    this.authService.currentUser.subscribe((user) => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
+
     this.route.params.subscribe(params => {
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);

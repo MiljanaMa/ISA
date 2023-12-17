@@ -35,7 +35,7 @@
   
   
     <div>
-        <button (click)="changeReservationMode(true)">Finish reservation</button>
+        <button *ngIf="currentUser?.role?.name === 'ROLE_CLIENT'" (click)="changeReservationMode(true)">Finish reservation</button>
         <h3><b>Equipment:</b></h3>
         <div class="equipment-container">
             <div *ngFor="let equipment of equipments" class="equipment-card">
@@ -44,7 +44,7 @@
                 <p>Price: {{ equipment.price }}</p>
                 <p>Description: {{ equipment.description }}</p>
                 <p>Available: {{ equipment.count }}</p>
-                <button (click)="addToReservation(equipment)">Add to reservation</button>
+                <button (click)="addToReservation(equipment)" *ngIf="currentUser?.role?.name === 'ROLE_CLIENT'">Add to reservation</button>
             </div>
         </div>
     </div>
