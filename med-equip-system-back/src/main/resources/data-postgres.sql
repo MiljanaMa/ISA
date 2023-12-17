@@ -199,8 +199,8 @@ VALUES
 INSERT INTO public.appointments(
     id, date, end_time, start_time, status, admin_id)
 VALUES
-    (4, '2023-11-23', '09:00', '10:00', FLOOR(RANDOM() * 2)::INTEGER, 2),
-    (5, '2023-11-24', '12:00', '13:00', FLOOR(RANDOM() * 2)::INTEGER, 2);
+    (4, '2023-11-23', '09:00', '10:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
+    (5, '2023-11-24', '12:00', '13:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 
 -- Appointments created by Admin 1
 INSERT INTO public.appointments(

@@ -38,7 +38,7 @@
         <h3>Select company admin</h3>
         <div *ngFor="let admin of freeAdmins; let i = index">
           <label>
-            <input type="checkbox" formControlName="{{i}}"> {{admin.firstName}} {{admin.lastName}}
+            <input type="checkbox" formControlName="{{i}}"> {{admin.user.firstName}} {{admin.user.lastName}}
           </label>
         </div>
         <button type="button" (click)="addAdmin()">Add Selected Admins</button>
@@ -46,7 +46,7 @@
         <div *ngIf="adminsArray.length > 0">
             <h4>Selected Admins:</h4>
             <ul>
-                <li *ngFor="let admin of adminsArray">{{admin.firstName}} {{admin.lastName}}</li>
+                <li *ngFor="let admin of adminsArray">{{admin.user.firstName}} {{admin.user.lastName}}</li>
             </ul>
         </div>
     </div>

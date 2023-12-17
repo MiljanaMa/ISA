@@ -67,13 +67,13 @@ public class CompanyAdminService {
         CompanyAdmin companyAdmin = companyAdminRepository.getById(companyAdminDTO.getId());
 
         User user = new User();
-        user.setEmail(companyAdminDTO.getUserDTO().getEmail());
-        user.setPassword(companyAdminDTO.getUserDTO().getPassword());
-        user.setFirstName(companyAdminDTO.getUserDTO().getFirstName());
-        user.setLastName(companyAdminDTO.getUserDTO().getLastName());
-        user.setCity(companyAdminDTO.getUserDTO().getCity());
-        user.setCountry(companyAdminDTO.getUserDTO().getCountry());
-        user.setPhoneNumber(companyAdminDTO.getUserDTO().getPhoneNumber());
+        user.setEmail(companyAdminDTO.getUser().getEmail());
+        user.setPassword(companyAdminDTO.getUser().getPassword());
+        user.setFirstName(companyAdminDTO.getUser().getFirstName());
+        user.setLastName(companyAdminDTO.getUser().getLastName());
+        user.setCity(companyAdminDTO.getUser().getCity());
+        user.setCountry(companyAdminDTO.getUser().getCountry());
+        user.setPhoneNumber(companyAdminDTO.getUser().getPhoneNumber());
         companyAdmin.setUser(user);
 
         companyAdminRepository.save(companyAdmin);

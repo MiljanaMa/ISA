@@ -1,6 +1,8 @@
 package medequipsystem.dto;
 
-public class UserDTO {
+import medequipsystem.mapper.MapperUtils.DTOEntity;
+
+public class UserDTO implements DTOEntity {
     private Long id;
     private String email;
     private String password;

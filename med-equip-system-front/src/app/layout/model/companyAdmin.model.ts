@@ -1,11 +1,7 @@
+import { User } from "./user.model";
+
 export interface CompanyAdmin {
     id?: number; 
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    city: string;
-    country: string;
-    phoneNumber: string;
+    user: User
     companyId?: number; 
   }

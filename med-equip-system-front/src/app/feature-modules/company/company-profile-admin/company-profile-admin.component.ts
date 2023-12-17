@@ -13,6 +13,7 @@ import { DateAdapter } from '@angular/material/core';
 import { Time } from '@angular/common';
 
 
+
 @Component({
   selector: 'app-company-profile-admin',
   templateUrl: './company-profile-admin.component.html',
@@ -218,13 +219,12 @@ export class CompanyProfileAdminComponent implements OnInit {
     this.companyService.getCompanyById(id).subscribe(
       (data: Company) => {
         this.company = data;
-        console.log(data); 
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
-        console.log(this.company?.companyEquipment);
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
-        console.log(this.companyEquipmentDataSource.data); 
-
-  
+        
+        console.log(this.companyAdminsDataSource.data[0].id); 
+        
+        console.log(this.companyAdminsDataSource.data[0].user);
 
         this.calendarOptions.businessHours =  {
         
@@ -257,7 +257,7 @@ export class CompanyProfileAdminComponent implements OnInit {
   initializeCalendar(): void {
 
     this.calendarOptions.events = this.getAppointmentsAsEvents(); 
-    console.log(this.calendarOptions.events); 
+   
     
   }
   
@@ -274,11 +274,11 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   
   getAppointmentsAsEvents(): EventInput[] {
-    console.log(this.appointmentsDataSource.data[0].startTime[0]); 
+   
     
     return this.appointmentsDataSource.data.map((appointment) => ({
       
-      title: `Admin: ${appointment.companyAdmin?.firstName} ${appointment.companyAdmin?.lastName}`,
+      title: `Admin: ${appointment.companyAdmin?.user.firstName} ${appointment.companyAdmin?.user.lastName}`,
       start: this.getDateAsString(new Date(appointment.date)) + 'T' + appointment.startTime[0].toString().padStart(2,'0')+":" + appointment.startTime[1].toString().padStart(2,'0')+":00",
       end: this.getDateAsString(new Date(appointment.date))  + 'T' + appointment.endTime[0].toString().padStart(2,'0')+":" + appointment.endTime[1].toString().padStart(2,'0')+":00",
       color: appointment.status === AppointmentStatus.RESERVED ? 'red': 'green'

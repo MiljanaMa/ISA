@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping(value = "api/companies")
 public class CompanyController {
@@ -104,6 +106,8 @@ public class CompanyController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Void> updateCompany(@RequestBody CompanyProfileDTO companyDTO) {
         Company company = (Company) new DtoUtils().convertToEntity( new Company(), companyDTO);
+        company.setCompanyEquipment(new HashSet<>());
+        company.setCompanyAdmins(new HashSet<>());
         companyService.Update(company);
         return new ResponseEntity<>(HttpStatus.OK);
     }

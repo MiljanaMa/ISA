@@ -30,8 +30,7 @@ public class CompanyEquipmentDTO {
         this.count = count;
     }
 
-    //@Autowired
-   // private CompanyRepository companyRepository;
+
     public CompanyEquipmentDTO(CompanyEquipment companyEquipment) {
         this.id = companyEquipment.getId();
         this.name = companyEquipment.getName();

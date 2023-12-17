@@ -44,13 +44,13 @@ export class AdminProfileComponent implements OnInit {
         next: (admin: CompanyAdmin) => {
          this.admin = admin;
           this.adminForm.patchValue({ 
-              email: this.admin.email,
-              password: this.admin.password , 
-              firstName: this.admin.firstName, 
-              lastName: this.admin.lastName, 
-              city: this.admin.city, 
-              country: this.admin.country, 
-              phoneNumber: this.admin.phoneNumber, 
+              email: this.admin.user.email,
+              password: this.admin.user.password , 
+              firstName: this.admin.user.firstName, 
+              lastName: this.admin.user.lastName, 
+              city: this.admin.user.city, 
+              country: this.admin.user.country, 
+              phoneNumber: this.admin.user.phoneNumber, 
           });
          },
         error: (error) => {

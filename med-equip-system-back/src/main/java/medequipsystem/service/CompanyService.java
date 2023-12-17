@@ -12,6 +12,8 @@ import medequipsystem.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,8 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     private CompanyAdminService companyAdminService;
 
@@ -46,6 +50,11 @@ public class CompanyService {
     }
 
     public void Update(Company company){
+        company.getCompanyEquipment().stream()
+            .forEach(entityManager::detach);
+
+        company.getCompanyAdmins().stream()
+                .forEach(entityManager::detach);
         companyRepository.save(company);
     }
 
