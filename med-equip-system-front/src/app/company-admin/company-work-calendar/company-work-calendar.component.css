@@ -1,0 +1,35 @@
+.fc-custom-event {
+  max-width: 200px;
+  background-color: #6f4dd5;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.fc-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.fc-details {
+  font-size: 14px;
+}
+
+.fc-custom-event .fc-details p {
+  margin: 0;
+  max-width: 200px;
+  background-color: #6f4dd5;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.fc-custom-event .fc-details strong {
+  display: inline-block;
+  width: 70px;
+  margin-right: 5px;
+}
+
+.fc-custom-event .fc-details p:last-child {
+  margin-bottom: 0;
+}

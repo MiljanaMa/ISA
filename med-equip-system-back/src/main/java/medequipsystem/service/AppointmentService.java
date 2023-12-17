@@ -3,6 +3,7 @@ package medequipsystem.service;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Company;
+import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.repository.AppointmentRepository;
 
 import medequipsystem.repository.CompanyAdminRepository;
@@ -78,4 +79,7 @@ public class AppointmentService {
         return timeSlots;
     }
 
+    public Set<ReservedAppointmentDTO> getReservedAppointmentsByCompanyId(Long companyId) {
+        return appointmentRepository.getReservedAppointmentsByCompanyId(companyId);
+    }
 }

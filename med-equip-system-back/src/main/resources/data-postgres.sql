@@ -217,4 +217,10 @@ VALUES
     (9, '2023-11-28', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
     (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES
+    (1, 0, 1, 1),
+    (2, 0, 2, 2),
+    (3, 0, 3, 1);
 

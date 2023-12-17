@@ -12,7 +12,10 @@ import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './auth/interceptor/token-interceptor';
 import { ClientModule } from './client/client.module';
 import { SystemAdminModule } from './system-admin/system-admin.module';
+import { CompanyAdminModule } from './company-admin/company-admin.module';
+import { ScheduleModule, DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
 
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,12 @@ import { SystemAdminModule } from './system-admin/system-admin.module';
     AuthModule,
     ClientModule,
     SystemAdminModule,
+    CompanyAdminModule,
+    FullCalendarModule,
+    ScheduleModule,
+
+    
+
     
   ],
   providers: [

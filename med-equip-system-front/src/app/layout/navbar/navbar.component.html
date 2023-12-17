@@ -15,6 +15,8 @@
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_SYSADMIN' && isMainAdmin"><a href="/systemAdminCreation">Create System Admin</a></li>
       <!--li *ngIf="currentUser && currentUser.role?.name === 'ROLE_SYSADMIN'"><a href="/systemAdminCreation">Create System Admin</a></li-->
 
+      <!--Company admins-->
+      <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a href="/company-work-calendar">Company's work calendar</a></li>
 
       <!--Clients-->
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_CLIENT'"><a href="/profile">Profile</a></li>

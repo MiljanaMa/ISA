@@ -3,11 +3,13 @@ package medequipsystem.controller;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.dto.AppointmentDTO;
+import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -34,5 +36,13 @@ public class AppointmentController {
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
+
+    //@PreAuthorize("hasRole('COMPADMIN')")
+    @GetMapping(value = "/companycalendar/{companyId}")
+    public ResponseEntity<Set<ReservedAppointmentDTO>> getReservedAppointmentsByCompanyId(@PathVariable Long companyId) {
+        Set<ReservedAppointmentDTO> reservedAppointmentDTOS = appointmentService.getReservedAppointmentsByCompanyId(companyId);
+        return new ResponseEntity<>(reservedAppointmentDTOS, HttpStatus.OK);
+    }
+
 
 }
