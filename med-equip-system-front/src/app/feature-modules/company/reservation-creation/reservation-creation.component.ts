@@ -34,6 +34,31 @@ export class ReservationCreationComponent {
       duration: [this.appointment?.duration, Validators.required]
     });*/
   }
+  formatTime(time: any): String {
+    if (!time || time.length !== 2) {
+      // Handle invalid or unexpected input
+      return '';
+    }
+
+    const [hours, minutes] = time;
+    const formattedHours = this.padWithZero(hours);
+    const formattedMinutes = this.padWithZero(minutes);
+
+    return `${formattedHours}:${formattedMinutes}`;
+  }
+  private padWithZero(value: number | string): string {
+    const stringValue = String(value);
+    return stringValue.length === 1 ? '0' + stringValue : stringValue;
+  }
+  formatDate(date: any): string {
+    if (!date) {
+      // Handle invalid or unexpected input
+      return '';
+    }
+  
+    const formattedDate = new Date(date).toLocaleDateString('sr-RS'); // Adjust the locale as needed
+    return formattedDate;
+  }
   
   createFormControl(value: number): FormControl {
     return new FormControl(value, [

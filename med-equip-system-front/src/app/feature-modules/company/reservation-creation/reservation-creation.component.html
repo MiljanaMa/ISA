@@ -45,30 +45,11 @@
       <select id="appointmentOption" name="appointmentOption" [(ngModel)]="selectedAppointment">
         <ng-container *ngFor="let appointment of availableAppointments">
           <option [value]="appointment.id">
-            {{ appointment.date }} - {{ appointment.startTime }} to {{ appointment.endTime }}
+            {{ formatDate(appointment.date) }} - {{ formatTime(appointment.startTime) }} to {{ formatTime(appointment.endTime) }}
           </option>
         </ng-container>
       </select>
       <button (click)="makeReservation()">Make reservation</button>
-    </div>
-    
-    <div *ngIf="selectedOption === 'predefined'">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Start time</th>
-            <th>End time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let appointment of availableAppointments">
-            <td>{{appointment.date}}</td>
-            <td>{{appointment.startTime}}</td>
-            <td>{{appointment.endTime}}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
     
     <div *ngIf="selectedOption === 'custom'">
