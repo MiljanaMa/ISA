@@ -16,11 +16,12 @@ public class CompanyEquipmentDTO {
     private double price;
     private CompanyDTO company;
     private int count;
+    private int reservedCount;
 
     public CompanyEquipmentDTO() {
     }
 
-    public CompanyEquipmentDTO(Long id, String name, EquipmentType type, String description, double price, CompanyDTO company, int count) {
+    public CompanyEquipmentDTO(Long id, String name, EquipmentType type, String description, double price, CompanyDTO company, int count, int reservedCount) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -28,6 +29,7 @@ public class CompanyEquipmentDTO {
         this.price = price;
         this.company = company;
         this.count = count;
+        this.reservedCount = reservedCount;
     }
 
     //@Autowired
@@ -46,6 +48,15 @@ public class CompanyEquipmentDTO {
 
         //this.company = companyEquipment.getCompany() != null ? new CompanyDTO(companyEquipment.getCompany()) : null;
         this.count = companyEquipment.getCount();
+        this.reservedCount = companyEquipment.getReservedCount();
+    }
+
+    public int getReservedCount() {
+        return reservedCount;
+    }
+
+    public void setReservedCount(int reservedCount) {
+        this.reservedCount = reservedCount;
     }
 
     public Long getId() {
@@ -114,6 +125,7 @@ public class CompanyEquipmentDTO {
         companyEquipment.setDescription(this.getDescription());
         companyEquipment.setPrice(this.getPrice());
         companyEquipment.setCount(this.getCount());
+        companyEquipment.setReservedCount(this.getReservedCount());
 
         if (this.getCompany() != null) {
             companyEquipment.setCompany(company);
