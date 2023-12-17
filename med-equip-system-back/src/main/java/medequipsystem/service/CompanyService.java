@@ -6,6 +6,7 @@ import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
 import medequipsystem.mapper.CompanyAdminDTOMapper;
+import medequipsystem.repository.CompanyAdminRepository;
 import medequipsystem.repository.CompanyRepository;
 import medequipsystem.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,10 @@ public class CompanyService {
     public Company getById(Long id){
         Optional<Company> companyOptional = this.companyRepository.findById(id);
         return companyOptional.orElse(null);
+    }
+
+    public void Update(Company company){
+        companyRepository.save(company);
     }
 
     public Company createOrUpdate(CompanyDTO companyDTO) {

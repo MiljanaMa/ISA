@@ -1,12 +1,13 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.Company;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CompanyDTO {
+public class CompanyDTO implements DTOEntity {
         private Long id;
         private String name;
         private LocationDTO location;
@@ -15,7 +16,7 @@ public class CompanyDTO {
         private Set<CompanyAdminRegistrationDTO> companyAdmins;
         //private Set<CompanyEquipmentDTO> equipment;
 
-
+        private String workingHours;
   
         public CompanyDTO() {
         }
@@ -75,6 +76,14 @@ public class CompanyDTO {
 
         public String getDescription() {
                 return description;
+        }
+
+        public String getWorkingHours() {
+                return workingHours;
+        }
+
+        public void setWorkingHours(String workingHours) {
+                this.workingHours = workingHours;
         }
 
         public void setDescription(String description) {

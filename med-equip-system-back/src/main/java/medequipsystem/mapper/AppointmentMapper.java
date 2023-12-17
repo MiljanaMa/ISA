@@ -5,4 +5,5 @@ import medequipsystem.dto.AppointmentDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface AppointmentMapper extends GenericMapper<Appointment, AppointmentDTO>  {}
+public interface AppointmentMapper extends GenericMapper<Appointment, AppointmentDTO>{
+}

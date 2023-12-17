@@ -10,6 +10,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ClientProfileComponent } from './client/client-profile/client-profile.component';
 import { SystemAdminCreationComponent } from './system-admin/system-admin-creation/system-admin-creation.component';
+import { CompanyProfileAdminComponent } from './feature-modules/company/company-profile-admin/company-profile-admin.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
   {path: 'companyadminCreation', component: CompanyAdminCreationComponent},
   {path: 'systemAdminCreation', component: SystemAdminCreationComponent},
+  {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent}, 
   
 
 ];

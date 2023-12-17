@@ -1,15 +1,17 @@
 package medequipsystem.dto;
 
+
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyAdmin;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class CompanyProfileDTO {
+public class CompanyProfileDTO implements DTOEntity {
 
     private Long id;
     private String name;
@@ -22,14 +24,13 @@ public class CompanyProfileDTO {
 
     private Set<CompanyEquipmentProfileDTO> companyEquipment;
 
-    private Set<AppointmentDTO> appointments;
-
+    private String workingHours;
 
     public CompanyProfileDTO() {
     }
 
 
-    public CompanyProfileDTO(Company company, Set<AppointmentDTO> appointments){
+    /*public CompanyProfileDTO(Company company, Set<AppointmentDTO> appointments){
 
         id = company.getId();
         name = company.getName();
@@ -42,7 +43,7 @@ public class CompanyProfileDTO {
                         .collect(Collectors.toSet());
           companyAdmins = company.getCompanyAdmins();
 
-        */
+
         Set<CompanyAdminRegistrationDTO> adminDtos = new HashSet<>(); // dto with all user data
         Set<CompanyAdmin> admins = company.getCompanyAdmins();
         for(CompanyAdmin ca : admins){
@@ -56,7 +57,7 @@ public class CompanyProfileDTO {
 
         this.appointments = appointments;
 
-    }
+    }*/
 
 
     public Long getId() {
@@ -77,6 +78,14 @@ public class CompanyProfileDTO {
 
     public LocationDTO getLocation() {
         return location;
+    }
+
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
     }
 
     public void setLocation(LocationDTO location) {
@@ -115,12 +124,5 @@ public class CompanyProfileDTO {
         this.companyEquipment = equipment;
     }
 
-    public Set<AppointmentDTO> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<AppointmentDTO> appointments) {
-        this.appointments = appointments;
-    }
 
 }
