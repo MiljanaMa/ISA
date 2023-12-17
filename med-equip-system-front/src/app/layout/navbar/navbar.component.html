@@ -8,6 +8,7 @@
       <!--Registered users-->
       <li *ngIf="currentUser?.role" (click)="onLogout()"><a href="/">Logout</a></li>
       <li *ngIf="currentUser?.role"><a href="/equipmentSearch">Search equipment</a></li>
+      
 
       <!--System admins-->
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_SYSADMIN'"><a href="/companyCreation">Create company</a></li>
@@ -18,6 +19,7 @@
 
       <!--Clients-->
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_CLIENT'"><a href="/profile">Profile</a></li>
+      <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_CLIENT'"><a href="/reservations">Reservations</a></li>
 
 
     </ul>

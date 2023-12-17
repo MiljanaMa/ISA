@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -66,5 +68,13 @@ public class ReservationService {
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
         reservation.setAppointment(savedAppointment);
         return reservationRepository.save(reservation);
+    }
+    public Set<Reservation> getUserReservations(Long id){
+        //stavi da sortira
+        List<Reservation> reservations = reservationRepository.findAll();
+        Set<Reservation> userReservations = reservations.stream()
+                .filter(reservation -> reservation.getClient().getUser().getId().equals(id))
+                .collect(Collectors.toSet());
+        return userReservations;
     }
 }

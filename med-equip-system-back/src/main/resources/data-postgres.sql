@@ -46,13 +46,13 @@ VALUES (5, 15, 'GOLD', 0, 400);
 
 --Company equipments
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 0);
+VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 2);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
 VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2, 0);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
 VALUES (3, 8, 'Cutting-edge laboratory equipment', 'LabTech 2000', 8000.00, 2, 3, 0);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (4, 12, 'High-tech surgical instruments', 'SurgiMate X', 10000.00, 3, 1, 0);
+VALUES (4, 12, 'High-tech surgical instruments', 'SurgiMate X', 10000.00, 3, 1, 5);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
 VALUES (5, 7, 'Versatile medical equipment', 'MediPro', 6000.00, 4, 3, 0);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
@@ -192,8 +192,8 @@ INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
     (1, '2023-12-20', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (2, '2023-11-21', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (3, '2023-11-22', '15:00', '16:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
+    (2, '2023-12-21', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
+    (3, '2023-12-22', '15:00', '16:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
@@ -216,5 +216,18 @@ INSERT INTO public.appointments(
 VALUES
     (9, '2023-11-28', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
     (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
-
+--Reservations
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES (1, 1, 1, 2);
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES (2, 1, 2, 2);
+--Reservation items
+INSERT INTO public.reservation_items(
+    id, count, equipment_id, reservation_id)
+VALUES (1, 2, 1, 1);
+INSERT INTO public.reservation_items(
+    id, count, equipment_id, reservation_id)
+VALUES (2, 5, 4, 2);
 

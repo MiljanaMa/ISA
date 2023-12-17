@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReservationItem } from '../model/reservationCreation.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Appointment, AppointmentStatus, CustomAppointment } from '../model/appointment.model';
@@ -31,7 +31,7 @@ export class ReservationCreationComponent {
   endTime: string | null = null;
   selectedDate: Date | null = null;
 
-  constructor(private companyService: CompanyService, private dateAdapter: DateAdapter<Date>) {
+  constructor(private companyService: CompanyService, private dateAdapter: DateAdapter<Date>, private router: Router) {
     this.minDate = new Date(); // Initialize minDate with today's date
     this.dateAdapter.setLocale('en-US'); // Set your desired locale
   }
@@ -198,8 +198,9 @@ export class ReservationCreationComponent {
         appointment: appointment,
       };
       this.companyService.makePredefinedReservation(reservation).subscribe(
-        () => {
+        (data) => {
           alert("You have succesfully made reservation");
+          this.router.navigate(['/reservations']);
         },
       );
       return;
@@ -223,8 +224,9 @@ export class ReservationCreationComponent {
     };
     //drugacije za pravljenje moga
     this.companyService.makeCustomReservation(reservation).subscribe(
-      () => {
+      (data) => {
         alert("You have succesfully made reservation");
+        this.router.navigate(['/reservations']);
       },
       error => {
         console.log(error);

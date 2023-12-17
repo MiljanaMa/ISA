@@ -35,12 +35,12 @@ export class CompanyService {
   createAppointment(appointment: Appointment): Observable<Appointment>{
     return this.http.post<Appointment>(`http://localhost:8092/api/appointments/create`, appointment);  
   }
-  makePredefinedReservation(reservation: ReservationCreation): Observable<void>{
-    return this.http.post<void>(`http://localhost:8092/api/reservations/create/predefined`, reservation);
+  makePredefinedReservation(reservation: ReservationCreation): Observable<string>{
+    return this.http.post<string>(`http://localhost:8092/api/reservations/create/predefined`, reservation);
 
   }
-  makeCustomReservation(reservation: CustomReservation): Observable<void>{
-    return this.http.post<void>(`http://localhost:8092/api/reservations/create/custom`, reservation);
+  makeCustomReservation(reservation: CustomReservation): Observable<string>{
+    return this.http.post<string>(`http://localhost:8092/api/reservations/create/custom`, reservation);
 
   }
   getCustomAppointments(date: Date, companyId: number): Observable<CustomAppointment[]>{

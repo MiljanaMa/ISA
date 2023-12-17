@@ -76,7 +76,7 @@ public class ReservationController {
         Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company,appointment.getDate(), appointment.getStartTime());
         if(availableAdmins.isEmpty())
             return ResponseEntity.badRequest().body("Appointment is not available anymore");
-
+        try {
         Reservation savedReservation = reservationService.createCustom(appointment, reservationItems, client, availableAdmins);
         /*if(savedReservation == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -85,7 +85,22 @@ public class ReservationController {
         emailService.sendReservationMail(user.getName(), savedReservation);
 
         //ReservationDTO dto = reservationMapper.toDto(savedReservation);
-        return ResponseEntity.ok().body("You have successfully made reservation");
+        return ResponseEntity.ok().body("{\"message\": \"You have successfully made a reservation\"}");
+        } catch (Exception e) {
+            // Log the exception
+            // logger.error("Error creating reservation", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during reservation creation");
+        }
+    }
+    @GetMapping(value = "/user")
+    @PreAuthorize("hasAnyRole('CLIENT')")
+    public ResponseEntity<Set<ReservationDTO>> getAppointmentsForCompany(Principal user){
+        User reservationUser = userService.getByEmail(user.getName());
+
+        Set<Reservation> reservations = reservationService.getUserReservations(reservationUser.getId());
+        Set<ReservationDTO> reservationDTOS = (Set<ReservationDTO>) new DtoUtils().convertToDtos(reservations, new ReservationDTO());
+
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 
 }
