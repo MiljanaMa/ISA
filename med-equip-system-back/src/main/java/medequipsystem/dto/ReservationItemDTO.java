@@ -3,8 +3,9 @@ package medequipsystem.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.ReservationItem;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
-public class ReservationItemDTO {
+public class ReservationItemDTO implements DTOEntity {
 
     @JsonProperty("id")
     private Long id;
@@ -15,14 +16,9 @@ public class ReservationItemDTO {
     private CompanyEquipmentDTO equipment;
 
     public ReservationItemDTO(){}
-    /*public ReservationItemDTO(ReservationItem item){
-        this(item.getId(), item.getCount(), item.getEquipment());
-    }
-
-    public ReservationItemDTO(Long id, int count, CompanyEquipment equipment) {
-        this.id = id;
-        this.count = count;
-        this.equipment = equipment;
+    /*public ReservationItemDTO(ReservationItem item) {
+        this.id = item.getId();
+        this.count = item.getCount();
     }*/
 
     public Long getId() {

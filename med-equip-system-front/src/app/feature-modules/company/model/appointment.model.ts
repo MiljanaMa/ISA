@@ -9,6 +9,13 @@ export interface Appointment {
     status: AppointmentStatus;
     companyAdmin?: CompanyAdmin; 
 }
+export interface CustomAppointment {
+    id?: number;
+    date: Date; 
+    startTime: string;
+    endTime: string; 
+    status: AppointmentStatus;
+}
 
 export enum AppointmentStatus {
 
