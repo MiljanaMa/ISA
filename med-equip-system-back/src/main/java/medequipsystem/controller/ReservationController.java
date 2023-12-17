@@ -69,6 +69,9 @@ public class ReservationController {
         Appointment appointment = appointmentMapper.toModel(reservationDTO.getAppointment());
         //potencijalno proslijedi usera, da ne pravis rezervaciju, takodje i provjera za appointment
         Reservation savedReservation = reservationService.create( appointment, reservationItems, clientId);
+        /*if(savedReservation == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        */
 
         emailService.sendReservationMail(user.getName(), savedReservation);
 
