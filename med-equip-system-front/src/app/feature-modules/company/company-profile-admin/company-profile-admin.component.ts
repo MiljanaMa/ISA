@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions, EventInput} from '@fullcalendar/core'; 
 import { DateAdapter } from '@angular/material/core';
+import { Time } from '@angular/common';
 
 
 @Component({
@@ -256,16 +257,30 @@ export class CompanyProfileAdminComponent implements OnInit {
   initializeCalendar(): void {
 
     this.calendarOptions.events = this.getAppointmentsAsEvents(); 
+    console.log(this.calendarOptions.events); 
+    
   }
   
+  getDateAsString(date: Date): string{
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-based
+    const day = ('0' + date.getDate()).slice(-2);
+  
+    return `${year}-${month}-${day}`;
+    
+  }
+
+
+
   
   getAppointmentsAsEvents(): EventInput[] {
+    console.log(this.appointmentsDataSource.data[0].startTime[0]); 
     
     return this.appointmentsDataSource.data.map((appointment) => ({
       
       title: `Admin: ${appointment.companyAdmin?.firstName} ${appointment.companyAdmin?.lastName}`,
-      start: appointment.date + 'T' + appointment.startTime,
-      end: appointment.date + 'T' + appointment.endTime,
+      start: this.getDateAsString(new Date(appointment.date)) + 'T' + appointment.startTime[0].toString().padStart(2,'0')+":" + appointment.startTime[1].toString().padStart(2,'0')+":00",
+      end: this.getDateAsString(new Date(appointment.date))  + 'T' + appointment.endTime[0].toString().padStart(2,'0')+":" + appointment.endTime[1].toString().padStart(2,'0')+":00",
       color: appointment.status === AppointmentStatus.RESERVED ? 'red': 'green'
     
     }));

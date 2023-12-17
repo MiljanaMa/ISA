@@ -61,7 +61,7 @@ export class CompanyProfileComponent implements OnInit {
             this.appointmentsDataSource.data = appointmentsData || [];
             
             this.appointmentsDataSource.data = this.appointmentsDataSource.data.filter(a => a.status === AppointmentStatus.AVAILABLE);
-        
+            this.availableAppointments = this.appointmentsDataSource.data; 
             
           }, 
           appointmentError => {

@@ -6,13 +6,13 @@ import medequipsystem.mapper.MapperUtils.DTOEntity;
 public class CompanyAdminDTO implements DTOEntity {
     private Long id;
     private UserDTO userDTO;
-    /*private String email;
+    private String email;
     private String password;
     private String firstName;
     private String lastName;
     private String city;
     private String country;
-    private String phoneNumber;*/
+    private String phoneNumber;
     private CompanyDTO companyDTO;
     private Long companyId;
     //private CompanyDTO companyDTO; stack overflow goes brrr
@@ -56,7 +56,7 @@ public class CompanyAdminDTO implements DTOEntity {
     public void setId(Long id) {
         this.id = id;
     }
-/*
+
     public String getEmail() {
         return email;
     }
@@ -112,7 +112,6 @@ public class CompanyAdminDTO implements DTOEntity {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-*/
     /*public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
