@@ -1,14 +1,14 @@
 package medequipsystem.service;
 
 import medequipsystem.domain.*;
+import medequipsystem.domain.enums.AppointmentStatus;
 import medequipsystem.domain.enums.ReservationStatus;
-import medequipsystem.repository.AppointmentRepository;
-import medequipsystem.repository.ClientRepository;
-import medequipsystem.repository.ReservationRepository;
-import medequipsystem.repository.UserRepository;
+import medequipsystem.dto.CustomAppointmentDTO;
+import medequipsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,17 +21,50 @@ public class ReservationService {
     private ClientRepository clientRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    private CompanyEquipmentRepository equipmentRepository;
 
 
-    public Reservation create(Appointment appointment, Set<ReservationItem> reservationItems, Long userId){
-        Optional<Client> userOptional = clientRepository.findById(userId);
-        //ako je appointment id null onda provjeri je li okej termin, ako je termin koji se dobije reserved throuw exception
+    public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
         Optional<Appointment> appointmentOptional = appointmentRepository.findById(appointment.getId());
-        //if( appointmentOptional == null)
-        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, userOptional.orElse(null), appointment, reservationItems);
-        //da li je potreban korak
-        /*for(ReservationItem ri: reservation.getReservationItems())
-            reservation.addReservationItem(ri);*/
+        if( appointmentOptional == null)
+            return null;
+        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, appointment, reservationItems);
+        //korak za smanjivanje kolicine robe
+        CompanyEquipment ce;
+        Set<ReservationItem> changedItems = new HashSet<>();
+        for(ReservationItem ri: reservation.getReservationItems()){
+            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
+                return null;
+            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+        }
+        reservation.setReservationItems(changedItems);
+
+        Appointment existingAppointment = appointmentOptional.get();
+        existingAppointment.setStatus(AppointmentStatus.RESERVED);
+        appointmentRepository.save(existingAppointment);
+
+        return reservationRepository.save(reservation);
+    }
+    public Reservation createCustom(CustomAppointmentDTO appointment, Set<ReservationItem> reservationItems, Client client, Set<CompanyAdmin> admins){
+        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, new Appointment(), reservationItems);
+        //korak za smanjivanje kolicine robe
+        CompanyEquipment ce;
+        Set<ReservationItem> changedItems = new HashSet<>();
+        for(ReservationItem ri: reservation.getReservationItems()){
+            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
+                return null;
+            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+        }
+        reservation.setReservationItems(changedItems);
+
+        Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, admins.stream().findFirst().get());
+        Appointment savedAppointment = appointmentRepository.save(newAppointment);
+        reservation.setAppointment(savedAppointment);
         return reservationRepository.save(reservation);
     }
 }

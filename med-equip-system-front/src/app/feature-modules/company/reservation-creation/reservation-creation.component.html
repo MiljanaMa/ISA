@@ -1,8 +1,10 @@
 <div>
-  <button (click)="addMoreItems()">Add more items</button>
-
+  <button (click)="addMoreItems()" style="margin: 10 auto;">Add more items</button>
+  <br>
+  <h3 style="margin-top: 20px; font-size: 20px;" *ngIf="reservationItems?.length === 0">Reservation list is empty!</h3>
+  <h3 style="margin-top: 20px; font-size: 20px;" *ngIf="reservationItems?.length !== 0">Reservation list:</h3>
   <!-- Display the equipment list in a table -->
-  <table>
+  <table style="margin-top: 10px; margin-bottom: 10px;" *ngIf="reservationItems?.length !== 0">
     <thead>
       <tr>
         <th>Equipment</th>
@@ -22,25 +24,28 @@
           </div>
         </td>
         <td>
-          <!-- Input for equipment count -->
-          <input class="input" type="number" [(ngModel)]="item.count" (change)="onCountChange" />
+          <!-- Input for equipment count with added styles -->
+          <input class="input" type="number" [(ngModel)]="item.count" (change)="onCountChange"
+            style="width: 60px; padding: 5px;" />
         </td>
-        <td>
-          <button (click)="removeItem(item)">Remove</button>
+        <td style="text-align: center; vertical-align: middle;">
+          <!-- Centered button -->
+          <button (click)="removeItem(item)" style="margin: 0 auto;">Remove</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div>
-    <label>
+  <div style="margin-bottom: 15px; font-size: 20px;">
+    <h3 style="margin-bottom: 10px; font-size: 20px;">Choose your appointment date and time:</h3>
+    <label style="margin-right: 10px; font-size: 20px;">
       <input type="radio" [(ngModel)]="selectedOption" value="predefined" />Predefined appointment
     </label>
-    <label>
-      <input type="radio" [(ngModel)]="selectedOption" value="custom" /> Custom appointment
+    <label style="margin-right: 10px; font-size: 20px;">
+      <input type="radio" [(ngModel)]="selectedOption" value="custom" />Custom appointment
     </label>
   </div>
-  <div *ngIf="selectedOption === 'predefined'">
+  <div *ngIf="selectedOption === 'predefined'" class="predefined-appointment">
     <label for="appointmentOption">Select Appointment:</label>
     <select id="appointmentOption" name="appointmentOption" [(ngModel)]="selectedAppointment">
       <ng-container *ngFor="let appointment of availableAppointments">
@@ -50,16 +55,36 @@
         </option>
       </ng-container>
     </select>
-    <button (click)="makeReservation()">Make reservation</button>
   </div>
 
   <div *ngIf="selectedOption === 'custom'">
-    <div>
+    <form (ngSubmit)="makeReservation()" style="margin-bottom: 20px; margin-top: 20px">
+      <div style="padding-top: 8px;">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date" [min]="minDate" readonly
+            [(ngModel)]="selectedDate" name="selectedDate" (ngModelChange)="onDateChange($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div *ngIf="customAppointments.length!==0">
+          <label for="appointmentOption">Select Appointment:</label>
+          <select id="customAppointmentOption" name="appointmentOption" [(ngModel)]="selectedCustomAppointment">
+            <ng-container *ngFor="let cappointment of customAppointments">
+              <option [value]="cappointment.id">{{ formatTime(cappointment.startTime) }} to
+                {{formatTime(cappointment.endTime)}}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="showForm">
       <form (ngSubmit)="onFormSubmit()" style="margin-bottom: 20px; margin-top: 20px">
         <div style="padding-top: 8px;">
           <mat-form-field>
             <input matInput [matDatepicker]="picker" placeholder="Choose a date" [min]="minDate" readonly
-              [(ngModel)]="selectedDate" name="selectedDate">
+              [(ngModel)]="selectedDate" name="selectedDate" (ngModelChange)="onDateChange($event)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -82,13 +107,11 @@
             </mat-error>
           </mat-form-field>
         </div>
-
-
         <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid()" style="margin-top: 16px;">
           Submit
         </button>
-
       </form>
     </div>
   </div>
+  <button (click)="makeReservation()">Make reservation</button>
 </div>

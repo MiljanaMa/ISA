@@ -191,7 +191,7 @@ INSERT INTO public.company_admins(
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (1, '2023-11-20', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
+    (1, '2023-12-20', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
     (2, '2023-11-21', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
     (3, '2023-11-22', '15:00', '16:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 

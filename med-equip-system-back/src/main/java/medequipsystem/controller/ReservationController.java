@@ -4,10 +4,8 @@ import medequipsystem.domain.*;
 import medequipsystem.domain.enums.ReservationStatus;
 import medequipsystem.dto.*;
 import medequipsystem.mapper.GenericMapper;
-import medequipsystem.service.ClientService;
-import medequipsystem.service.EmailService;
-import medequipsystem.service.ReservationService;
-import medequipsystem.service.UserService;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
+import medequipsystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +24,10 @@ public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
-    //vidi da li su potrebni ovi maperi
     @Autowired
-    private GenericMapper<Reservation,ReservationDTO> reservationMapper;
+    private AppointmentService appointmentService;
     @Autowired
-    private GenericMapper<ReservationItem, ReservationItemDTO> reservationItemMapper;
-    @Autowired
-    private GenericMapper<CompanyEquipment, CompanyEquipmentDTO> companyEquipmentMapper;
-
-    @Autowired
-    private GenericMapper<Client, ClientDTO> userMapper;
-    @Autowired
-    private GenericMapper<Appointment, AppointmentDTO> appointmentMapper;
+    private CompanyService companyService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -45,30 +35,20 @@ public class ReservationController {
     @Autowired
     private ClientService clientService;
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create/predefined")
     @PreAuthorize("hasAnyRole('CLIENT')")
-    public void create(@RequestBody ReservationCreationDTO reservationDTO, Principal user) {
+    public ResponseEntity<String> createPredefined(@RequestBody ReservationCreationDTO reservationDTO, Principal user) {
         //maybe change that client has only one id connected to user and doesnt have its own id(same for sysadmin, compadmin)
-        Long userId = userService.getByEmail(user.getName()).getId();
-        Long clientId = clientService.getByUserId(userId).getId();
+        User reservationUser = userService.getByEmail(user.getName());
+        if(reservationUser == null)
+            return ResponseEntity.badRequest().body("You are not authorized");
+        Client client = clientService.getByUserId(reservationUser.getId());
+        if(client == null)
+            return ResponseEntity.badRequest().body("You are not authorized");
 
-        //trbea mi citav appointment kao custom ili kao citav koji salje sa backa
-        //potencijalno ce da radi jer nema dva nivoa
-        Set<ReservationItem> reservationItems = new HashSet<>();
-        CompanyEquipment ce;
-        ReservationItem ri1;
-        for(ReservationItemDTO ri: reservationDTO.getReservationItems()){
-            ce = companyEquipmentMapper.toModel(ri.getEquipment());
-            ri1 = reservationItemMapper.toModel(ri);
-            ri1.setCount(ri.getCount());
-            ri1.setEquipment(ce);
-            reservationItems.add(ri1);
-
-        }
-        //User user = userMapper.toModel(reservationDTO.getClient());
-        Appointment appointment = appointmentMapper.toModel(reservationDTO.getAppointment());
-        //potencijalno proslijedi usera, da ne pravis rezervaciju, takodje i provjera za appointment
-        Reservation savedReservation = reservationService.create( appointment, reservationItems, clientId);
+        Appointment appointment =  (Appointment) new DtoUtils().convertToEntity(new Appointment(), reservationDTO.getAppointment());
+        Set<ReservationItem> reservationItems =  (Set<ReservationItem>) new DtoUtils().convertToEntities(new ReservationItem(), reservationDTO.getReservationItems());
+        Reservation savedReservation = reservationService.createPredefined( appointment, reservationItems, client);
         /*if(savedReservation == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         */
@@ -76,7 +56,36 @@ public class ReservationController {
         emailService.sendReservationMail(user.getName(), savedReservation);
 
         //ReservationDTO dto = reservationMapper.toDto(savedReservation);
-        return ;
+        return ResponseEntity.ok().body("You have successfully made reservation");
+    }
+    @PostMapping(value = "/create/custom")
+    @PreAuthorize("hasAnyRole('CLIENT')")
+    public ResponseEntity<String> createCustom(@RequestBody CustomReservationDTO reservationDTO, Principal user) {
+        //maybe change that client has only one id connected to user and doesnt have its own id(same for sysadmin, compadmin)
+        User reservationUser = userService.getByEmail(user.getName());
+        if(reservationUser == null)
+            return ResponseEntity.badRequest().body("You are not authorized");
+        Client client = clientService.getByUserId(reservationUser.getId());
+        if(client == null)
+            return ResponseEntity.badRequest().body("You are not authorized");
+
+        CustomAppointmentDTO appointment =  reservationDTO.getAppointment();
+        Set<ReservationItem> reservationItems =  (Set<ReservationItem>) new DtoUtils().convertToEntities(new ReservationItem(), reservationDTO.getReservationItems());
+
+        Company company = companyService.getById(reservationDTO.getCompanyId());
+        Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company,appointment.getDate(), appointment.getStartTime());
+        if(availableAdmins.isEmpty())
+            return ResponseEntity.badRequest().body("Appointment is not available anymore");
+
+        Reservation savedReservation = reservationService.createCustom(appointment, reservationItems, client, availableAdmins);
+        /*if(savedReservation == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        */
+
+        emailService.sendReservationMail(user.getName(), savedReservation);
+
+        //ReservationDTO dto = reservationMapper.toDto(savedReservation);
+        return ResponseEntity.ok().body("You have successfully made reservation");
     }
 
 }

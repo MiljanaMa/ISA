@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { ActivatedRoute } from '@angular/router';
 import { ReservationItem } from '../model/reservationCreation.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Appointment, AppointmentStatus } from '../model/appointment.model';
+import { Appointment, AppointmentStatus, CustomAppointment } from '../model/appointment.model';
 import { CompanyService } from '../company.service';
 import { DateAdapter } from '@angular/material/core';
-import { CompanyProfile as Company }  from '../model/company-profile-model';
+import { CompanyProfile as Company } from '../model/company-profile-model';
 
 @Component({
   selector: 'xp-reservation-creation',
@@ -18,13 +18,15 @@ export class ReservationCreationComponent {
   @Input() company: Company | undefined;
   @Output() itemsUpdated = new EventEmitter<ReservationItem[]>();
   @Output() reservationModeChanged = new EventEmitter<boolean>();
+  public customAppointments: CustomAppointment[] = [];
   public selectedOption = 'predefined';
   public selectedAppointment: string = '';
+  public selectedCustomAppointment: string = '';
   public appointment: Appointment | undefined;
+  public showForm: boolean = false;
   //appointmentForm: FormGroup;
   public minDate: Date = new Date();
   formBuilder: any;
-  durationOptions = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
   startTime: string | null = null;
   endTime: string | null = null;
   selectedDate: Date | null = null;
@@ -156,8 +158,23 @@ export class ReservationCreationComponent {
     // Emit the event when the count is changed
     this.itemsUpdated.emit(this.reservationItems);
   }
+  onDateChange(selectedDate: Date): void {
+    const offset = selectedDate.getTimezoneOffset()
+    selectedDate = new Date(selectedDate.getTime() - (offset * 60 * 1000))
+
+    this.companyService.getCustomAppointments(selectedDate, this.company?.id || 0).subscribe(
+      (data: CustomAppointment[]) => {
+        this.customAppointments = data;
+      },
+      error => {
+        console.log(error);
+      }
+
+    );
+
+  }
   removeItem(item: ReservationItem): void {
-    this.reservationItems = this.reservationItems?.filter(i => i === item);
+    this.reservationItems = this.reservationItems?.filter(i => i.equipment.id !== item.equipment.id);
     this.itemsUpdated.emit(this.reservationItems);
   }
   addMoreItems(): void {
@@ -166,6 +183,23 @@ export class ReservationCreationComponent {
   }
 
   makeReservation(): void {
+    if (this.selectedOption === 'predefined') {
+      let appointment = this.availableAppointments?.find(a => a.id === Number(this.selectedAppointment));
+      if (appointment === undefined) {
+        alert("You should select some appointment");
+        return;
+      }
+      let reservation = {
+        reservationItems: this.reservationItems || [],
+        appointment: appointment,
+      };
+      this.companyService.makePredefinedReservation(reservation).subscribe(
+        () => {
+          alert("You have succesfully made reservation");
+        },
+      );
+      return;
+    }
     let emptyAppointment = {
       id: 0,
       date: new Date(), // You might need to handle LocalDate format accordingly
@@ -173,15 +207,20 @@ export class ReservationCreationComponent {
       endTime: (new Date()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }), // LocalTime might need formatting as well
       status: AppointmentStatus.AVAILABLE
     }
-    let appointment = this.availableAppointments?.find(a => a.id === Number(this.selectedAppointment));
+    let appointment = this.customAppointments?.find(a => a.id === Number(this.selectedCustomAppointment));
+    if(appointment === undefined){
+      alert("You should select some appointment");
+      return;
+    }
     let reservation = {
       reservationItems: this.reservationItems || [],
-      appointment: appointment || emptyAppointment,
+      appointment: appointment,
+      companyId: this.company?.id || 0
     };
-    //sredi undefined appointment
-    this.companyService.makeReservation(reservation).subscribe(
+    //drugacije za pravljenje moga
+    this.companyService.makeCustomReservation(reservation).subscribe(
       () => {
-        //dodaj da ti ispise da si uspjesno dodao-toast
+        alert("You have succesfully made reservation");
       },
       error => {
         console.log(error);
