@@ -1,12 +1,18 @@
+import { CompanyAdmin } from "src/app/layout/model/companyAdmin.model";
+
+
 export interface Appointment {
-    id: number;
-    date: Date; // You might need to handle LocalDate format accordingly
-    startTime: string; // LocalTime might need formatting as well
-    endTime: string; // LocalTime might need formatting as well
+    id?: number;
+    date: Date; 
+    startTime: string;
+    endTime: string; 
     status: AppointmentStatus;
+    companyAdmin?: CompanyAdmin; 
 }
 
 export enum AppointmentStatus {
+
     RESERVED = 'RESERVED',
     AVAILABLE = 'AVAILABLE'
 }
+

@@ -13,7 +13,9 @@ import java.util.Set;
 @Table(name = "appointments")
 public class Appointment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 30, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
 
     @Column(name = "date", nullable = false)
@@ -27,7 +29,8 @@ public class Appointment {
 
     @Column(name="status", nullable = false)
     public AppointmentStatus status;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private CompanyAdmin companyAdmin;
 
@@ -48,7 +51,7 @@ public class Appointment {
         return endTime;
     }
 
-    public AppointmentStatus getAppointmentStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
@@ -72,7 +75,7 @@ public class Appointment {
         this.endTime = endTime;
     }
 
-    public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
+    public void setStatus(AppointmentStatus appointmentStatus) {
         this.status = appointmentStatus;
     }
 

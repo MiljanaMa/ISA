@@ -1,5 +1,6 @@
 import { CompanyEquipment } from "./companyEquipment.model";
 import { Appointment } from "./appointment.model";
+import { Time } from "@angular/common";
 
 export interface ReservationCreation {
     reservationItems: ReservationItem[];
@@ -10,3 +11,4 @@ export interface ReservationItem {
     count: number;
     equipment: CompanyEquipment;
 }
+

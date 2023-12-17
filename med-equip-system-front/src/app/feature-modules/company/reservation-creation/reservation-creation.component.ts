@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { ActivatedRoute } from '@angular/router';
 import { ReservationItem } from '../model/reservationCreation.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Appointment, AppointmentStatus } from '../model/appointment.model';
+import { Appointment, AppointmentStatus } from '../model/appointment.model'; 
 import { CompanyService } from '../company.service';
 
 @Component({

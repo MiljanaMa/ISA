@@ -1,20 +1,15 @@
 package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.*;
-import medequipsystem.repository.AppointmentRepository;
-import medequipsystem.service.AppointmentService;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.CompanyService;
-import org.apache.coyote.Response;
 import medequipsystem.mapper.CompanyDTOMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,10 +19,8 @@ public class CompanyController {
     private CompanyService companyService;
 
     @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
     private CompanyDTOMapper companyDTOMapper;
+
 
 
     @GetMapping(value = "/all")
@@ -64,12 +57,13 @@ public class CompanyController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<CompanyProfileDTO> getById(@PathVariable Long id) {
         Company c = companyService.getById(id);
-        Set<Appointment> appointments = appointmentService.getByCompany(id);
 
-        CompanyProfileDTO dto = new CompanyProfileDTO(c, appointments.stream().map(AppointmentDTO::new).collect(Collectors.toSet()));
+        CompanyProfileDTO dto = (CompanyProfileDTO) new DtoUtils().convertToDto(c, new CompanyProfileDTO());
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+
     /*
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
@@ -109,8 +103,8 @@ public class CompanyController {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Void> updateCompany(@RequestBody CompanyProfileDTO companyDTO) {
-        CompanyDTO dto = new CompanyDTO(companyDTO.getId(), companyDTO.getName(), companyDTO.getLocation(), companyDTO.getDescription(), companyDTO.getAverageRate());
-        Company updatedCompany = companyService.createOrUpdate(dto);
+        Company company = (Company) new DtoUtils().convertToEntity( new Company(), companyDTO);
+        companyService.Update(company);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

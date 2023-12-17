@@ -2,8 +2,9 @@ package medequipsystem.dto;
 
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.enums.EquipmentType;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
-public class CompanyEquipmentProfileDTO {
+public class CompanyEquipmentProfileDTO implements DTOEntity {
 
     private Long id;
     private String name;
