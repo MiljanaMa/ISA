@@ -82,4 +82,8 @@ public class AppointmentService {
     public Set<ReservedAppointmentDTO> getReservedAppointmentsByCompanyId(Long companyId) {
         return appointmentRepository.getReservedAppointmentsByCompanyId(companyId);
     }
+
+    public Set<Appointment> getNotReservedAppointments(Long companyId){
+        return appointmentRepository.getNotReservedAppointments(companyId);
+    }
 }

@@ -37,11 +37,18 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasRole('COMPADMIN')")
-    @GetMapping(value = "/companycalendar/{companyId}")
+    @PreAuthorize("hasRole('COMPADMIN')")
+    @GetMapping(value = "/companycalendar/{companyId}") //TODO: bolja imena za putanje
     public ResponseEntity<Set<ReservedAppointmentDTO>> getReservedAppointmentsByCompanyId(@PathVariable Long companyId) {
         Set<ReservedAppointmentDTO> reservedAppointmentDTOS = appointmentService.getReservedAppointmentsByCompanyId(companyId);
         return new ResponseEntity<>(reservedAppointmentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/notreservedappointments/{companyId}") //TODO: bolja imena, nemam snage trenutno
+    public ResponseEntity<Set<AppointmentDTO>> getNotReservedAppointments(@PathVariable Long companyId){
+        Set<Appointment> appointments = appointmentService.getNotReservedAppointments(companyId);
+        Set<AppointmentDTO> appointmentDTOS = (Set<AppointmentDTO>) new DtoUtils().convertToDtos(appointments, new AppointmentDTO());
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 
 

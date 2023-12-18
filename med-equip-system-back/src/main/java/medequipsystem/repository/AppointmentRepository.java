@@ -28,4 +28,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "WHERE ca.company.id = ?1")
     public Set<ReservedAppointmentDTO> getReservedAppointmentsByCompanyId(Long companyId);
 
+    @Query("SELECT a FROM Appointment a LEFT JOIN Reservation r ON a.id = r.appointment.id WHERE r.id IS NULL AND a.companyAdmin.id IN (SELECT ca.id FROM CompanyAdmin ca WHERE ca.company.id = ?1)")
+    public Set<Appointment> getNotReservedAppointments(Long id);
 }
