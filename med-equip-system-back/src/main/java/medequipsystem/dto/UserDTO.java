@@ -1,6 +1,9 @@
 package medequipsystem.dto;
 
-public class UserDTO {
+import medequipsystem.domain.Role;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
+
+public class UserDTO implements DTOEntity {
     private Long id;
     private String email;
     private String password;
@@ -9,6 +12,16 @@ public class UserDTO {
     private String city;
     private String country;
     private String phoneNumber;
+
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public UserDTO() {
     }

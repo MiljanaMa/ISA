@@ -1,4 +1,4 @@
-import { CompanyEquipment } from "./companyEquipment.model";
+import {  CompanyEquipmentProfile } from "./companyEquipmentProfile.model";
 import { Appointment, CustomAppointment } from "./appointment.model";
 import { Time } from "@angular/common";
 
@@ -14,6 +14,6 @@ export interface CustomReservation {
 export interface ReservationItem {
     id: number;
     count: number;
-    equipment: CompanyEquipment;
+    equipment: CompanyEquipmentProfile;
 }
 

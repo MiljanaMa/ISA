@@ -55,13 +55,17 @@ export class CompanyAdminCreationComponent {
     }else{
       let  admin: CompanyAdmin = {
         id: 0,
-        email: this.adminForm.value.email,
-        password: this.adminForm.value.password,
-        firstName: this.adminForm.value.firstName,
-        lastName: this.adminForm.value.lastName,
-        city: this.adminForm.value.city,
-        country: this.adminForm.value.country,
-        phoneNumber: this.adminForm.value.phoneNumber,
+        user: {
+          email: this.adminForm.value.email,
+          password: this.adminForm.value.password,
+          firstName: this.adminForm.value.firstName,
+          lastName: this.adminForm.value.lastName,
+          city: this.adminForm.value.city,
+          country: this.adminForm.value.country,
+          phoneNumber: this.adminForm.value.phoneNumber, 
+      
+          }, 
+        firstTime: true, 
         companyId: 0
       }
       

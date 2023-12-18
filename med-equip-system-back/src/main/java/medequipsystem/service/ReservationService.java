@@ -50,6 +50,13 @@ public class ReservationService {
 
         return reservationRepository.save(reservation);
     }
+
+
+    public Set<Reservation> getReservationsInProgress(){
+
+        return reservationRepository.getReservationsInProgress();
+    }
+
     public Reservation createCustom(CustomAppointmentDTO appointment, Set<ReservationItem> reservationItems, Client client, Set<CompanyAdmin> admins){
         Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, new Appointment(), reservationItems);
         //korak za smanjivanje kolicine robe

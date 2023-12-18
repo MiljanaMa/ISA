@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
-import { CompanyEquipment } from '../model/companyEquipment.model';
+import { CompanyEquipmentProfile, EquipmentType } from '../model/companyEquipmentProfile.model';
 import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,8 +11,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions, EventInput} from '@fullcalendar/core'; 
 import { DateAdapter } from '@angular/material/core';
 import { Time } from '@angular/common';
-
-
 @Component({
   selector: 'app-company-profile-admin',
   templateUrl: './company-profile-admin.component.html',
@@ -28,11 +26,11 @@ export class CompanyProfileAdminComponent implements OnInit {
   calendarOptions: CalendarOptions = {}; 
 
   editMode = false; 
-  addMode = false 
+  addMode = false; 
   minDate: Date; 
-
+  
   public companyAdminsDataSource = new MatTableDataSource<CompanyAdmin>();
-  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
+  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipmentProfile>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
 
   constructor(
@@ -53,6 +51,65 @@ export class CompanyProfileAdminComponent implements OnInit {
   endTime: string | null = null; 
   selectedDate: Date | null = null;
 
+  newEquipment:any = {}; 
+  addModeEquipment = false; 
+  editModeEquipment = false; 
+
+  equipmentTypes: EquipmentType[] = [
+    EquipmentType.DIAGNOSTIC,
+    EquipmentType.LIFE_SUPPORT,
+    EquipmentType.LABORATORY,
+    EquipmentType.SURGICAL,
+    EquipmentType.OTHER
+];
+
+  public inputSearch: string = '';
+  public inputPrice: number = 0;
+  public inputType: string = '';
+
+
+  searchName: string = '';
+  minPrice: number = 0;
+  selectedType: EquipmentType | 'Any' = 'Any';
+
+ 
+  originalData: CompanyEquipmentProfile[] = []; // Store original data separately
+
+  
+  
+  applyFilter() {
+    let filteredData = this.originalData.slice(); // Use the original data for filtering
+  
+    const nameFilter = this.searchName ? this.searchName.trim().toLowerCase() : '';
+    const minPriceFilter = this.minPrice || 0;
+    const typeFilter = this.selectedType !== 'Any' ? this.selectedType : '';
+  
+    filteredData = filteredData.filter(item => {
+      const nameMatch = !nameFilter || item.name.toLowerCase().includes(nameFilter);
+      const priceMatch = item.price >= minPriceFilter;
+      const typeMatch = !typeFilter || item.type === typeFilter;
+  
+      return nameMatch && priceMatch && typeMatch;
+    });
+  
+    this.companyEquipmentDataSource.data = filteredData;
+  }
+  
+  resetFilter() {
+    this.searchName = '';
+    this.minPrice = 0;
+    this.selectedType = 'Any';
+    this.applyFilter(); // Apply the filter with reset values to reflect the original data
+  }
+  
+  
+  
+
+ 
+  toggleAddMode(){
+    this.addModeEquipment = !this.addModeEquipment; 
+    this.editModeEquipment = false; 
+  }
  
  
 
@@ -72,6 +129,7 @@ export class CompanyProfileAdminComponent implements OnInit {
           this.appointmentsDataSource.data.push(response);
           this.calendarOptions.events = []; 
           this.initializeCalendar();  
+          this.addMode = false; 
         },
         (error) => {  
           console.error("Error creating appointment:", error);
@@ -80,7 +138,7 @@ export class CompanyProfileAdminComponent implements OnInit {
     }
     
 
-    this.addMode = false; 
+    
   }
   formatDateToYYYYMMDD(date: Date): Date{
     const year = date.getFullYear();
@@ -93,12 +151,25 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+    
+      
+      this.newEquipment = {
+        name: '',
+        type: EquipmentType.OTHER,
+        description: '',
+        price: 0,
+        count: 0
+      
+      };
+
+
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);
       
       this.calendarOptions = {
         plugins: [timeGridPlugin],
         initialView: 'timeGridDay', 
+        height: '600px', 
         headerToolbar: {
           left: 'prev,next today addButton',
           center: 'title',
@@ -218,13 +289,10 @@ export class CompanyProfileAdminComponent implements OnInit {
     this.companyService.getCompanyById(id).subscribe(
       (data: Company) => {
         this.company = data;
-        console.log(data); 
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
-        console.log(this.company?.companyEquipment);
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
-        console.log(this.companyEquipmentDataSource.data); 
-
-  
+        
+    
 
         this.calendarOptions.businessHours =  {
         
@@ -238,7 +306,9 @@ export class CompanyProfileAdminComponent implements OnInit {
         this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
           (appointmentsData : Appointment[] ) => {
             this.appointmentsDataSource.data = appointmentsData || [];
+            this.originalData = [...this.companyEquipmentDataSource.data];
             this.initializeCalendar(); 
+
         
             
           }, 
@@ -257,7 +327,7 @@ export class CompanyProfileAdminComponent implements OnInit {
   initializeCalendar(): void {
 
     this.calendarOptions.events = this.getAppointmentsAsEvents(); 
-    console.log(this.calendarOptions.events); 
+   
     
   }
   
@@ -274,11 +344,11 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   
   getAppointmentsAsEvents(): EventInput[] {
-    console.log(this.appointmentsDataSource.data[0].startTime[0]); 
+   
     
     return this.appointmentsDataSource.data.map((appointment) => ({
       
-      title: `Admin: ${appointment.companyAdmin?.firstName} ${appointment.companyAdmin?.lastName}`,
+      title: `Admin: ${appointment.companyAdmin?.user.firstName} ${appointment.companyAdmin?.user.lastName}`,
       start: this.getDateAsString(new Date(appointment.date)) + 'T' + appointment.startTime[0].toString().padStart(2,'0')+":" + appointment.startTime[1].toString().padStart(2,'0')+":00",
       end: this.getDateAsString(new Date(appointment.date))  + 'T' + appointment.endTime[0].toString().padStart(2,'0')+":" + appointment.endTime[1].toString().padStart(2,'0')+":00",
       color: appointment.status === AppointmentStatus.RESERVED ? 'red': 'green'
@@ -311,6 +381,90 @@ export class CompanyProfileAdminComponent implements OnInit {
       this.company!.location = updatedLocation;
    
   }
+
+  deleteEquipment(equipment: CompanyEquipmentProfile): void{
+
+    if(equipment.id){
+    this.companyService.deleteEquipment(equipment.id).subscribe(
+      () => {
+        this.companyEquipmentDataSource.data = this.companyEquipmentDataSource.data.filter(e => e.id !== equipment.id);
+        this.originalData = this.companyEquipmentDataSource.data; 
+         
+        
+      }, 
+      error => {
+        console.log('Error fetching appointments', error); 
+      }
+    );
+    }
+
+  }
+
+  saveEquipment(): void {
+  
+    if (this.addModeEquipment) {
+   
+      this.addEquipment();
+    } else if (this.editModeEquipment && this.newEquipment) {
+     
+      this.updateEquipment();
+      this.editModeEquipment = false; 
+    }
+  }
+
+  updateEquipment(): void{
+    if(this.company){ 
+      this.companyService.updateEquipment(this.newEquipment, this.company).subscribe(
+        () => {
+          const index = this.companyEquipmentDataSource.data.findIndex(e => e.id === this.newEquipment.id);
+        
+          if (index !== -1) {
+            
+            this.companyEquipmentDataSource.data[index] = this.newEquipment;
+          
+            this.companyEquipmentDataSource._updateChangeSubscription();
+
+            this.originalData = this.companyEquipmentDataSource.data; 
+          }
+        }, 
+        error => {
+          console.log(error); 
+        }
+
+      ); 
+    }
+  }
+
+
+
+  editEquipment(equipment: CompanyEquipmentProfile): void {
+    this.editModeEquipment = true; 
+    this.addModeEquipment = false; 
+    this.newEquipment = JSON.parse(JSON.stringify(equipment));
+   
+  }
+
+  addEquipment(): void {
+  
+    if(this.newEquipment && this.company){
+      
+    
+
+      this.companyService.createEquipment(this.newEquipment, this.company).subscribe(
+          (data) => {
+            const newData = [...this.companyEquipmentDataSource.data, data];
+            this.companyEquipmentDataSource.data = newData;
+            this.originalData = newData; 
+            this.addModeEquipment = false; 
+          }, 
+          error => {
+            console.log(error); 
+          }
+        ); 
+        }
+    } 
+    
+  
 
 
 }

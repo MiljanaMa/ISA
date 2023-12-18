@@ -3,6 +3,7 @@ import { LayoutService } from '../layout.service';
 import { Company } from '../model/company.model';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { CompanyAdmin } from '../model/companyAdmin.model';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,52 @@ export class HomeComponent implements OnInit {
   public selectedRating: number = 0;
   public inputSearch: string = '';
 
+
   constructor(private layoutService: LayoutService, private router: Router, private authService: AuthService) { }
+
+  loggedUser: CompanyAdmin| undefined; 
 
   ngOnInit(): void {
     this.getAllCompanies();
+
+    this.authService.getCurrentUser().subscribe(
+      (data) => {
+        let user = data; 
+        if(user){
+     
+        
+          if(user.role?.name === "ROLE_COMPADMIN"){
+            this.layoutService.getAdminByUserId(user.id).subscribe( 
+              
+            (data) => {
+              this.loggedUser = data; 
+              
+            
+            }, 
+            error => {
+              console.log(error); 
+            }); 
+          }
+        }
+      }
+    ); 
+
+   
+    
+  }
+  onSubmit(form: any) {
+    if(this.loggedUser){
+      this.loggedUser.user.password = form.value.password; 
+      this.loggedUser.firstTime = true;  
+      this.layoutService.updateAdmin(this.loggedUser).subscribe(
+        (data) => {
+
+        }, 
+        error => {
+          console.log(error); 
+        }
+      ); 
+    }
   }
 
   getAllCompanies(): void {
