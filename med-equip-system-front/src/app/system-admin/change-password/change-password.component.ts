@@ -5,6 +5,7 @@ import { SystemAdminService } from '../system-admin.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
+import { PasswordChange } from '../model/password-change.model';
 
 @Component({
   selector: 'app-change-password',
@@ -21,6 +22,7 @@ export class ChangePasswordComponent implements OnInit{
   public updatePasswordMode: boolean = true;
   public currentUserId?: number = 6; ;
   public currentUser = new BehaviorSubject<CurrentUser>({id: 0, email: "", role: null });
+  public passwordChange: PasswordChange | undefined; 
 
 
 
@@ -82,9 +84,17 @@ export class ChangePasswordComponent implements OnInit{
     }
     
     else {
-      this.systemAdminService.updatePassword(this.passwordForm.value.newPassword, this.passwordForm.value.oldPassword, this.currentUserId || 6).subscribe({
-        next: (client) => {
-          window.alert("You have been successfully update your profile.");
+      let passwordChange: PasswordChange = {
+
+        newPassword: this.passwordForm.value.newPassword,
+        oldPassword: this.passwordForm.value.oldPassword,
+        userId: this.currentUserId || 6
+      }
+
+      //this.systemAdminService.updatePassword(this.passwordForm.value.newPassword, this.passwordForm.value.oldPassword, /*this.currentUserId ||*/ 6).subscribe({
+      this.systemAdminService.updatePassword(passwordChange).subscribe({
+          next: (client) => {
+          window.alert("You have successfully updated your password.");
           //this.getSystemAdmin();
 
           this.updatePasswordMode = false;

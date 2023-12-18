@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
 import { SystemAdmin } from 'src/app/system-admin/model/system-admin.model';
+import { ChangePasswordComponent } from 'src/app/system-admin/change-password/change-password.component';
 
 
 
@@ -18,7 +20,7 @@ export class NavbarComponent implements OnInit{
   public isMainAdmin: boolean = false;
   public isInitPasswordChanged: boolean = false;
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private router: Router){}
 
   async ngOnInit(): Promise<void> {
     if (window.localStorage.getItem('jwt')) {
@@ -35,6 +37,8 @@ export class NavbarComponent implements OnInit{
         }
       }
     });
+
+    this.handleInitPasswordChanged();
   }
   
   getSystemAdmin(userId: number): void {
@@ -49,6 +53,7 @@ export class NavbarComponent implements OnInit{
         if(this.systemAdmin.inititialPasswordChanged){
           this.isInitPasswordChanged = true;
         }
+        this.handleInitPasswordChanged();
       },
       error: (error) => {
         console.error('Error fetching system admin:', error);
@@ -56,6 +61,14 @@ export class NavbarComponent implements OnInit{
     });
   }
   
+  handleInitPasswordChanged(): void {
+    if (this.isInitPasswordChanged) {
+      if (window.confirm("You must change your initial password 123")) {
+        this.router.navigate(['/systemAdminChangePassword']);
+      }
+    }
+  }
+
   onLogout(): void {
     this.authService.logout();
   }

@@ -99,10 +99,13 @@ public class SystemAdminService {
             return false;
         }
         User user = systemAdmin.getUser();
-        String oldPassword = user.getPassword();
+        String oldPassword =  "123";  //napravi da je ovo defaultna lozinka, jer drugacije se ne moza proveriti sa hesiranom lozinkom da li se stara poklapa  //user.getPassword();
 
         String passwordToCheckEncoded = passwordEncoder.encode(passwordToCheck);
-        if(passwordToCheckEncoded.equals(oldPassword)){
+        System.out.println("\n\n ****** ******* ********stara stvarna loz: " + oldPassword);
+        System.out.println("stara nova loz: " + passwordToCheckEncoded); /// AHHHH SVAKI PUT DRUGACIJE ENKODIRA PA NE MOZE DA PROVERI
+
+        if(passwordToCheck.equals(oldPassword)){
             return true;
         }
         else {

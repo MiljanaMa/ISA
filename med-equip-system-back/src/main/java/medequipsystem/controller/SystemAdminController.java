@@ -5,6 +5,7 @@ import medequipsystem.domain.Role;
 import medequipsystem.domain.SystemAdmin;
 import medequipsystem.domain.User;
 import medequipsystem.dto.ClientDTO;
+import medequipsystem.dto.PasswordChangeDTO;
 import medequipsystem.dto.SystemAdminDTO;
 import medequipsystem.repository.RoleRepository;
 import medequipsystem.service.SystemAdminService;
@@ -122,9 +123,16 @@ public class SystemAdminController {
     //TODO: update lozinke, metoda iz servisa, sredi front
     @PreAuthorize("hasRole('SYSADMIN')")
     @PostMapping("/updatePassword")
-    public ResponseEntity<SystemAdminDTO> updatePassword(@RequestBody String password, String oldPassword, Long userId) {
+    public ResponseEntity<SystemAdminDTO> updatePassword(@RequestBody PasswordChangeDTO passwordChangeDTO){//String password, String oldPassword, Long userId) {
         //Long userId = userService.getByEmail(user.getName()).getId();
+        System.out.println("\n\n ******************** update pass controller 1");
+        System.out.println("\n\n *user id: " + passwordChangeDTO.getUserId().toString());
+        Long userId = passwordChangeDTO.getUserId();
+        String oldPassword = passwordChangeDTO.getOldPassword();
+        String newPassword = passwordChangeDTO.getNewPassword();
+
         SystemAdmin systemAdmin = systemAdminService.getByUserId(userId);
+        System.out.println("\n\n ******************** update pass controller");
 
         if(systemAdmin == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -133,7 +141,7 @@ public class SystemAdminController {
         if(!oldPasswordCorrect){
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
-        SystemAdmin systemAdminUpdated = systemAdminService.updatePassword(userId, password);
+        SystemAdmin systemAdminUpdated = systemAdminService.updatePassword(userId, newPassword);
         systemAdminUpdated.setInitialPasswordChanged(true);
         return new ResponseEntity<>(new SystemAdminDTO(systemAdminUpdated), HttpStatus.OK);
     }
