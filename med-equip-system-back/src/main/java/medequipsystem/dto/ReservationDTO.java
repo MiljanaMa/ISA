@@ -3,10 +3,11 @@ package medequipsystem.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import medequipsystem.domain.*;
 import medequipsystem.domain.enums.ReservationStatus;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 import java.util.Set;
 
-public class ReservationDTO {
+public class ReservationDTO implements DTOEntity {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("status")

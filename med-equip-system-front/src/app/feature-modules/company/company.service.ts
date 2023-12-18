@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CompanyProfile } from './model/company-profile-model';
-import { Appointment } from './model/appointment.model';
 import { CompanyEquipmentProfile } from './model/companyEquipmentProfile.model';
 import { ReservationCreation } from './model/reservationCreation.model';
 import { CompanyEquipment } from 'src/app/layout/model/equipment.model';
+import { Appointment, CustomAppointment } from './model/appointment.model';
+import { CustomReservation, ReservationCreation } from './model/reservationCreation.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
   private baseUrl = 'http://localhost:8092/api/companies';
+  datePipe: any;
 
   constructor(private http: HttpClient) { }
 
@@ -35,8 +38,8 @@ export class CompanyService {
   createAppointment(appointment: Appointment): Observable<Appointment>{
     return this.http.post<Appointment>(`http://localhost:8092/api/appointments/create`, appointment);  
   }
-  makeReservation(reservation: ReservationCreation): Observable<void>{
-    return this.http.post<void>(`http://localhost:8092/api/reservations/create`, reservation);
+  makePredefinedReservation(reservation: ReservationCreation): Observable<string>{
+    return this.http.post<string>(`http://localhost:8092/api/reservations/create/predefined`, reservation);
 
   }
 
@@ -52,4 +55,15 @@ export class CompanyService {
     return this.http.post<CompanyEquipmentProfile>('http://localhost:8092/api/equipments/create', { equipDto: equipment, companyDto: company });
   }
   
+
+  makeCustomReservation(reservation: CustomReservation): Observable<string>{
+    return this.http.post<string>(`http://localhost:8092/api/reservations/create/custom`, reservation);
+
+  }
+  getCustomAppointments(date: Date, companyId: number): Observable<CustomAppointment[]>{
+    let params = new HttpParams().set('date', date.toISOString().split('T')[0]).set('companyId', companyId || '');
+
+    return this.http.get<CustomAppointment[]>(`http://localhost:8092/api/appointments/custom`, {params});
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CompanyProfile as Company }  from '../model/company-profile-model';
+import { CompanyProfile as Company } from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 import { CompanyEquipmentProfile, EquipmentType } from '../model/companyEquipmentProfile.model';
@@ -8,6 +8,9 @@ import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReservationItem } from '../model/reservationCreation.model';
+import { DatePipe } from '@angular/common';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CurrentUser } from 'src/app/auth/model/current-user.model';
 
 @Component({
   selector: 'app-company-profile',
@@ -19,13 +22,11 @@ import { ReservationItem } from '../model/reservationCreation.model';
 
 export class CompanyProfileComponent implements OnInit {
   companyId?: number;
-  company: Company|undefined;
-  oldCompany: Company|undefined;
+  company: Company | undefined;
+  oldCompany: Company | undefined;
+  currentUser?: CurrentUser;
 
- 
-
-  editMode = false;
-  reservationMode = false; 
+  reservationMode = false;
 
   equipmentTypes: EquipmentType[] = [
     EquipmentType.DIAGNOSTIC,
@@ -41,16 +42,26 @@ export class CompanyProfileComponent implements OnInit {
   public equipments: CompanyEquipmentProfile[] = [];
   public reservationItems: ReservationItem[] = [];
   public availableAppointments: Appointment[] = [];
- 
- 
+
+
 
 
   constructor(
     private route: ActivatedRoute,
-    private companyService: CompanyService
-  ) {}
+    private companyService: CompanyService, private datePipe: DatePipe,
+    private authService: AuthService
+  ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    if (window.localStorage.getItem('jwt')) {
+      await this.authService.setCurrentUser();
+    }
+    this.authService.currentUser.subscribe((user) => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
+
     this.route.params.subscribe(params => {
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);
@@ -61,50 +72,56 @@ export class CompanyProfileComponent implements OnInit {
     this.companyService.getCompanyById(id).subscribe(
       (data: Company) => {
         this.company = data;
-        console.log(data); 
+        console.log(data);
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
         this.equipments = this.company?.companyEquipment || [];
         this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
-          (appointmentsData : Appointment[] ) => {
+          (appointmentsData: Appointment[]) => {
             this.appointmentsDataSource.data = appointmentsData || [];
-            
+
             this.appointmentsDataSource.data = this.appointmentsDataSource.data.filter(a => a.status === AppointmentStatus.AVAILABLE);
-            this.availableAppointments = this.appointmentsDataSource.data; 
-            
-          }, 
+            this.availableAppointments = this.appointmentsDataSource.data;
+          },
           appointmentError => {
-            console.log('Error fetching appointments', appointmentError); 
+            console.log('Error fetching appointments', appointmentError);
           }
         );
       },
       error => {
         console.error('Error fetching company details:', error);
-       
+
       }
     );
   }
-  toggleEditMode() {
-  
-    this.editMode = !this.editMode;
-    
+  formatTime(time: any): String {
+    if (!time || time.length !== 2) {
+      // Handle invalid or unexpected input
+      return '';
+    }
+
+    const [hours, minutes] = time;
+    const formattedHours = this.padWithZero(hours);
+    const formattedMinutes = this.padWithZero(minutes);
+
+    return `${formattedHours}:${formattedMinutes}`;
   }
-
-  saveChanges():void {
-    if(this.company){
-      this.companyService.updateCompany(this.company).subscribe(
-        () => {this.toggleEditMode();}, 
-        error => {
-          console.log(error); 
-        }
-
-      );  
-    
-      }
+  private padWithZero(value: number | string): string {
+    const stringValue = String(value);
+    return stringValue.length === 1 ? '0' + stringValue : stringValue;
+  }
+  formatDate(date: any): string {
+    if (!date) {
+      // Handle invalid or unexpected input
+      return '';
+    }
+  
+    const formattedDate = new Date(date).toLocaleDateString('sr-RS'); // Adjust the locale as needed
+    return formattedDate;
   }
   onLocationUpdated(updatedLocation: Location): void {
-   
-      this.company!.location = updatedLocation;
-   
+
+    this.company!.location = updatedLocation;
+
   }
   itemsUpdated(updatedItems: ReservationItem[]): void {
     this.reservationItems = updatedItems;
@@ -117,8 +134,10 @@ export class CompanyProfileComponent implements OnInit {
     return this.reservationItems.some(i => i.equipment.id === targetId);
   }
 
+
   addToReservation(equipment: CompanyEquipmentProfile):void {
     if(this.isEquipmentInItems(equipment.id)){
+
       alert("This equipment is already in reservation");
       return;
     }
@@ -131,4 +150,4 @@ export class CompanyProfileComponent implements OnInit {
     alert("Equipment added to reservation");
   }
 
-  }
+}

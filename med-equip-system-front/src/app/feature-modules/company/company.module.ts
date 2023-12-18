@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CompanyProfileComponent } from './company-profile/company-profile.component';
 import { MatTableModule } from '@angular/material/table';
 import { LayoutModule } from 'src/app/layout/layout.module';
@@ -39,5 +39,6 @@ import { ReservationCreationComponent } from './reservation-creation/reservation
     MatIconModule, 
 
   ], 
+  providers: [DatePipe],
 })
 export class CompanyModule { }

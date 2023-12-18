@@ -25,7 +25,11 @@
     "@fullcalendar/daygrid": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/timegrid": "^6.1.10",
+
     "crypto-js": "^4.2.0",
+    "@syncfusion/ej2-angular-schedule": "^23.2.7",
+    "@syncfusion/ej2-base": "^23.2.6",
+    "fullcalendar": "^6.1.10",
     "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -16,7 +16,7 @@ public class CompanyAdminRegistrationDTO {
     public CompanyAdminRegistrationDTO(){}
 
     public CompanyAdminRegistrationDTO(CompanyAdmin companyAdmin) {
-        this.id = companyAdmin.getUser().getId();
+        this.id = companyAdmin.getId();
         this.email = companyAdmin.getUser().getEmail();
         this.password = companyAdmin.getUser().getPassword();
         this.firstName = companyAdmin.getUser().getFirstName();
@@ -24,10 +24,14 @@ public class CompanyAdminRegistrationDTO {
         this.city = companyAdmin.getUser().getCity();
         this.country = companyAdmin.getUser().getCountry();
         this.phoneNumber = companyAdmin.getUser().getPhoneNumber();
-        if(companyAdmin.getCompany() == null){
+        if(companyAdmin.getCompany().getId() == null){
+            System.out.println("\n\n****comp id je null " + companyAdmin.getCompany().getId().toString());
+
             this.companyId = null;
         }else {
             this.companyId = companyAdmin.getCompany().getId();
+            System.out.println("\n\n****comp id je broj " + companyAdmin.getCompany().getId().toString());
+
         }
     }
 

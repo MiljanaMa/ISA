@@ -1,5 +1,6 @@
 package medequipsystem.repository;
 
+import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Reservation;
 import medequipsystem.domain.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;

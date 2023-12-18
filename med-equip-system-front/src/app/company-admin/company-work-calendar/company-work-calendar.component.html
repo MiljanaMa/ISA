@@ -1,0 +1,14 @@
+
+<!--div *ngFor="let appointment of reservedAppointments">
+    <div>
+
+        <p>{{ convertToDate(appointment.date) }} - {{ appointment.startTime | date: 'hh:mm a' }} to {{ appointment.endTime | date: 'hh:mm a' }}</p>
+        <p>Client: {{ appointment.clientFirstName }} {{ appointment.clientLastName }}</p>
+        <p>Admin: {{ appointment.adminFirstName }} {{ appointment.adminLastName }}</p>
+    </div>
+  </div-->
+
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+  
+
