@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
-import { CompanyEquipment } from '../model/companyEquipment.model';
+import { CompanyEquipmentProfile, EquipmentType } from '../model/companyEquipmentProfile.model';
 import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,9 +11,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions, EventInput} from '@fullcalendar/core'; 
 import { DateAdapter } from '@angular/material/core';
 import { Time } from '@angular/common';
-
-
-
 @Component({
   selector: 'app-company-profile-admin',
   templateUrl: './company-profile-admin.component.html',
@@ -33,7 +30,7 @@ export class CompanyProfileAdminComponent implements OnInit {
   minDate: Date; 
 
   public companyAdminsDataSource = new MatTableDataSource<CompanyAdmin>();
-  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
+  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipmentProfile>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
 
   constructor(
@@ -54,6 +51,20 @@ export class CompanyProfileAdminComponent implements OnInit {
   endTime: string | null = null; 
   selectedDate: Date | null = null;
 
+  newEquipment:any = {}; 
+  addModeEquipment = false; 
+
+  equipmentTypes: EquipmentType[] = [
+    EquipmentType.DIAGNOSTIC,
+    EquipmentType.LIFE_SUPPORT,
+    EquipmentType.LABORATORY,
+    EquipmentType.SURGICAL,
+    EquipmentType.OTHER
+];
+
+  toggleAddMode(){
+    this.addModeEquipment = !this.addModeEquipment; 
+  }
  
  
 
@@ -94,6 +105,16 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+
+      this.newEquipment = {
+        name: '',
+        type: EquipmentType.OTHER,
+        description: '',
+        price: 0,
+        count: 0
+        // Other properties...
+      };
+
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);
       
@@ -311,6 +332,55 @@ export class CompanyProfileAdminComponent implements OnInit {
       this.company!.location = updatedLocation;
    
   }
+
+  deleteEquipment(equipment: CompanyEquipmentProfile): void{
+
+    if(equipment.id){
+    this.companyService.deleteEquipment(equipment.id).subscribe(
+      () => {
+        this.companyEquipmentDataSource.data = this.companyEquipmentDataSource.data.filter(e => e.id !== equipment.id);
+         
+        
+      }, 
+      error => {
+        console.log('Error fetching appointments', error); 
+      }
+    );
+    }
+
+  }
+
+  updateEquipment(equipment: CompanyEquipmentProfile): void{
+    this.companyService.updateEquipment(equipment).subscribe(
+      () => {
+      
+      }, 
+      error => {
+        console.log(error); 
+      }
+
+    ); 
+  }
+
+  addEquipment(): void {
+    if(this.newEquipment && this.company){
+    
+    
+
+    this.companyService.createEquipment(this.newEquipment, this.company).subscribe(
+        (data) => {
+          const newData = [...this.companyEquipmentDataSource.data, data];
+          this.companyEquipmentDataSource.data = newData;
+          this.addModeEquipment = !this.addModeEquipment; 
+        }, 
+        error => {
+          console.log(error); 
+        }
+      ); 
+      }
+    } 
+    
+  
 
 
 }

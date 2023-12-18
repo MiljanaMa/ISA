@@ -1,4 +1,4 @@
-export interface CompanyEquipment {
+export interface CompanyEquipmentProfile {
     id: number;
     name: string;
     type: EquipmentType;

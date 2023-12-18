@@ -1,6 +1,6 @@
 import { CompanyAdmin } from "src/app/layout/model/companyAdmin.model";
 import { Location } from "src/app/layout/model/location.model";
-import { CompanyEquipment } from "./companyEquipment.model";
+import { CompanyEquipmentProfile } from "./companyEquipmentProfile.model";
 import { Appointment } from "./appointment.model";
 export interface CompanyProfile {
     id: number;
@@ -9,7 +9,7 @@ export interface CompanyProfile {
     averageRate: number;
     location: Location;
     companyAdmins?: CompanyAdmin[]; 
-    companyEquipment? : CompanyEquipment[]; 
+    companyEquipment? : CompanyEquipmentProfile[]; 
     workingHours: string; 
    
 }

@@ -54,28 +54,102 @@
     </div>
     
   
-  
     <div>
         <h3><b>Equipment:</b></h3>
+        <button mat-raised-button color="primary" (click)="toggleAddMode()">Add Equipment</button>
+        <!-- Check if addMode is true to render the form -->
+        <div *ngIf="addModeEquipment">
+            <form (ngSubmit)="addEquipment()" style="margin-bottom: 20px; margin-top: 20px" #equipmentForm="ngForm">
+                <mat-form-field appearance="fill" style="width: 100%">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" [(ngModel)]="newEquipment.name" name="name" required #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-message">
+                        Name is required.
+                    </div>
+                </mat-form-field>
+                
+                <mat-form-field appearance="fill" style="width: 100%">
+                    <mat-label>Type</mat-label>
+                    <mat-select [(ngModel)]="newEquipment.type" name="type" required #type="ngModel">
+                        <mat-option *ngFor="let type of equipmentTypes" [value]="type">{{ type }}</mat-option>
+                    </mat-select>
+                    <div *ngIf="type.invalid && (type.dirty || type.touched)" class="error-message">
+                        Type is required.
+                    </div>
+                </mat-form-field>
+                
+                <mat-form-field appearance="fill" style="width: 100%">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput [(ngModel)]="newEquipment.description" name="description" rows="4" required #description="ngModel"></textarea>
+                    <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error-message">
+                        Description is required.
+                    </div>
+                </mat-form-field>
+                
+                <mat-form-field appearance="fill" style="width: 100%">
+                    <mat-label>Price</mat-label>
+                    <input matInput type="number" [(ngModel)]="newEquipment.price" name="price" required #price="ngModel">
+                    <div *ngIf="price.invalid && (price.dirty || price.touched)" class="error-message">
+                        Price is required and should be a number.
+                    </div>
+                </mat-form-field>
+                
+                <mat-form-field appearance="fill" style="width: 100%">
+                    <mat-label>Count</mat-label>
+                    <input matInput type="number" [(ngModel)]="newEquipment.count" name="count" required #count="ngModel">
+                    <div *ngIf="count.invalid && (count.dirty || count.touched)" class="error-message">
+                        Count is required and should be a number.
+                    </div>
+                </mat-form-field>
+                
+                <button mat-raised-button color="primary" type="submit" [disabled]="equipmentForm.invalid">
+                    Submit
+                </button>
+            </form>
+        </div>
+        
         <table mat-table [dataSource]="companyEquipmentDataSource">
             <!-- Define columns for Equipment -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
                 <td mat-cell *matCellDef="let equipment"> {{ equipment.name }} </td>
             </ng-container>
+
             <ng-container matColumnDef="description">
                 <th mat-header-cell *matHeaderCellDef> Description </th>
                 <td mat-cell *matCellDef="let equipment"> {{ equipment.description }} </td>
             </ng-container>
 
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef> Type </th>
+                <td mat-cell *matCellDef="let equipment"> {{ equipment.type }} </td>
+            </ng-container>
+            <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef> Price </th>
+                <td mat-cell *matCellDef="let equipment"> {{ equipment.price}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="count">
+                <th mat-header-cell *matHeaderCellDef> Count </th>
+                <td mat-cell *matCellDef="let equipment"> {{ equipment.count}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let equipment">
+                    <button mat-icon-button color="warn" (click)="deleteEquipment(equipment)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+    
             <!-- Set column definitions -->
-            <tr mat-header-row *matHeaderRowDef="['name', 'description']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['name', 'description']"></tr>
+            <tr mat-header-row *matHeaderRowDef="['name', 'description', 'type', 'price', 'count', 'actions']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['name', 'description', 'type', 'price', 'count', 'actions']"></tr>
         </table>
     </div>
-
     
-    <div *ngIf = "editMode">
+    <div>
         <h3><b>Company Admins:</b></h3>
         <table mat-table [dataSource]="companyAdminsDataSource">
             <!-- Define columns for Company Admins -->

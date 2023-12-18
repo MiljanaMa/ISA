@@ -3,12 +3,13 @@ package medequipsystem.dto;
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.enums.EquipmentType;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 import medequipsystem.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-public class CompanyEquipmentDTO {
+public class CompanyEquipmentDTO implements DTOEntity {
     private Long id;
     private String name;
     private EquipmentType type;
