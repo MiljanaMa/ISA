@@ -11,11 +11,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ClientProfileComponent } from './client/client-profile/client-profile.component';
 import { SystemAdminCreationComponent } from './system-admin/system-admin-creation/system-admin-creation.component';
 import { CompanyProfileAdminComponent } from './feature-modules/company/company-profile-admin/company-profile-admin.component';
-<<<<<<< HEAD
 import { CompanyWorkCalendarComponent } from './company-admin/company-work-calendar/company-work-calendar.component';
-=======
 import { ReservationsComponent } from './client/reservations/reservations.component';
->>>>>>> develop
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
