@@ -18,6 +18,13 @@ export class SystemAdminService {
     return this.http.post<SystemAdmin>(`http://localhost:8092/api/systemadmins/create`, admin)
   } 
 
+  updatePassword(password: string, oldPassword: string, userId: number): Observable<SystemAdmin> {
+    const body = { password, oldPassword, userId };
+
+    return this.http.post<SystemAdmin>(`http://localhost:8092/api/systemadmins/updatePassword`, body);
+  }
+  
+
 
 
 }

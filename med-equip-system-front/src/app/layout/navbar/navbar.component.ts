@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit{
   public currentUser: CurrentUser | undefined;
   public systemAdmin: SystemAdmin | undefined;
   public isMainAdmin: boolean = false;
+  public isInitPasswordChanged: boolean = false;
 
   constructor(private authService: AuthService){}
 
@@ -44,6 +45,9 @@ export class NavbarComponent implements OnInit{
         console.log("this.systemAdmin: ", this.systemAdmin);
         if(this.systemAdmin.main){  // skrnavo, ali mora ovako za sad
           this.isMainAdmin = true;
+        }
+        if(this.systemAdmin.inititialPasswordChanged){
+          this.isInitPasswordChanged = true;
         }
       },
       error: (error) => {

@@ -13,6 +13,7 @@ import { SystemAdminCreationComponent } from './system-admin/system-admin-creati
 import { CompanyProfileAdminComponent } from './feature-modules/company/company-profile-admin/company-profile-admin.component';
 import { CompanyWorkCalendarComponent } from './company-admin/company-work-calendar/company-work-calendar.component';
 import { ReservationsComponent } from './client/reservations/reservations.component';
+import { ChangePasswordComponent } from './system-admin/change-password/change-password.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -28,6 +29,8 @@ const routes: Routes = [
   {path: 'systemAdminCreation', component: SystemAdminCreationComponent},
   {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent}, 
   {path: 'company-work-calendar', component: CompanyWorkCalendarComponent},
+  {path: 'systemAdminChangePassword', component: ChangePasswordComponent},
+
   
 
 ];

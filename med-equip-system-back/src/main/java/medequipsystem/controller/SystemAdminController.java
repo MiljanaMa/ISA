@@ -1,8 +1,10 @@
 package medequipsystem.controller;
 
+import medequipsystem.domain.Client;
 import medequipsystem.domain.Role;
 import medequipsystem.domain.SystemAdmin;
 import medequipsystem.domain.User;
+import medequipsystem.dto.ClientDTO;
 import medequipsystem.dto.SystemAdminDTO;
 import medequipsystem.repository.RoleRepository;
 import medequipsystem.service.SystemAdminService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -117,4 +120,31 @@ public class SystemAdminController {
     }
 
     //TODO: update lozinke, metoda iz servisa, sredi front
+    @PreAuthorize("hasRole('SYSADMIN')")
+    @PostMapping("/updatePassword")
+    public ResponseEntity<SystemAdminDTO> updatePassword(@RequestBody String password, String oldPassword, Long userId) {
+        //Long userId = userService.getByEmail(user.getName()).getId();
+        SystemAdmin systemAdmin = systemAdminService.getByUserId(userId);
+
+        if(systemAdmin == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        boolean oldPasswordCorrect = systemAdminService.checkOldPassword(userId, oldPassword);
+        if(!oldPasswordCorrect){
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+        SystemAdmin systemAdminUpdated = systemAdminService.updatePassword(userId, password);
+        systemAdminUpdated.setInitialPasswordChanged(true);
+        return new ResponseEntity<>(new SystemAdminDTO(systemAdminUpdated), HttpStatus.OK);
+    }
+
+    /*@PreAuthorize("hasRole('SYSADMIN')")
+    @GetMapping("/checkPassword")
+    public boolean checkPassword(@RequestBody String oldPassword, Principal user){
+        Long userId = userService.getByEmail(user.getName()).getId();
+
+        return systemAdminService.checkOldPassword(userId, oldPassword);
+    }*/
+
+
 }

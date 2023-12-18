@@ -5,13 +5,15 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
 
 @NgModule({
   declarations: [
-    SystemAdminCreationComponent
+    SystemAdminCreationComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,

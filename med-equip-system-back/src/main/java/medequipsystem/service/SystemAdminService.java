@@ -92,6 +92,24 @@ public class SystemAdminService {
         return this.systemAdminRepository.save(systemAdmin);
     }
 
+    public boolean checkOldPassword(long userId, String passwordToCheck){
+        SystemAdmin systemAdmin = getByUserId(userId);
+        if(systemAdmin == null){
+            System.out.println("\nCheck old password error: system admin not found by id");
+            return false;
+        }
+        User user = systemAdmin.getUser();
+        String oldPassword = user.getPassword();
+
+        String passwordToCheckEncoded = passwordEncoder.encode(passwordToCheck);
+        if(passwordToCheckEncoded.equals(oldPassword)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public SystemAdmin mapDtoToDomain(SystemAdminDTO systemAdminDTO){
         User user = new User();
         user.setEmail(systemAdminDTO.getEmail());
