@@ -32,11 +32,12 @@ export class CompanyProfileComponent implements OnInit {
   public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
   public equipments: CompanyEquipment[] = [];
+  public filteredEquipments: CompanyEquipment[] = [];
   public reservationItems: ReservationItem[] = [];
   public availableAppointments: Appointment[] = [];
-
-
-
+  public inputSearch: string = '';
+  public inputPrice: number = 0;
+  public inputType: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +68,7 @@ export class CompanyProfileComponent implements OnInit {
         console.log(data);
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
         this.equipments = this.company?.companyEquipment || [];
+        this.filteredEquipments = this.company?.companyEquipment || [];;
         this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
           (appointmentsData: Appointment[]) => {
             this.appointmentsDataSource.data = appointmentsData || [];
@@ -138,6 +140,31 @@ export class CompanyProfileComponent implements OnInit {
     };
     this.reservationItems.push(reservationItem);
     alert("Equipment added to reservation");
+  }
+
+  searchEquipments(): void{
+    this.filteredEquipments = this.equipments.filter(
+      equipment => equipment.price >= this.inputPrice
+    );
+  
+    if (this.inputType !== '') {
+      this.filteredEquipments = this.filteredEquipments.filter(
+        equipment => equipment.type === this.inputType
+      );
+    }
+  
+    if (this.inputSearch !== '') {
+      this.filteredEquipments = this.filteredEquipments.filter(
+        equipment => equipment.name.toLowerCase().includes(this.inputSearch.toLowerCase())
+      );
+    }
+  }
+
+  clearSearch(): void{
+    this.inputPrice = 0;
+    this.inputType = '';
+    this.inputSearch = '';
+    this.filteredEquipments = this.equipments;
   }
 
 }

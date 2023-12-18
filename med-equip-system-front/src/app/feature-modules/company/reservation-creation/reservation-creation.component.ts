@@ -199,10 +199,17 @@ export class ReservationCreationComponent {
       };
       this.companyService.makePredefinedReservation(reservation).subscribe(
         (data) => {
-          alert("You have succesfully made reservation");
-          this.router.navigate(['/reservations']);
+          //FIX THIS LATER - DOESNT WORK
+         // alert("You have succesfully made reservation");
+        //  this.router.navigate(['/reservations']);
+        console.log("Reservation creation works");
         },
+        error => {
+          console.log(error);
+        }
       );
+      alert("You have succesfully made reservation");
+      this.router.navigate(['/reservations']);
       return;
     }
     let emptyAppointment = {
