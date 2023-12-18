@@ -44,8 +44,8 @@ export class CompanyService {
     return this.http.delete<void>(`http://localhost:8092/api/equipments/${equipmentId}`); 
   }
 
-  updateEquipment(equipment: CompanyEquipmentProfile): Observable<void> {
-    return this.http.put<void>('http://localhost:8092/api/equipments/update', equipment); 
+  updateEquipment(equipment: CompanyEquipmentProfile, company: CompanyProfile): Observable<void> {
+    return this.http.put<void>('http://localhost:8092/api/equipments/update', { equipDto: equipment, companyDto: company }); 
   }
   createEquipment(equipment: CompanyEquipmentProfile, company: CompanyProfile): Observable<CompanyEquipmentProfile> {
 

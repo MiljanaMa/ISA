@@ -60,8 +60,13 @@ public class CompanyEquipmentController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Void> update(@RequestBody CompanyEquipmentProfileDTO companyEquipmentDTO){
+    public ResponseEntity<Void> update(@RequestBody Map<String, Object> request){
+        CompanyEquipmentProfileDTO companyEquipmentDTO = objectMapper.convertValue(request.get("equipDto"), CompanyEquipmentProfileDTO.class);
+        CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class );
+
         CompanyEquipment equipment = (CompanyEquipment) new DtoUtils().convertToEntity(new CompanyEquipment(), companyEquipmentDTO);
+        Company company = (Company) new DtoUtils().convertToEntity(new Company(), companyDTO);
+        equipment.setCompany(company);
         companyEquipmentService.update(equipment);
         return new ResponseEntity<>(HttpStatus.OK);
     }

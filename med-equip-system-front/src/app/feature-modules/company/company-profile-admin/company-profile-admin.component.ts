@@ -26,9 +26,9 @@ export class CompanyProfileAdminComponent implements OnInit {
   calendarOptions: CalendarOptions = {}; 
 
   editMode = false; 
-  addMode = false 
+  addMode = false; 
   minDate: Date; 
-
+  
   public companyAdminsDataSource = new MatTableDataSource<CompanyAdmin>();
   public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipmentProfile>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
@@ -53,6 +53,7 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   newEquipment:any = {}; 
   addModeEquipment = false; 
+  editModeEquipment = false; 
 
   equipmentTypes: EquipmentType[] = [
     EquipmentType.DIAGNOSTIC,
@@ -62,8 +63,52 @@ export class CompanyProfileAdminComponent implements OnInit {
     EquipmentType.OTHER
 ];
 
+  public inputSearch: string = '';
+  public inputPrice: number = 0;
+  public inputType: string = '';
+
+
+  searchName: string = '';
+  minPrice: number = 0;
+  selectedType: EquipmentType | 'Any' = 'Any';
+
+ 
+  originalData: CompanyEquipmentProfile[] = []; // Store original data separately
+
+  
+  
+  applyFilter() {
+    let filteredData = this.originalData.slice(); // Use the original data for filtering
+  
+    const nameFilter = this.searchName ? this.searchName.trim().toLowerCase() : '';
+    const minPriceFilter = this.minPrice || 0;
+    const typeFilter = this.selectedType !== 'Any' ? this.selectedType : '';
+  
+    filteredData = filteredData.filter(item => {
+      const nameMatch = !nameFilter || item.name.toLowerCase().includes(nameFilter);
+      const priceMatch = item.price >= minPriceFilter;
+      const typeMatch = !typeFilter || item.type === typeFilter;
+  
+      return nameMatch && priceMatch && typeMatch;
+    });
+  
+    this.companyEquipmentDataSource.data = filteredData;
+  }
+  
+  resetFilter() {
+    this.searchName = '';
+    this.minPrice = 0;
+    this.selectedType = 'Any';
+    this.applyFilter(); // Apply the filter with reset values to reflect the original data
+  }
+  
+  
+  
+
+ 
   toggleAddMode(){
     this.addModeEquipment = !this.addModeEquipment; 
+    this.editModeEquipment = false; 
   }
  
  
@@ -84,6 +129,7 @@ export class CompanyProfileAdminComponent implements OnInit {
           this.appointmentsDataSource.data.push(response);
           this.calendarOptions.events = []; 
           this.initializeCalendar();  
+          this.addMode = false; 
         },
         (error) => {  
           console.error("Error creating appointment:", error);
@@ -92,7 +138,7 @@ export class CompanyProfileAdminComponent implements OnInit {
     }
     
 
-    this.addMode = false; 
+    
   }
   formatDateToYYYYMMDD(date: Date): Date{
     const year = date.getFullYear();
@@ -105,15 +151,17 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-
+    
+      
       this.newEquipment = {
         name: '',
         type: EquipmentType.OTHER,
         description: '',
         price: 0,
         count: 0
-        // Other properties...
+      
       };
+
 
       this.companyId = +params['id'];
       this.getCompanyDetails(this.companyId);
@@ -121,6 +169,7 @@ export class CompanyProfileAdminComponent implements OnInit {
       this.calendarOptions = {
         plugins: [timeGridPlugin],
         initialView: 'timeGridDay', 
+        height: '600px', 
         headerToolbar: {
           left: 'prev,next today addButton',
           center: 'title',
@@ -243,9 +292,7 @@ export class CompanyProfileAdminComponent implements OnInit {
         this.companyAdminsDataSource.data = this.company?.companyAdmins || [];
         this.companyEquipmentDataSource.data = this.company?.companyEquipment || [];
         
-        console.log(this.companyAdminsDataSource.data[0].id); 
-        
-        console.log(this.companyAdminsDataSource.data[0].user);
+    
 
         this.calendarOptions.businessHours =  {
         
@@ -259,7 +306,9 @@ export class CompanyProfileAdminComponent implements OnInit {
         this.companyService.getAppointmentsByCompany(this.company.id).subscribe(
           (appointmentsData : Appointment[] ) => {
             this.appointmentsDataSource.data = appointmentsData || [];
+            this.originalData = [...this.companyEquipmentDataSource.data];
             this.initializeCalendar(); 
+
         
             
           }, 
@@ -339,6 +388,7 @@ export class CompanyProfileAdminComponent implements OnInit {
     this.companyService.deleteEquipment(equipment.id).subscribe(
       () => {
         this.companyEquipmentDataSource.data = this.companyEquipmentDataSource.data.filter(e => e.id !== equipment.id);
+        this.originalData = this.companyEquipmentDataSource.data; 
          
         
       }, 
@@ -350,34 +400,68 @@ export class CompanyProfileAdminComponent implements OnInit {
 
   }
 
-  updateEquipment(equipment: CompanyEquipmentProfile): void{
-    this.companyService.updateEquipment(equipment).subscribe(
-      () => {
-      
-      }, 
-      error => {
-        console.log(error); 
-      }
-
-    ); 
+  saveEquipment(): void {
+  
+    if (this.addModeEquipment) {
+   
+      this.addEquipment();
+    } else if (this.editModeEquipment && this.newEquipment) {
+     
+      this.updateEquipment();
+      this.editModeEquipment = false; 
+    }
   }
 
-  addEquipment(): void {
-    if(this.newEquipment && this.company){
-    
-    
+  updateEquipment(): void{
+    if(this.company){ 
+      this.companyService.updateEquipment(this.newEquipment, this.company).subscribe(
+        () => {
+          const index = this.companyEquipmentDataSource.data.findIndex(e => e.id === this.newEquipment.id);
+        
+          if (index !== -1) {
+            
+            this.companyEquipmentDataSource.data[index] = this.newEquipment;
+          
+            this.companyEquipmentDataSource._updateChangeSubscription();
 
-    this.companyService.createEquipment(this.newEquipment, this.company).subscribe(
-        (data) => {
-          const newData = [...this.companyEquipmentDataSource.data, data];
-          this.companyEquipmentDataSource.data = newData;
-          this.addModeEquipment = !this.addModeEquipment; 
+            this.originalData = this.companyEquipmentDataSource.data; 
+          }
         }, 
         error => {
           console.log(error); 
         }
+
       ); 
-      }
+    }
+  }
+
+
+
+  editEquipment(equipment: CompanyEquipmentProfile): void {
+    this.editModeEquipment = true; 
+    this.addModeEquipment = false; 
+    this.newEquipment = JSON.parse(JSON.stringify(equipment));
+   
+  }
+
+  addEquipment(): void {
+  
+    if(this.newEquipment && this.company){
+      
+    
+
+      this.companyService.createEquipment(this.newEquipment, this.company).subscribe(
+          (data) => {
+            const newData = [...this.companyEquipmentDataSource.data, data];
+            this.companyEquipmentDataSource.data = newData;
+            this.originalData = newData; 
+            this.addModeEquipment = false; 
+          }, 
+          error => {
+            console.log(error); 
+          }
+        ); 
+        }
     } 
     
   

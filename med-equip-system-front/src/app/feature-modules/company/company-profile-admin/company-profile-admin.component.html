@@ -56,10 +56,23 @@
   
     <div>
         <h3><b>Equipment:</b></h3>
-        <button mat-raised-button color="primary" (click)="toggleAddMode()">Add Equipment</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <button mat-raised-button color="primary" (click)="toggleAddMode()">Add Appointment</button>
+            <div>
+                <input type="text" placeholder="Search by name" [(ngModel)]="searchName" (input)="applyFilter()">
+                <input type="number" placeholder="Min Price" [(ngModel)]="minPrice" (input)="applyFilter()">
+                <select [(ngModel)]="selectedType" (change)="applyFilter()">
+                  <option value="Any">Any Type</option>
+                  <option *ngFor="let type of equipmentTypes" [value]="type">{{ type }}</option>
+                </select>
+             
+              </div>
+          
+       
+        </div>
         <!-- Check if addMode is true to render the form -->
-        <div *ngIf="addModeEquipment">
-            <form (ngSubmit)="addEquipment()" style="margin-bottom: 20px; margin-top: 20px" #equipmentForm="ngForm">
+        <div *ngIf="addModeEquipment || editModeEquipment">
+            <form  style="margin-bottom: 20px; margin-top: 20px" #equipmentForm="ngForm">
                 <mat-form-field appearance="fill" style="width: 100%">
                     <mat-label>Name</mat-label>
                     <input matInput type="text" [(ngModel)]="newEquipment.name" name="name" required #name="ngModel">
@@ -102,9 +115,10 @@
                     </div>
                 </mat-form-field>
                 
-                <button mat-raised-button color="primary" type="submit" [disabled]="equipmentForm.invalid">
+                <button mat-raised-button color="primary" type="submit" [disabled]="equipmentForm.invalid" (click)="saveEquipment()">
                     Submit
                 </button>
+                
             </form>
         </div>
         
@@ -137,11 +151,16 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let equipment">
-                    <button mat-icon-button color="warn" (click)="deleteEquipment(equipment)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                  <button mat-icon-button color="primary" (click)="editEquipment(equipment)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteEquipment(equipment)">
+                    <mat-icon>delete</mat-icon>
+                 </button>
                 </td>
-            </ng-container>
+              </ng-container>
+
+           
     
             <!-- Set column definitions -->
             <tr mat-header-row *matHeaderRowDef="['name', 'description', 'type', 'price', 'count', 'actions']"></tr>
