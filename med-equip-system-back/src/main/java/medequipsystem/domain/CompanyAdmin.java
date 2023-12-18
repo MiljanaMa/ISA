@@ -24,6 +24,16 @@ public class CompanyAdmin {
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
+    public boolean isFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        this.firstTime = firstTime;
+    }
+
+    @Column(name = "first_time", nullable = false)
+    private boolean firstTime;
 
     public CompanyAdmin() {
     }

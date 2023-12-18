@@ -179,13 +179,13 @@ INSERT INTO public.clients(
 
 -- Company admin - 1
 INSERT INTO public.company_admins(
-	id, user_id, company_id)
-	VALUES (1, 7, 1);
+	id, user_id, company_id, first_time)
+	VALUES (1, 7, 1, false);
 
 -- Company admin - 2
 INSERT INTO public.company_admins(
-	id, user_id, company_id)
-	VALUES (2, 8, null);
+	id, user_id, company_id, first_time)
+	VALUES (2, 8, null, false);
 
 -- Appointments created by Admin 1
 INSERT INTO public.appointments(
@@ -218,3 +218,10 @@ VALUES
     (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 
 
+INSERT INTO public.reservations (id, status, client_id, appointment_id)
+VALUES
+    (52, 0, 1, 10);
+
+INSERT INTO public.reservation_items (id, count, equipment_id, reservation_id)
+VALUES
+    (52, 3, 9, 52);

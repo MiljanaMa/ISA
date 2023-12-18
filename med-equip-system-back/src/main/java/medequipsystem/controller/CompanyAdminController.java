@@ -1,14 +1,13 @@
 package medequipsystem.controller;
-import medequipsystem.domain.User;
+import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyAdminRegistrationDTO;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.repository.RoleRepository;
+import org.apache.coyote.Response;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
-import medequipsystem.domain.Company;
-import medequipsystem.domain.CompanyAdmin;
-import medequipsystem.domain.Location;
 import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.mapper.CompanyAdminDTOMapper;
@@ -23,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
+
 @RequestMapping(value = "api/companyadmins")
 public class CompanyAdminController {
     @Autowired
@@ -100,11 +101,14 @@ public class CompanyAdminController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CompanyAdminRegistrationDTO> update(@RequestBody CompanyAdminRegistrationDTO companyAdminDTO){
-        CompanyAdmin companyAdmin = mapDtoToDomain(companyAdminDTO);
-        companyAdmin = companyAdminService.update(companyAdmin);
-        if(companyAdmin == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new CompanyAdminRegistrationDTO(companyAdmin), HttpStatus.OK);
+    public ResponseEntity<CompanyAdminDTO> update(@RequestBody CompanyAdminDTO companyAdminDTO){
+        CompanyAdmin companyAdmin = (CompanyAdmin) new DtoUtils().convertToEntity(new CompanyAdmin(), companyAdminDTO);
+        companyAdmin.setCompany(companyAdminService.getById(companyAdminDTO.getId()).getCompany());
+        companyAdmin.getUser().setRole(new Role(2, "ROLE_COMPADMIN"));
+        companyAdmin.getUser().setEnabled(true);
+        companyAdmin.getUser().setPassword(passwordEncoder.encode(companyAdmin.getUser().getPassword()));
+        companyAdminService.create(companyAdmin);
+        return new ResponseEntity<>(companyAdminDTO, HttpStatus.OK);
     }
 
      @PutMapping(value="update/{id}")
@@ -114,9 +118,16 @@ public class CompanyAdminController {
         return new ResponseEntity<>(new CompanyAdminRegistrationDTO(updatedAdmin), HttpStatus.OK);
     }
     @GetMapping(value="{id}")
-    public ResponseEntity<CompanyAdminRegistrationDTO> getAdmin(@PathVariable Long id){
+    public ResponseEntity<CompanyAdminDTO> getAdmin(@PathVariable Long id){
         CompanyAdmin admin = companyAdminService.get(id);
-        return new ResponseEntity<>(new CompanyAdminRegistrationDTO(admin),HttpStatus.OK);
+        return new ResponseEntity<>((CompanyAdminDTO) new DtoUtils().convertToDto(admin, new CompanyAdminDTO()), HttpStatus.OK);
+    }
+
+    @GetMapping(value="/user/{id}")
+    public ResponseEntity<CompanyAdminDTO> getAdminByUser(@PathVariable Long id){
+        CompanyAdmin admin = companyAdminService.getByUserId(id);
+        return new ResponseEntity<>((CompanyAdminDTO) new DtoUtils().convertToDto(admin, new CompanyAdminDTO()), HttpStatus.OK);
+
     }
 
     //ne moze u companyAdminService zbog cirkularne zavisnosti

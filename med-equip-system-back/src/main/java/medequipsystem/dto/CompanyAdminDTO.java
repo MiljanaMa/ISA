@@ -10,6 +10,16 @@ public class CompanyAdminDTO implements DTOEntity {
     private CompanyDTO company;
     //private CompanyDTO companyDTO; stack overflow goes brrr
 
+    public boolean isFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        this.firstTime = firstTime;
+    }
+
+    private boolean firstTime;
+
     public CompanyAdminDTO() {
     }
 

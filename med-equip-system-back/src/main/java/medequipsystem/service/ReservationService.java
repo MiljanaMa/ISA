@@ -34,4 +34,10 @@ public class ReservationService {
             reservation.addReservationItem(ri);*/
         return reservationRepository.save(reservation);
     }
+
+    public Set<Reservation> getReservationsInProgress(){
+
+        return reservationRepository.getReservationsInProgress();
+
+    }
 }

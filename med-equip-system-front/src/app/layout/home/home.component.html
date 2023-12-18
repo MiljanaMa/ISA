@@ -16,3 +16,10 @@
     <p>Rating: {{ company.averageRate }}</p>
   </div>
 </div>
+<div *ngIf="!loggedUser?.firstTime && loggedUser">
+  <form #passwordForm="ngForm" (ngSubmit)="onSubmit(passwordForm)">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" ngModel required><br><br>
+    <button type="submit">Submit</button>
+  </form>
+</div>

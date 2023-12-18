@@ -62,8 +62,10 @@ export class CompanyAdminCreationComponent {
           lastName: this.adminForm.value.lastName,
           city: this.adminForm.value.city,
           country: this.adminForm.value.country,
-          phoneNumber: this.adminForm.value.phoneNumber,
+          phoneNumber: this.adminForm.value.phoneNumber, 
+      
           }, 
+        firstTime: true, 
         companyId: 0
       }
       

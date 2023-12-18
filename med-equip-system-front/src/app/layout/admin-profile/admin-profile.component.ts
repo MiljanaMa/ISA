@@ -3,8 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CompanyAdmin } from '../model/companyAdmin.model';
 import { LayoutService } from '../layout.service';
 import { ActivatedRoute } from '@angular/router';
+import * as CryptoJs from 'crypto-js'; 
 import { Params
  } from '@angular/router';
+ import { User } from '../model/user.model';
 @Component({
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
@@ -34,6 +36,7 @@ export class AdminProfileComponent implements OnInit {
   ngOnInit(): void {
     this.currentRoute.params.subscribe((params: Params) => {
       this.adminId = params['id'];
+      console.log(this.adminId); 
     });
     this.getById();
   }
@@ -45,7 +48,7 @@ export class AdminProfileComponent implements OnInit {
          this.admin = admin;
           this.adminForm.patchValue({ 
               email: this.admin.user.email,
-              password: this.admin.user.password , 
+              password: '' , 
               firstName: this.admin.user.firstName, 
               lastName: this.admin.user.lastName, 
               city: this.admin.user.city, 
@@ -75,14 +78,30 @@ export class AdminProfileComponent implements OnInit {
 
   update(): void {
     if (this.adminForm.valid) {
-      const updatedAdmin: CompanyAdmin = this.adminForm.value;
-
-      updatedAdmin.id = this.adminId; 
     
+    
+      let updatedAdmin = {
+        id: this.adminId,  
+        user: {
+          id: this.admin?.user.id, 
+          email: this.adminForm.value.email, 
+          password: this.adminForm.value.password, 
+          firstName: this.adminForm.value.firstName, 
+          lastName: this.adminForm.value.lastName, 
+          city: this.adminForm.value.city, 
+          country: this.adminForm.value.country, 
+          phoneNumber: this.adminForm.value.phoneNumber, 
+        
+
+        }, 
+        firstTime: true
+
+      }
+      console.log(updatedAdmin); 
       this.layoutService.updateAdmin(updatedAdmin).subscribe({
        next: () => {
      
-           this.getById(); 
+           //this.getById(); 
           this.updateMode = false;
             }, 
         error: (error) => {

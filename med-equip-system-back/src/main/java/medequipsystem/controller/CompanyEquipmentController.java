@@ -65,18 +65,23 @@ public class CompanyEquipmentController {
         CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class );
 
         CompanyEquipment equipment = (CompanyEquipment) new DtoUtils().convertToEntity(new CompanyEquipment(), companyEquipmentDTO);
+
         Company company = (Company) new DtoUtils().convertToEntity(new Company(), companyDTO);
         equipment.setCompany(company);
         companyEquipmentService.update(equipment);
         return new ResponseEntity<>(HttpStatus.OK);
+
+
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         CompanyEquipment equipment = companyEquipmentService.getById(id);
-        equipment.setCompany(null);
-        companyEquipmentService.update(equipment);
-        return new ResponseEntity<>(HttpStatus.OK);
-
+        if(!companyEquipmentService.IsUnpicked(id)) {
+            equipment.setCompany(null);
+            companyEquipmentService.update(equipment);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

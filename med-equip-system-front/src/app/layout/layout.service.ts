@@ -32,7 +32,7 @@ export class LayoutService {
       return this.http.get<CompanyAdmin>(`http://localhost:8092/api/companyadmins/${adminId}`);
   }
   updateAdmin(admin : CompanyAdmin): Observable<CompanyAdmin>{
-      return this.http.put<CompanyAdmin>(`http://localhost:8092/api/companyadmins/update/${admin?.id}`,admin); 
+      return this.http.put<CompanyAdmin>(`http://localhost:8092/api/companyadmins/update`,admin); 
   }
   getEquipments(): Observable<Array<CompanyEquipment>>{
     return this.http.get<Array<CompanyEquipment>>(`http://localhost:8092/api/equipments/all`);
@@ -46,6 +46,10 @@ export class LayoutService {
   getFreeAdmins(): Observable<Array<CompanyAdmin>>{
     return this.http.get<Array<CompanyAdmin>>(`http://localhost:8092/api/companyadmins/free`);
   }
+
+  getAdminByUserId(userId: number): Observable<CompanyAdmin>{
+    return this.http.get<CompanyAdmin>(`http://localhost:8092/api/companyadmins/user/${userId}`);
+}
 
   
 }
