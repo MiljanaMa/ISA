@@ -3,6 +3,7 @@ package medequipsystem.controller;
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Company;
 import medequipsystem.dto.AppointmentDTO;
+import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.dto.CustomAppointmentDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.AppointmentService;
@@ -41,6 +42,22 @@ public class AppointmentController {
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('COMPADMIN')")
+    @GetMapping(value = "/companycalendar/{companyId}") //TODO: bolja imena za putanje
+    public ResponseEntity<Set<ReservedAppointmentDTO>> getReservedAppointmentsByCompanyId(@PathVariable Long companyId) {
+        Set<ReservedAppointmentDTO> reservedAppointmentDTOS = appointmentService.getReservedAppointmentsByCompanyId(companyId);
+        return new ResponseEntity<>(reservedAppointmentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/notreservedappointments/{companyId}") //TODO: bolja imena, nemam snage trenutno
+    public ResponseEntity<Set<AppointmentDTO>> getNotReservedAppointments(@PathVariable Long companyId){
+        Set<Appointment> appointments = appointmentService.getNotReservedAppointments(companyId);
+        Set<AppointmentDTO> appointmentDTOS = (Set<AppointmentDTO>) new DtoUtils().convertToDtos(appointments, new AppointmentDTO());
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
+
     @GetMapping(value = "/custom")
     @PreAuthorize("hasAnyRole('CLIENT')")
     public ResponseEntity<Set<CustomAppointmentDTO>> getCustomAppointments(@RequestParam String date, @RequestParam Long companyId, Principal user){

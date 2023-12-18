@@ -2,6 +2,7 @@ package medequipsystem.service;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Company;
+import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.domain.CompanyAdmin;
 import medequipsystem.domain.enums.AppointmentStatus;
 import medequipsystem.dto.CustomAppointmentDTO;
@@ -171,4 +172,11 @@ public class AppointmentService {
         return timeSlots;
     }
 
+    public Set<ReservedAppointmentDTO> getReservedAppointmentsByCompanyId(Long companyId) {
+        return appointmentRepository.getReservedAppointmentsByCompanyId(companyId);
+    }
+
+    public Set<Appointment> getNotReservedAppointments(Long companyId){
+        return appointmentRepository.getNotReservedAppointments(companyId);
+    }
 }
