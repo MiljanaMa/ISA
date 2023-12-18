@@ -1,5 +1,6 @@
 package medequipsystem.repository;
 
+import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

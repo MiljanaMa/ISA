@@ -35,6 +35,8 @@ public class CompanyEquipment {
 
     @Column(name = "count", nullable = false)
     private int count;
+    @Column(name = "reservedCount", nullable = false)
+    private int reservedCount;
 
     /*@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_item_id", referencedColumnName = "id")
@@ -43,7 +45,7 @@ public class CompanyEquipment {
     public CompanyEquipment() {
     }
 
-    public CompanyEquipment(Long id, String name, EquipmentType type, String description, double price, Company company, int count) {
+    public CompanyEquipment(Long id, String name, EquipmentType type, String description, double price, Company company, int count, int reservedCount) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -51,6 +53,7 @@ public class CompanyEquipment {
         this.price = price;
         this.company = company;
         this.count = count;
+        this.reservedCount = reservedCount;
     }
 
     public Long getId() {
@@ -75,6 +78,14 @@ public class CompanyEquipment {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getReservedCount() {
+        return reservedCount;
+    }
+
+    public void setReservedCount(int reservedCount) {
+        this.reservedCount = reservedCount;
     }
 
     public String getName() {

@@ -81,6 +81,28 @@ label {
     box-sizing: border-box;
     width: 100%; /* Adjust width as needed */
   }
+  .predefined-appointment {
+    margin-top: 10px; /* Adjust the margin top as needed */
+  }
+  
+  /* Style for the label */
+  label {
+    font-size: 20px;
+    margin-right: 8px; /* Adjust the margin right as needed */
+  }
+  
+  /* Style for the select dropdown */
+  select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Style for the options in the dropdown */
+  option {
+    font-size: 16px;
+  }
   
   
   

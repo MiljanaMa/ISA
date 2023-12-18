@@ -1,0 +1,28 @@
+<div *ngIf="userReservations.length > 0">
+    <h2>User Reservations</h2>
+    <table>
+        <tbody>
+            <tr *ngFor="let reservation of userReservations">
+                <td *ngFor="let item of reservation.reservationItems">
+                    <div class="equipment-card">
+                        <h3>{{ item.equipment.name }}</h3>
+                        <p>Type: {{ item.equipment.type }}</p>
+                        <p>Price: {{ item.equipment.price }}</p>
+                        <p>Description: {{ item.equipment.description }}</p>
+                        <p>Reserved count: {{ item.count }}</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="equipment-card">
+                        <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
+                        <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
+                        <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="userReservations.length === 0">
+    <p>No reservations available.</p>
+</div>
