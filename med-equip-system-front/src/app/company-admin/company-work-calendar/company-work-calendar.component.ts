@@ -9,6 +9,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Appointment } from 'src/app/feature-modules/company/model/appointment.model';
+import { BehaviorSubject } from 'rxjs';
+import { CurrentUser } from 'src/app/auth/model/current-user.model';
+import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 
 
 @Component({
@@ -18,6 +21,8 @@ import { Appointment } from 'src/app/feature-modules/company/model/appointment.m
 })
 export class CompanyWorkCalendarComponent implements OnInit{
 
+  public currentUser = new BehaviorSubject<CurrentUser>({id: 0, email: "", role: null });
+  public companyAdmin: CompanyAdmin | undefined;
   reservedAppointments: ReservedAppointment[] = [];
   calendarOptions: CalendarOptions = {
   };
@@ -30,7 +35,10 @@ export class CompanyWorkCalendarComponent implements OnInit{
   public weekInterval: number = 1; 
   public monthInterval: number = 1; 
 
-  public companyId: number = 1;
+  public companyId: number | undefined;
+  public currentUserId: number | undefined;
+
+  public companyIdZakucano = 1; // trenutno resenje, postoji kod gde metode cekaju da se ucita id kompanije(prvenstveno usera i companyAdmina, mora na drugi nacin)
 
   private selectedDate: Date | undefined; 
 
@@ -38,10 +46,25 @@ export class CompanyWorkCalendarComponent implements OnInit{
 
   }
 
-  ngOnInit(): void {
+  // ***********************NE BRISI KOMENTARE, FUNKCIONALAN KOD!!!
+  /*async ngOnInit(): Promise<void> {        
+    await this.getCurrentUserId();
+    await this.loadReservedAppointments();
+    await this.getAllAppointmentsByCompany();
+    this.getCalendarOptions();
+  }*/
+  
+  async ngOnInit(): Promise<void> {
+    this.getCurrentUserId();
+    //this.getCompanyAdmin(this.currentUserId);
     this.loadReservedAppointments();
     this.getAllAppointmentsByCompany();
+    this.getCalendarOptions();
 
+  }
+  
+  getCalendarOptions(): void{
+    
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth', 
@@ -54,21 +77,80 @@ export class CompanyWorkCalendarComponent implements OnInit{
       slotDuration: '00:15:00', 
       allDaySlot: false,
       eventContent: this.customEventContent.bind(this) 
-
     };
   }
 
+    // ***********************NE BRISI KOMENTARE, FUNKCIONALAN KOD!!!
+    
+ /* async getCurrentUserId(): Promise<void> {
+    try {
+      const user = await this.service.getCurrentUser().toPromise();
+      if(user)
+      this.currentUser.next(user);
+      this.currentUserId = user?.id;
+      console.log("current user ://////// ", this.currentUser);
+      if (user &&user.id > 0) {
+        await this.getCompanyAdmin(user.id);
+      }
+    } catch (error) {
+      console.log('Error getting current user:', error);
+    }
+  }
+  
+  async getCompanyAdmin(userId: number): Promise<void> {
+    try {
+      const companyAdmin = await this.service.getCompanyAdminByUserId(userId).toPromise();
+      this.companyAdmin = companyAdmin;
+      if (companyAdmin?.companyId == 0 || companyAdmin?.companyId === undefined) {
+        this.companyId = 1;
+      } else {
+        this.companyId = companyAdmin.companyId;
+      }
+    } catch (error) {
+      console.error('Error fetching company admin:', error);
+    }
+  }*/
 
-  loadReservedAppointments() {
+  async getCurrentUserId(): Promise<void>{
+    await this.service.getCurrentUser().subscribe({
+      next: (user) => {
+        this.currentUser.next(user);
+        this.currentUserId = user.id;
+        console.log("current user ://////// ", this.currentUser);
+        if(user.id > 0){
+          this.getCompanyAdmin(user.id);
+        }
+      },
+      error: (err) => {
+        console.log('Error getting current user')
+      }
+    });
+  }
+
+  async getCompanyAdmin(userId: number): Promise<void>{
+    await this.service.getCompanyAdminByUserId(userId).subscribe({
+      next: (companyAdmin: CompanyAdmin ) => {
+        this.companyAdmin = companyAdmin;
+        if(companyAdmin.companyId == 0 || undefined){
+          this.companyId = 1;   //TODO: popraviti bag sa dobavljanjem kompanije kod compAdmina jer ne nadje kompaniju
+        } else{
+          this.companyId = companyAdmin.companyId;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching company admin:', error);
+      }
+    });
+  }
+
+  async loadReservedAppointments(): Promise<void> {
     //const companyId = 1; 
     //get CompanyId from Admin
-    this.service.getReservedAppointments(this.companyId).subscribe(
+    await this.service.getReservedAppointments(this.companyIdZakucano || 0).subscribe(
       (appointmentsData: ReservedAppointment[]) => {
         this.appointmentsDataSource.data = appointmentsData || [];
         this.calendarOptions.events = [];
         this.initializeCalendar();
-        //this.reservedAppointments = data;
-        //console.log('Reserved Appointments:', this.reservedAppointments);
       },
       (error) => {
         console.error('Error fetching reserved appointments:', error);
@@ -80,31 +162,11 @@ export class CompanyWorkCalendarComponent implements OnInit{
     return date.toISOString().split('T')[0];
   }
   
-  
   initializeCalendar(): void {
-
     this.calendarOptions.events = this.getReservedAppointmentsAsEvents(); 
     console.log(this.calendarOptions.events); 
     
   }
-
-  /*getReservedAppointmentsAsEvents(): EventInput[] {
-    return this.appointmentsDataSource.data.map((appointment) => ({
-      start: this.getDateAsString(new Date(appointment.date)) + 'T' + appointment.startTime[0].toString().padStart(2, '0') + ":" + appointment.startTime[1].toString().padStart(2, '0') + ":00",
-      end: this.getDateAsString(new Date(appointment.date)) + 'T' + appointment.endTime[0].toString().padStart(2, '0') + ":" + appointment.endTime[1].toString().padStart(2, '0') + ":00",
-      //title: `Client: ${appointment.clientFirstName} ${appointment.clientLastName}`,
-      backgroundColor: '#6f4dd5', 
-      borderColor: '#6f4dd5', 
-      extendedProps: {
-        clientFirstName: appointment.clientFirstName,
-        clientLastName: appointment.clientLastName,
-        adminFirstName: appointment.adminFirstName,
-        adminLastName: appointment.adminLastName,
-        startTime: appointment.startTime,
-        endTime: appointment.endTime
-      }
-    }));
-  }*/
 
   getReservedAppointmentsAsEvents(): EventInput[] {
     const reservedEvents = this.appointmentsDataSource.data.map((appointment) => ({
@@ -128,7 +190,6 @@ export class CompanyWorkCalendarComponent implements OnInit{
       backgroundColor: 'lightblue', 
       borderColor: 'lightblue', 
       extendedProps: {
-        
         startTime: appointment.startTime,
         endTime: appointment.endTime
       },
@@ -139,31 +200,6 @@ export class CompanyWorkCalendarComponent implements OnInit{
     return [...reservedEvents, ...allAppointmentsEvents];
   }
   
-
-  
-  /*customEventContent(arg: EventContentArg): { domNodes: HTMLElement[] } {
-    const container = document.createElement('div');
-    container.classList.add('fc-custom-event');
-    container.style.backgroundColor = 'lightblue'; // Set background color to purple
-  
-    const title = document.createElement('div');
-    title.classList.add('fc-title');
-    title.innerText = arg.event.title;
-  
-    const details = document.createElement('div');
-    details.classList.add('fc-details');
-    details.innerHTML = `
-    <strong>Start:</strong> ${arg.event.extendedProps['startTime']}<br>
-    <strong>End:</strong> ${arg.event.extendedProps['endTime']}<br>
-    <strong>Client:</strong> ${arg.event.extendedProps['clientFirstName']} ${arg.event.extendedProps['clientLastName']}<br>
-    <strong>Admin:</strong> ${arg.event.extendedProps['adminFirstName']} ${arg.event.extendedProps['adminLastName']}
-  `;
-  
-    container.appendChild(title);
-    container.appendChild(details);
-  
-    return { domNodes: [container] };
-  }*/
   customEventContent(arg: EventContentArg): { domNodes: HTMLElement[] } {
     const container = document.createElement('div');
     container.classList.add('fc-custom-event');
@@ -178,13 +214,11 @@ export class CompanyWorkCalendarComponent implements OnInit{
     details.classList.add('fc-details');
   
     if (arg.event.backgroundColor === 'lightblue') {
-      // For appointments from AllAppointmentsDataSource, show only start and end time
       details.innerHTML = `
         <strong>Start:</strong> ${arg.event.extendedProps['startTime']}<br>
         <strong>End:</strong> ${arg.event.extendedProps['endTime']}<br>
       `;
     } else {
-      // For appointments from appointmentsDataSource, show additional client and admin information
       details.innerHTML = `
         <strong>Start:</strong> ${arg.event.extendedProps['startTime']}<br>
         <strong>End:</strong> ${arg.event.extendedProps['endTime']}<br>
@@ -199,42 +233,16 @@ export class CompanyWorkCalendarComponent implements OnInit{
     return { domNodes: [container] };
   }
   
-  
-
   getDateAsString(date: Date): string{
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2); 
     const day = ('0' + date.getDate()).slice(-2);
-  
     return `${year}-${month}-${day}`;
   }
 
-  /*getAllAppointmentsByCompany(): void{
-    this.service.getAppointmentsByCompany(this.companyId).subscribe(
-      (appointmentsData : Appointment[] ) => {
-        this.AllAppointmentsDataSource.data = appointmentsData || [];
-        this.initializeCalendar(); 
-    
-        
-      }, 
-      appointmentError => {
-        console.log('Error fetching appointments', appointmentError); 
-      }
-    );
-  }*/
-  getAllAppointmentsByCompany(): void {
-    this.service.getNotReservedAppointmentsByCompany(this.companyId).subscribe(
+  async getAllAppointmentsByCompany(): Promise<void> {
+    await this.service.getNotReservedAppointmentsByCompany(this.companyIdZakucano || 0).subscribe(
       (appointmentsData: Appointment[]) => {
-        /*const filteredAppointments = appointmentsData.filter(appointment =>
-          !this.appointmentsDataSource.data.some(reservedAppointment =>
-            reservedAppointment.date === appointment.date &&
-            reservedAppointment.startTime[0] === appointment.startTime[0] &&
-            reservedAppointment.startTime[1] === appointment.startTime[1] &&
-            reservedAppointment.endTime[0] === appointment.endTime[0] &&
-            reservedAppointment.endTime[1] === appointment.endTime[1]
-          )
-        );*/
-
         this.AllAppointmentsDataSource.data = appointmentsData || [];
         this.initializeCalendar();
       },

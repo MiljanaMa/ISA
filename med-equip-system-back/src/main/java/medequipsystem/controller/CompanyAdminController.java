@@ -119,17 +119,21 @@ public class CompanyAdminController {
         return new ResponseEntity<>(new CompanyAdminRegistrationDTO(admin),HttpStatus.OK);
     }
 
-    //ne moze u companyAdminService zbog cirkularne zavisnosti
-    /*
-    *
-    *
-   companyAdminController (field private medequipsystem.service.CompanyAdminService medequipsystem.controller.CompanyAdminController.companyAdminService)
-┌─────┐
-|  companyAdminService (field private medequipsystem.service.CompanyService medequipsystem.service.CompanyAdminService.companyService)
-↑     ↓
-|  companyService (field private medequipsystem.service.CompanyAdminService medequipsystem.service.CompanyService.companyAdminService)
-└─────┘
-*/
+    @GetMapping(value="user/{id}")
+    public ResponseEntity<CompanyAdminRegistrationDTO> getAdminByUserId(@PathVariable Long id){
+        CompanyAdmin admin = companyAdminService.getByUserId(id);
+        System.out.println("\n\n*********\nadmin id" + admin.getId().toString());
+        System.out.println("*********\nadmin company id " + admin.getCompany().getId().toString());
+        admin.setCompany(companyService.getById(admin.getCompany().getId()));
+        System.out.println("\n\n*********\nadmin company id " + admin.getCompany().getId().toString());
+        System.out.println("*********\ncomp name" + admin.getCompany().getName());
+        System.out.println("*********\n company description " + admin.getCompany().getDescription()
+        );
+
+
+        return new ResponseEntity<>(new CompanyAdminRegistrationDTO(admin),HttpStatus.OK);
+    }
+
     public CompanyAdmin mapDtoToDomain(CompanyAdminRegistrationDTO companyAdminDTO){
         User user = new User();
         user.setEmail(companyAdminDTO.getEmail());
