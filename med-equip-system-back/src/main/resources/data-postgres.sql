@@ -218,13 +218,13 @@ VALUES
     (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
 
 
-INSERT INTO public.reservations (id, status, client_id, appointment_id)
-VALUES
-    (52, 0, 1, 10);
+--INSERT INTO public.reservations (id, status, client_id, appointment_id)
+--VALUES
+  --  (52, 0, 1, 8);
 
-INSERT INTO public.reservation_items (id, count, equipment_id, reservation_id)
-VALUES
-    (52, 3, 9, 52);
+--INSERT INTO public.reservation_items (id, count, equipment_id, reservation_id)
+--VALUES
+    --(52, 3, 9, 52);
 
 --Reservations
 INSERT INTO public.reservations(

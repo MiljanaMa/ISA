@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CompanyProfile } from './model/company-profile-model';
 import { CompanyEquipmentProfile } from './model/companyEquipmentProfile.model';
-import { ReservationCreation } from './model/reservationCreation.model';
+
 import { CompanyEquipment } from 'src/app/layout/model/equipment.model';
 import { Appointment, CustomAppointment } from './model/appointment.model';
 import { CustomReservation, ReservationCreation } from './model/reservationCreation.model';

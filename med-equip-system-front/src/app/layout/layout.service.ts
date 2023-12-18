@@ -48,7 +48,7 @@ export class LayoutService {
   }
 
   getAdminByUserId(userId: number): Observable<CompanyAdmin>{
-    return this.http.get<CompanyAdmin>(`http://localhost:8092/api/companyadmins/user/${userId}`);
+    return this.http.get<CompanyAdmin>(`http://localhost:8092/api/companyadmins/byUser/${userId}`);
 }
 
   

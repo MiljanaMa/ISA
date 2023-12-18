@@ -123,7 +123,7 @@ public class CompanyAdminController {
         return new ResponseEntity<>((CompanyAdminDTO) new DtoUtils().convertToDto(admin, new CompanyAdminDTO()), HttpStatus.OK);
     }
 
-    @GetMapping(value="/user/{id}")
+    @GetMapping(value="/byUser/{id}")
     public ResponseEntity<CompanyAdminDTO> getAdminByUser(@PathVariable Long id){
         CompanyAdmin admin = companyAdminService.getByUserId(id);
         return new ResponseEntity<>((CompanyAdminDTO) new DtoUtils().convertToDto(admin, new CompanyAdminDTO()), HttpStatus.OK);
