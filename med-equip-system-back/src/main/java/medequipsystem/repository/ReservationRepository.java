@@ -2,6 +2,7 @@ package medequipsystem.repository;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Reservation;
+import medequipsystem.domain.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +17,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE c.id = ?1 " +
             "AND r.client.id = ?2")
     Set<Reservation> findReservationByCompanyIdAndUserId(Long companyId, Long userId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.status = 0")
+    Set<Reservation> getReservationsInProgress();
 }

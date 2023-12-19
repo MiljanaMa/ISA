@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CompanyProfile } from './model/company-profile-model';
+import { CompanyEquipmentProfile } from './model/companyEquipmentProfile.model';
+
+import { CompanyEquipment } from 'src/app/layout/model/equipment.model';
 import { Appointment, CustomAppointment } from './model/appointment.model';
-import { CompanyEquipment } from './model/companyEquipment.model';
 import { CustomReservation, ReservationCreation } from './model/reservationCreation.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +42,20 @@ export class CompanyService {
     return this.http.post<string>(`http://localhost:8092/api/reservations/create/predefined`, reservation);
 
   }
+
+  deleteEquipment(equipmentId: number): Observable<void>{
+    return this.http.delete<void>(`http://localhost:8092/api/equipments/${equipmentId}`); 
+  }
+
+  updateEquipment(equipment: CompanyEquipmentProfile, company: CompanyProfile): Observable<void> {
+    return this.http.put<void>('http://localhost:8092/api/equipments/update', { equipDto: equipment, companyDto: company }); 
+  }
+  createEquipment(equipment: CompanyEquipmentProfile, company: CompanyProfile): Observable<CompanyEquipmentProfile> {
+
+    return this.http.post<CompanyEquipmentProfile>('http://localhost:8092/api/equipments/create', { equipDto: equipment, companyDto: company });
+  }
+  
+
   makeCustomReservation(reservation: CustomReservation): Observable<string>{
     return this.http.post<string>(`http://localhost:8092/api/reservations/create/custom`, reservation);
 
@@ -48,4 +65,5 @@ export class CompanyService {
 
     return this.http.get<CustomAppointment[]>(`http://localhost:8092/api/appointments/custom`, {params});
   }
+
 }

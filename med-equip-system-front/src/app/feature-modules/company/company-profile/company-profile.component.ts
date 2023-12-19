@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CompanyProfile as Company } from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
-import { CompanyEquipment } from '../model/companyEquipment.model';
+import { CompanyEquipmentProfile, EquipmentType } from '../model/companyEquipmentProfile.model';
 import { Appointment, AppointmentStatus } from '../model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,11 +28,19 @@ export class CompanyProfileComponent implements OnInit {
 
   reservationMode = false;
 
+  equipmentTypes: EquipmentType[] = [
+    EquipmentType.DIAGNOSTIC,
+    EquipmentType.LIFE_SUPPORT,
+    EquipmentType.LABORATORY,
+    EquipmentType.SURGICAL,
+    EquipmentType.OTHER
+];
+
   public companyAdminsDataSource = new MatTableDataSource<CompanyAdmin>();
-  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipment>();
+  public companyEquipmentDataSource = new MatTableDataSource<CompanyEquipmentProfile>();
   public appointmentsDataSource = new MatTableDataSource<Appointment>();
-  public equipments: CompanyEquipment[] = [];
-  public filteredEquipments: CompanyEquipment[] = [];
+  public equipments: CompanyEquipmentProfile[] = [];
+  public filteredEquipments: CompanyEquipmentProfile[] = [];
   public reservationItems: ReservationItem[] = [];
   public availableAppointments: Appointment[] = [];
   public inputSearch: string = '';
@@ -128,8 +136,10 @@ export class CompanyProfileComponent implements OnInit {
     return this.reservationItems.some(i => i.equipment.id === targetId);
   }
 
-  addToReservation(equipment: CompanyEquipment): void {
-    if (this.isEquipmentInItems(equipment.id)) {
+
+  addToReservation(equipment: CompanyEquipmentProfile):void {
+    if(this.isEquipmentInItems(equipment.id)){
+
       alert("This equipment is already in reservation");
       return;
     }

@@ -33,8 +33,7 @@ public class CompanyEquipmentDTO implements DTOEntity {
         this.reservedCount = reservedCount;
     }
 
-    //@Autowired
-   // private CompanyRepository companyRepository;
+
     public CompanyEquipmentDTO(CompanyEquipment companyEquipment) {
         this.id = companyEquipment.getId();
         this.name = companyEquipment.getName();

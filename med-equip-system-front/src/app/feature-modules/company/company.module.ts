@@ -13,7 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { CompanyProfileAdminComponent } from './company-profile-admin/company-profile-admin.component'; 
-
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 import { ReservationCreationComponent } from './reservation-creation/reservation-creation.component';
 
@@ -35,7 +35,8 @@ import { ReservationCreationComponent } from './reservation-creation/reservation
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule, 
-    MatButtonModule
+    MatButtonModule, 
+    MatIconModule, 
 
   ], 
   providers: [DatePipe],
