@@ -199,17 +199,15 @@ export class ReservationCreationComponent {
       };
       this.companyService.makePredefinedReservation(reservation).subscribe(
         (data) => {
-          //FIX THIS LATER - DOESNT WORK
-         // alert("You have succesfully made reservation");
-        //  this.router.navigate(['/reservations']);
-        console.log("Reservation creation works");
+          alert("You have succesfully made reservation");
+          this.router.navigate(['/reservations']);
+          console.log("Reservation creation works");
         },
         error => {
+          alert("There is not enough items in storage.");
           console.log(error);
         }
       );
-      alert("You have succesfully made reservation");
-      this.router.navigate(['/reservations']);
       return;
     }
     let emptyAppointment = {
@@ -236,6 +234,7 @@ export class ReservationCreationComponent {
         this.router.navigate(['/reservations']);
       },
       error => {
+        alert("There is not enough items in storage.");
         console.log(error);
       }
 
