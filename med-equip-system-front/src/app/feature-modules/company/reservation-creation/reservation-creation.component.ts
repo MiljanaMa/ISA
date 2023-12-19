@@ -201,7 +201,12 @@ export class ReservationCreationComponent {
         (data) => {
           alert("You have succesfully made reservation");
           this.router.navigate(['/reservations']);
+          console.log("Reservation creation works");
         },
+        error => {
+          alert("There is not enough items in storage.");
+          console.log(error);
+        }
       );
       return;
     }
@@ -229,6 +234,7 @@ export class ReservationCreationComponent {
         this.router.navigate(['/reservations']);
       },
       error => {
+        alert("There is not enough items in storage.");
         console.log(error);
       }
 

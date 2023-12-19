@@ -14,24 +14,23 @@ import { CompanyProfileAdminComponent } from './feature-modules/company/company-
 import { CompanyWorkCalendarComponent } from './company-admin/company-work-calendar/company-work-calendar.component';
 import { ReservationsComponent } from './client/reservations/reservations.component';
 import { ChangePasswordComponent } from './system-admin/change-password/change-password.component';
+import { AuthGuard } from './auth/guard/auth.guard';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'profile', component: ClientProfileComponent},
-  {path: 'reservations', component: ReservationsComponent},
   {path: '', component: HomeComponent},
-  {path: 'companyCreation', component: CompanyCreationComponent},
-  { path: 'admin-profile/:id', component: AdminProfileComponent },
-  { path: 'company-profile/:id', component: CompanyProfileComponent },
+  {path: 'profile', component: ClientProfileComponent, canActivate: [AuthGuard],},
+  {path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard],},
+  {path: 'companyCreation', component: CompanyCreationComponent, canActivate: [AuthGuard],},
+  { path: 'admin-profile/:id', component: AdminProfileComponent, canActivate: [AuthGuard],},
+  { path: 'company-profile/:id', component: CompanyProfileComponent, canActivate: [AuthGuard],},
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
-  {path: 'companyadminCreation', component: CompanyAdminCreationComponent},
-  {path: 'systemAdminCreation', component: SystemAdminCreationComponent},
-  {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent}, 
-  {path: 'company-work-calendar', component: CompanyWorkCalendarComponent},
-  {path: 'systemAdminChangePassword', component: ChangePasswordComponent},
-
-  
+  {path: 'companyadminCreation', component: CompanyAdminCreationComponent, canActivate: [AuthGuard],},
+  {path: 'systemAdminCreation', component: SystemAdminCreationComponent, canActivate: [AuthGuard],},
+  {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent, canActivate: [AuthGuard],}, 
+  {path: 'company-work-calendar', component: CompanyWorkCalendarComponent, canActivate: [AuthGuard],},
+  {path: 'systemAdminChangePassword', component: ChangePasswordComponent, canActivate: [AuthGuard]},
 
 ];
 

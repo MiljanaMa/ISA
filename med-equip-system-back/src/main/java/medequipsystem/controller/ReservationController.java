@@ -46,6 +46,14 @@ public class ReservationController {
         if(client == null)
             return ResponseEntity.badRequest().body("You are not authorized");
 
+        /*REFACTOR THIS - and for some reason it always gets 0 for reservedCount, I don't know why*/
+        for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
+            if(reservationItemDTO.getEquipment().getCount()-reservationItemDTO.getEquipment().getReservedCount() < reservationItemDTO.getCount()){
+                return ResponseEntity.badRequest().body("{\"message\": \"There is not enough items in storage.\"}");
+            }
+        }
+
+
         Appointment appointment =  (Appointment) new DtoUtils().convertToEntity(new Appointment(), reservationDTO.getAppointment());
         Set<ReservationItem> reservationItems =  (Set<ReservationItem>) new DtoUtils().convertToEntities(new ReservationItem(), reservationDTO.getReservationItems());
         Reservation savedReservation = reservationService.createPredefined( appointment, reservationItems, client);
@@ -56,7 +64,7 @@ public class ReservationController {
         emailService.sendReservationMail(user.getName(), savedReservation);
 
         //ReservationDTO dto = reservationMapper.toDto(savedReservation);
-        return ResponseEntity.ok().body("You have successfully made reservation");
+        return ResponseEntity.ok().body("{\"message\": \"You have successfully made a reservation\"}");
     }
     @PostMapping(value = "/create/custom")
     @PreAuthorize("hasAnyRole('CLIENT')")
@@ -68,6 +76,13 @@ public class ReservationController {
         Client client = clientService.getByUserId(reservationUser.getId());
         if(client == null)
             return ResponseEntity.badRequest().body("You are not authorized");
+
+        /*REFACTOR THIS - and for some reason it always gets 0 for reservedCount, I don't know why*/
+        for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
+            if(reservationItemDTO.getEquipment().getCount()-reservationItemDTO.getEquipment().getReservedCount() < reservationItemDTO.getCount()){
+                return ResponseEntity.badRequest().body("{\"message\": \"There is not enough items in storage.\"}");
+            }
+        }
 
         CustomAppointmentDTO appointment =  reservationDTO.getAppointment();
         Set<ReservationItem> reservationItems =  (Set<ReservationItem>) new DtoUtils().convertToEntities(new ReservationItem(), reservationDTO.getReservationItems());

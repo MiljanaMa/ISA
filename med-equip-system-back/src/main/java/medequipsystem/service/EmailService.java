@@ -59,7 +59,7 @@ public class EmailService {
                 + "- Reservation items: \n";
 
         for(ReservationItem item: reservation.getReservationItems()){
-            qrData += "  -> " + item.getEquipment().getName() + ": " + item.getCount() + "\n";
+            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "]\n";
         }
 
         byte[] qrImageBytes = generateQRCode(qrData);
