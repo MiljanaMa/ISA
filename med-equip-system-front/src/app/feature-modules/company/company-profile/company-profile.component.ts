@@ -82,7 +82,13 @@ export class CompanyProfileComponent implements OnInit {
             this.appointmentsDataSource.data = appointmentsData || [];
 
             this.appointmentsDataSource.data = this.appointmentsDataSource.data.filter(a => a.status === AppointmentStatus.AVAILABLE);
-            this.availableAppointments = this.appointmentsDataSource.data;
+            this.availableAppointments = this.appointmentsDataSource.data.filter(appointment => {
+              const appointmentDate = new Date(appointment.date);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return appointmentDate > today;
+          });
+          //this.availableAppointments = this.appointmentsDataSource.data;
           },
           appointmentError => {
             console.log('Error fetching appointments', appointmentError);

@@ -32,7 +32,12 @@ export class ReservationCreationComponent {
   selectedDate: Date | null = null;
 
   constructor(private companyService: CompanyService, private dateAdapter: DateAdapter<Date>, private router: Router) {
-    this.minDate = new Date(); // Initialize minDate with today's date
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    var tomorrow = new Date(currentDate);
+    tomorrow.setDate(currentDate.getDate() + 1);
+    this.minDate = tomorrow;
+
     this.dateAdapter.setLocale('en-US'); // Set your desired locale
   }
   onFormSubmit(): void {

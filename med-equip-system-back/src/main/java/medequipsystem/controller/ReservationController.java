@@ -27,6 +27,8 @@ public class ReservationController {
     @Autowired
     private AppointmentService appointmentService;
     @Autowired
+    private CompanyEquipmentService equipmentService;
+    @Autowired
     private CompanyService companyService;
     @Autowired
     private EmailService emailService;
@@ -47,8 +49,10 @@ public class ReservationController {
             return ResponseEntity.badRequest().body("You are not authorized");
 
         /*REFACTOR THIS - and for some reason it always gets 0 for reservedCount, I don't know why*/
+        CompanyEquipment ce;
         for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
-            if(reservationItemDTO.getEquipment().getCount()-reservationItemDTO.getEquipment().getReservedCount() < reservationItemDTO.getCount()){
+            ce = equipmentService.getById(reservationItemDTO.getEquipment().getId());
+            if(ce.getCount()-ce.getReservedCount() < reservationItemDTO.getCount()){
                 return ResponseEntity.badRequest().body("{\"message\": \"There is not enough items in storage.\"}");
             }
         }
@@ -77,9 +81,10 @@ public class ReservationController {
         if(client == null)
             return ResponseEntity.badRequest().body("You are not authorized");
 
-        /*REFACTOR THIS - and for some reason it always gets 0 for reservedCount, I don't know why*/
+        CompanyEquipment ce;
         for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
-            if(reservationItemDTO.getEquipment().getCount()-reservationItemDTO.getEquipment().getReservedCount() < reservationItemDTO.getCount()){
+            ce = equipmentService.getById(reservationItemDTO.getEquipment().getId());
+            if(ce.getCount()-ce.getReservedCount() < reservationItemDTO.getCount()){
                 return ResponseEntity.badRequest().body("{\"message\": \"There is not enough items in storage.\"}");
             }
         }

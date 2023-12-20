@@ -46,7 +46,7 @@ VALUES (5, 15, 'GOLD', 0, 400);
 
 --Company equipments
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 2);
+VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 3);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
 VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2, 0);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
@@ -96,7 +96,7 @@ VALUES
 INSERT INTO public.users(
     id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
 VALUES
-     (2, 'New York', 'USA', 'miljana@email.com', true, 'Miljana', 'Johnson', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789', 3);
+     (2, 'New York', 'USA', 'miljana.marjanovic9@gmail.com', true, 'Miljana', 'Johnson', '2020-06-22 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789', 3);
 
 -- User 3
 INSERT INTO public.users(
@@ -191,31 +191,31 @@ INSERT INTO public.company_admins(
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (1, '2023-12-20', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (2, '2023-12-21', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (3, '2023-12-22', '15:00', '16:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
+    (1, '2023-12-20', '10:00', '10:30', 0, 1),
+    (2, '2023-12-21', '13:00', '13:30', 0, 1),
+    (3, '2023-12-22', '15:00', '15:30', 0, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (4, '2023-11-23', '09:00', '10:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (5, '2023-11-24', '12:00', '13:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
+    (4, '2023-12-23', '09:00', '09:30', 1, 1),
+    (5, '2023-12-24', '12:00', '12:30', 1, 1);
 
 -- Appointments created by Admin 1
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (6, '2023-11-25', '11:00', '12:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (7, '2023-11-26', '14:00', '15:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (8, '2023-11-27', '16:00', '17:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
+    (6, '2024-01-25', '11:00', '11:30', 1, 1),
+    (7, '2024-01-26', '14:00', '14:30', 1, 1),
+    (8, '2024-01-27', '16:00', '16:30', 1, 1);
 
 -- Appointments created by Admin 4 and 5
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (9, '2023-11-28', '10:00', '11:00', FLOOR(RANDOM() * 2)::INTEGER, 1),
-    (10, '2023-11-29', '13:00', '14:00', FLOOR(RANDOM() * 2)::INTEGER, 1);
+    (9, '2023-11-28', '10:00', '10:30', 1, 1),
+    (10, '2023-11-29', '13:00', '13:30', 1, 1);
 
 
 --INSERT INTO public.reservations (id, status, client_id, appointment_id)
@@ -229,10 +229,14 @@ VALUES
 --Reservations
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (1, 1, 1, 2);
+VALUES (1, 1, 1, 1);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (2, 1, 2, 2);
+VALUES (2, 1, 2, 1);
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES
+    (3, 0, 3, 1);
 --Reservation items
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id)
@@ -240,10 +244,7 @@ VALUES (1, 2, 1, 1);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id)
 VALUES (2, 5, 4, 2);
+INSERT INTO public.reservation_items(
+    id, count, equipment_id, reservation_id)
+VALUES (3, 1, 1, 3);
 
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    --(1, 0, 1, 1),
-    --(2, 0, 2, 2),
-    (3, 0, 3, 1);
