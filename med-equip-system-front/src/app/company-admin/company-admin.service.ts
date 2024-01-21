@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservedAppointment } from './model/reserved-appointment.model';
-import { Appointment } from '../feature-modules/company/model/appointment.model';
+import { Appointment } from '../client/model/appointment.model';
 import { CurrentUser } from '../auth/model/current-user.model';
 import { environment } from 'src/env/environment';
 import { CompanyAdmin } from '../layout/model/companyAdmin.model';

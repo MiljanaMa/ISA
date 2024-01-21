@@ -1,4 +1,4 @@
-import {  CompanyEquipmentProfile } from "./companyEquipmentProfile.model";
+import {  CompanyEquipmentProfile } from "../../feature-modules/company/model/companyEquipmentProfile.model";
 import { Appointment, CustomAppointment } from "./appointment.model";
 import { Time } from "@angular/common";
 

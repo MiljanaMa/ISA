@@ -85,6 +85,17 @@ public class ClientService {
         client.setUser(user);
         return this.clientRepository.save(client);
     }
+    public boolean checkPassword(long userId, String password){
+        Client client = getByUserId(userId);
+        if(client == null)
+            return false;
+
+        boolean isPasswordMatch = passwordEncoder.matches(password, client.getUser().getPassword());
+        if(!isPasswordMatch)
+            return false;
+
+        return true;
+    }
 
     public Client mapClientDtoToDomain(ClientRegistrationDTO clientDTO) {
         User user = new User();

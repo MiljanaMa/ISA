@@ -4,6 +4,7 @@ import { Company } from '../model/company.model';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CompanyAdmin } from '../model/companyAdmin.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,8 @@ export class HomeComponent implements OnInit {
   public filteredCompanies: Company[] = [];
   public selectedRating: number = 0;
   public inputSearch: string = '';
+  public sortType: string = 'NAME';
+  public orderType: string = 'DESC';
 
 
   constructor(private layoutService: LayoutService, private router: Router, private authService: AuthService) { }
@@ -69,6 +72,7 @@ export class HomeComponent implements OnInit {
       next: (data) => {
         this.companies = data;
         this.filteredCompanies = data;
+        this.onSortChange();
       }
     });
   }
@@ -86,6 +90,20 @@ export class HomeComponent implements OnInit {
     this.selectedRating = 0;
     this.inputSearch = '';
     this.filteredCompanies = this.companies;
+  }
+  onSortChange(): void {
+    if(this.sortType === 'NAME' && this.orderType === 'ASC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => b.name.toUpperCase().localeCompare(a.name.toUpperCase()));
+    else if(this.sortType === 'NAME' && this.orderType === 'DESC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()));
+    else if(this.sortType === 'CITY' && this.orderType === 'ASC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => b.location.city.toUpperCase().localeCompare(a.location.city.toUpperCase()));
+    else if(this.sortType === 'CITY' && this.orderType === 'DESC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => a.location.city.toUpperCase().localeCompare(b.location.city.toUpperCase()));
+    else if(this.sortType === 'RATING' && this.orderType === 'DESC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => a.averageRate - b.averageRate);
+    else if(this.sortType === 'RATING' && this.orderType === 'ASC')
+      this.filteredCompanies = this.filteredCompanies.sort((b, a) => b.averageRate - a.averageRate);
   }
 
   viewCompanyProfile(companyId: number): void {

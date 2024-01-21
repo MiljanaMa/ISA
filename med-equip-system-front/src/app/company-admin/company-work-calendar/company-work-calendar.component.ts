@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Appointment } from 'src/app/feature-modules/company/model/appointment.model';
+import { Appointment } from 'src/app/client/model/appointment.model';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';

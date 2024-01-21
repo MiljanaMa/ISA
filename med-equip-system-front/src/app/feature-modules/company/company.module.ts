@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { CompanyProfileComponent } from './company-profile/company-profile.component';
+import { CompanyProfileComponent } from '../../client/company-profile/company-profile.component';
 import { MatTableModule } from '@angular/material/table';
 import { LayoutModule } from 'src/app/layout/layout.module';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CompanyProfileAdminComponent } from './company-profile-admin/company-profile-admin.component'; 
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 
-import { ReservationCreationComponent } from './reservation-creation/reservation-creation.component';
+import { ReservationCreationComponent } from '../../client/reservation-creation/reservation-creation.component';
 
 
 @NgModule({
