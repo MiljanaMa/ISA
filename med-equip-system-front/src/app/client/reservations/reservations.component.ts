@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
-import { Reservation } from '../model/reservation.model';
+import { QRCode, Reservation } from '../model/reservation.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ClientService } from '../client.service';
 
@@ -14,8 +14,11 @@ export class ReservationsComponent implements OnInit {
   public userReservations: Reservation[] = [];
   public takenReservations: Reservation[] = [];
   public reservedReservations: Reservation[] = [];
+  public qrCodes: QRCode[] = [];
+  public filteredQrCodes: QRCode[] = [];
   public sortType: string = 'DATE';
   public orderType: string = 'DESC';
+  public filterType: string = 'ANY';
 
   constructor(private authService: AuthService, private clientService: ClientService
   ) { }
@@ -30,6 +33,7 @@ export class ReservationsComponent implements OnInit {
       }
     });
     this.getUserReservations();
+    this.getQrCodes();
   }
 
   getUserReservations(): void {
@@ -39,6 +43,13 @@ export class ReservationsComponent implements OnInit {
         this.takenReservations = this.userReservations.filter(r => r.status === 'TAKEN');
         this.reservedReservations = this.userReservations.filter(r => r.status === 'RESERVED');
         this.onSortChange();
+      });
+  }
+  getQrCodes(): void {
+    this.clientService.getQrCodes().subscribe(
+      (data: QRCode[]) => {
+        this.qrCodes = data;
+        this.filteredQrCodes = data;
       });
   }
   formatTime(time: any): String {
@@ -108,5 +119,18 @@ export class ReservationsComponent implements OnInit {
   }
   private calculateDuration(start: any, end: any): number {  
     return ((end[0] *60 + end[1]) - (start[0] *60 + start[1]));
+  }
+  getQRCodeDataURL(qrCode: QRCode): string {
+    return `data:image/png;base64,${qrCode.qrCode}`;
+  }
+  onFilterChange(): void{
+    if(this.filterType === 'ANY')
+      this.filteredQrCodes = this.qrCodes;
+    else if(this.filterType === 'TAKEN')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'TAKEN');
+    else if(this.filterType === 'RESERVED')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'RESERVED');
+    else
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
   }
 }

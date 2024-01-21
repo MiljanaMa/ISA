@@ -51,19 +51,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendReservationMail(String email, Reservation reservation) {
-        String qrData = "Reservation details: \n"
-                + "- Appointment date: " + reservation.getAppointment().getDate() + "\n"
-                + "- Appointment time: " + reservation.getAppointment().getStartTime()
-                + "-" + reservation.getAppointment().getEndTime() + "\n"
-                + "- Reservation items: \n";
-
-        for(ReservationItem item: reservation.getReservationItems()){
-            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "]\n";
-        }
-
-        byte[] qrImageBytes = generateQRCode(qrData);
-
+    public void sendReservationMail(String email, byte[] qrImageBytes) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -83,30 +71,4 @@ public class EmailService {
             System.out.println("Failed to send email with QR code");
         }
     }
-
-    private byte[] generateQRCode(String qrData) {
-        try {
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<>();
-            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrData, BarcodeFormat.QR_CODE, 300, 300, hintMap);
-
-            BufferedImage qrImage = new BufferedImage(300, 300, BufferedImage.TYPE_INT_RGB);
-            qrImage.createGraphics();
-
-            for (int x = 0; x < 300; x++) {
-                for (int y = 0; y < 300; y++) {
-                    qrImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
-                }
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(qrImage, "png", baos);
-            return baos.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new byte[0];
-        }
-    }
-
 }

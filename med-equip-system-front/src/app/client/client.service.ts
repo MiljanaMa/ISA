@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Client, Passwords } from './model/client.model';
 import { Observable } from 'rxjs';
-import { Reservation } from './model/reservation.model';
+import { QRCode, Reservation } from './model/reservation.model';
 import { CustomReservation, ReservationCreation } from './model/reservationCreation.model';
 import { CustomAppointment } from './model/appointment.model';
 import { environment } from 'src/env/environment';
@@ -42,6 +42,9 @@ export class ClientService {
     let params = new HttpParams().set('date', date.toISOString().split('T')[0]).set('companyId', companyId || '');
 
     return this.http.get<CustomAppointment[]>(environment.apiHost +`appointments/custom`, {params});
+  }
+  getQrCodes(): Observable<QRCode[]>{
+    return this.http.get<QRCode[]>(environment.apiHost +`reservations/qrCodes`)
   }
   
 }

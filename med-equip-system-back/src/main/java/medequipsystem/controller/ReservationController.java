@@ -1,9 +1,7 @@
 package medequipsystem.controller;
 
 import medequipsystem.domain.*;
-import medequipsystem.domain.enums.ReservationStatus;
 import medequipsystem.dto.*;
-import medequipsystem.mapper.GenericMapper;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +64,7 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         */
 
-        emailService.sendReservationMail(user.getName(), savedReservation);
+        emailService.sendReservationMail(user.getName(), reservationService.getQrCode(savedReservation));
 
         //ReservationDTO dto = reservationMapper.toDto(savedReservation);
         return ResponseEntity.ok().body("{\"message\": \"You have successfully made a reservation\"}");
@@ -87,7 +85,7 @@ public class ReservationController {
         for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
             ce = equipmentService.getById(reservationItemDTO.getEquipment().getId());
             if(ce.getCount()-ce.getReservedCount() < reservationItemDTO.getCount()){
-                return ResponseEntity.badRequest().body("{\"message\": \"There is not enough items in storage.\"}");
+                return ResponseEntity.badRequest().body("There is not enough items in storage.");
             }
         }
 
@@ -104,10 +102,10 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         */
 
-        emailService.sendReservationMail(user.getName(), savedReservation);
+            emailService.sendReservationMail(user.getName(), reservationService.getQrCode(savedReservation));
 
         //ReservationDTO dto = reservationMapper.toDto(savedReservation);
-        return ResponseEntity.ok().body("{\"message\": \"You have successfully made a reservation\"}");
+        return ResponseEntity.ok().body("You have successfully made a reservation");
         } catch (Exception e) {
             // Log the exception
             // logger.error("Error creating reservation", e);
@@ -116,13 +114,23 @@ public class ReservationController {
     }
     @GetMapping(value = "/user")
     @PreAuthorize("hasAnyRole('CLIENT')")
-    public ResponseEntity<Set<ReservationDTO>> getAppointmentsForCompany(Principal user){
+    public ResponseEntity<Set<ReservationDTO>> getUserReservations(Principal user){
         User reservationUser = userService.getByEmail(user.getName());
 
         Set<Reservation> reservations = reservationService.getUserReservations(reservationUser.getId());
         Set<ReservationDTO> reservationDTOS = (Set<ReservationDTO>) new DtoUtils().convertToDtos(reservations, new ReservationDTO());
 
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
+    @GetMapping(value = "/qrCodes")
+    @PreAuthorize("hasAnyRole('CLIENT')")
+    public ResponseEntity<Set<QRCodeDTO>> getQRCodes(Principal user){
+        User reservationUser = userService.getByEmail(user.getName());
+        Set<QRCodeDTO> qrCodes = new HashSet<>();
+        for(Reservation r: reservationService.getUserReservations(reservationUser.getId()))
+            qrCodes.add(new QRCodeDTO(reservationService.getQrCode(r), r.status));
+
+        return new ResponseEntity<>(qrCodes, HttpStatus.OK);
     }
 
 }

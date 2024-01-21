@@ -9,4 +9,16 @@ export interface Reservation {
     client: Client;
     status: string;
 }
+export interface QRCode {
+    qrCode: Uint8Array;
+    status: ReservationStatus;
+}
+export enum ReservationStatus {
+
+    RESERVED = 'RESERVED',
+    CANCELLED = 'CANCELLED',
+    TAKEN = 'TAKEN',
+    EXPIRED = 'EXPIRED',
+  }
+
 

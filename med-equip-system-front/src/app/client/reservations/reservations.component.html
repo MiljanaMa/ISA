@@ -62,7 +62,17 @@
     </mat-tab>
   
     <mat-tab label="QR CODE">
-      <!-- Content for Tab 3 -->
-      <p>Content for Tab 3</p>
+        <div class="sort-container">
+            <label for="sort">Filter by:</label>
+                          <select id="sort" class="sort" [(ngModel)]="filterType" (change)="onFilterChange()">
+                              <option value="ANY" selected>ANY</option>
+                              <option value="TAKEN">TAKEN</option>
+                              <option value="CANCELLED">CANCELLED</option>
+                              <option value="RESERVED">RESERVED</option>
+                          </select>
+          </div>
+        <div *ngFor="let qrCode of filteredQrCodes">
+            <img [src]="getQRCodeDataURL(qrCode)" alt="QR Code">
+          </div>
     </mat-tab>
   </mat-tab-group>
