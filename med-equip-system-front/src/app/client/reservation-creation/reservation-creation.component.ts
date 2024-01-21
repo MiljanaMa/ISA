@@ -108,7 +108,7 @@ export class ReservationCreationComponent {
           console.log("Reservation creation works");
         },
         error => {
-          alert("There is not enough items in storage.");
+          alert(error.error);
           console.log(error);
         }
       );

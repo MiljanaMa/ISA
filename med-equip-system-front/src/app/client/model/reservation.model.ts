@@ -7,5 +7,6 @@ export interface Reservation {
     reservationItems: ReservationItem[];
     appointment: Appointment;
     client: Client;
+    status: string;
 }
 

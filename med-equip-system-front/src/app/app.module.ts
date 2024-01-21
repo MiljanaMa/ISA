@@ -14,6 +14,7 @@ import { ClientModule } from './client/client.module';
 import { SystemAdminModule } from './system-admin/system-admin.module';
 import { CompanyAdminModule } from './company-admin/company-admin.module';
 import { ScheduleModule, DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import dayGridPlugin from '@fullcalendar/daygrid';
 
@@ -35,6 +36,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
     CompanyAdminModule,
     FullCalendarModule,
     ScheduleModule,
+    MatTabsModule,
 
     
 

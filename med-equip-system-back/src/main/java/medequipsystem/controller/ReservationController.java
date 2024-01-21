@@ -47,7 +47,8 @@ public class ReservationController {
         Client client = clientService.getByUserId(reservationUser.getId());
         if(client == null)
             return ResponseEntity.badRequest().body("You are not authorized");
-
+        else if(client.getPenaltyPoints() >= 3)
+            return ResponseEntity.badRequest().body("You can't make reservation because of penalty points");
         /*REFACTOR THIS - and for some reason it always gets 0 for reservedCount, I don't know why*/
         CompanyEquipment ce;
         for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
@@ -80,7 +81,8 @@ public class ReservationController {
         Client client = clientService.getByUserId(reservationUser.getId());
         if(client == null)
             return ResponseEntity.badRequest().body("You are not authorized");
-
+        else if(client.getPenaltyPoints() >= 3)
+            return ResponseEntity.badRequest().body("You can't make reservation because of penalty points");
         CompanyEquipment ce;
         for(ReservationItemDTO reservationItemDTO: reservationDTO.getReservationItems()){
             ce = equipmentService.getById(reservationItemDTO.getEquipment().getId());
