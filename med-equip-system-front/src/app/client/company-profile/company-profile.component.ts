@@ -115,6 +115,7 @@ export class CompanyProfileComponent implements OnInit {
       id: 0,
       count: 1,
       equipment: equipment,
+      price: 0
     };
     this.reservationItems.push(reservationItem);
     alert("Equipment added to reservation");

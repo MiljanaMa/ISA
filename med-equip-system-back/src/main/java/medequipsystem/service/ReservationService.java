@@ -45,7 +45,7 @@ public class ReservationService {
             if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
         reservation.setReservationItems(changedItems);
 
@@ -72,7 +72,7 @@ public class ReservationService {
             if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
         reservation.setReservationItems(changedItems);
 
@@ -89,6 +89,7 @@ public class ReservationService {
                 .collect(Collectors.toSet());
         return userReservations;
     }
+    //potentionally move this to utils
     public byte[] generateQRCode(String qrData) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -121,7 +122,7 @@ public class ReservationService {
                 + "- Reservation items: \n";
 
         for(ReservationItem item: reservation.getReservationItems()){
-            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "]\n";
+            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "], Price: [" + item.getPrice() +"]\n";
         }
         return generateQRCode(qrData);
     }

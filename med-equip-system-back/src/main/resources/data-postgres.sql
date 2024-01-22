@@ -238,12 +238,12 @@ VALUES
     (3, 2, 3, 3);
 --Reservation items
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (1, 2, 1, 1);
+    id, count, equipment_id, reservation_id, price)
+VALUES (1, 2, 1, 1, 500);
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (2, 5, 4, 2);
+    id, count, equipment_id, reservation_id, price)
+VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (3, 1, 1, 3);
+    id, count, equipment_id, reservation_id, price)
+VALUES (3, 1, 1, 3, 345);
 

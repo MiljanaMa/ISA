@@ -95,12 +95,10 @@ export class ReservationsComponent implements OnInit {
     else if(this.sortType === 'DURATION' && this.orderType === 'DESC')
       this.takenReservations = this.takenReservations.sort((b, a) =>
     this.calculateDuration(a.appointment.startTime, a.appointment.endTime) - this.calculateDuration(b.appointment.startTime, b.appointment.endTime));
-    //treba da se ubaci price u slucaju da neko izmjeni cijenu
-    
-    /*else if(this.sortType === 'PRICE' && this.orderType === 'DESC')
-      this.takenReservations = this.takenReservations.sort((b, a) => a.price - b.averageRate);
     else if(this.sortType === 'PRICE' && this.orderType === 'ASC')
-      this.takenReservations = this.takenReservations.sort((b, a) => b.averageRate - a.averageRate);*/
+      this.takenReservations = this.takenReservations.sort((b, a) => this.calculatePrice(b) - this.calculatePrice(a));
+    else if(this.sortType === 'PRICE' && this.orderType === 'DESC')
+      this.takenReservations = this.takenReservations.sort((b, a) => this.calculatePrice(a) - this.calculatePrice(b));
   }
   private compareHours(a: Reservation, b: Reservation) {
     if(a.appointment.startTime[0] > b.appointment.startTime[0])
@@ -119,6 +117,10 @@ export class ReservationsComponent implements OnInit {
   }
   private calculateDuration(start: any, end: any): number {  
     return ((end[0] *60 + end[1]) - (start[0] *60 + start[1]));
+  }
+  private calculatePrice(r: Reservation): number {  
+    let total = r.reservationItems.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+    return total;
   }
   getQRCodeDataURL(qrCode: QRCode): string {
     return `data:image/png;base64,${qrCode.qrCode}`;

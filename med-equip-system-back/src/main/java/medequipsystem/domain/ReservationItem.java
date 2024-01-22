@@ -19,13 +19,16 @@ public class ReservationItem {
     @JoinColumn(name = "equipment_id", nullable = false)
     @ManyToOne()
     private CompanyEquipment equipment;
+    @Column(name = "price", nullable = false)
+    private double price;
 
     public ReservationItem() {
     }
-    public ReservationItem(Long id, int count, CompanyEquipment equipment) {
+    public ReservationItem(Long id, int count, CompanyEquipment equipment, double price) {
         this.id = id;
         this.count = count;
         this.equipment = equipment;
+        this.price = price;
     }
 
     public Long getId() {
@@ -52,4 +55,11 @@ public class ReservationItem {
         this.equipment = equipment;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

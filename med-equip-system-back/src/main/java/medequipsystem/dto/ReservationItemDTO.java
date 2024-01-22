@@ -14,6 +14,8 @@ public class ReservationItemDTO implements DTOEntity {
     private int count;
     @JsonProperty("equipment")
     private CompanyEquipmentDTO equipment;
+    @JsonProperty("price")
+    private double price;
 
     public ReservationItemDTO(){}
     /*public ReservationItemDTO(ReservationItem item) {
@@ -43,5 +45,13 @@ public class ReservationItemDTO implements DTOEntity {
 
     public void setEquipment(CompanyEquipmentDTO equipment) {
         this.equipment = equipment;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -15,5 +15,6 @@ export interface ReservationItem {
     id: number;
     count: number;
     equipment: CompanyEquipmentProfile;
+    price: number;
 }
 
