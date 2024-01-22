@@ -3,15 +3,13 @@ import medequipsystem.domain.*;
 import medequipsystem.dto.*;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.CompanyService;
-import medequipsystem.mapper.CompanyDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -20,18 +18,10 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @Autowired
-    private CompanyDTOMapper companyDTOMapper;
-
-
-
     @GetMapping(value = "/all")
-    public ResponseEntity<List<CompanyDTO>> getAll() {
-        List<Company> companies = companyService.getAll();
-        List<CompanyDTO> companiesDTO = companies.stream()
-                .map(companyDTOMapper::fromCompanytoDTO)
-                .collect(Collectors.toList());
-
+    public ResponseEntity<Set<CompanyDTO>> getAll() {
+        Set<Company> companies = new HashSet<>(companyService.getAll());
+        Set<CompanyDTO> companiesDTO = (Set<CompanyDTO>) new DtoUtils().convertToDtos(companies, new CompanyDTO());
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
     }
 
@@ -39,7 +29,8 @@ public class CompanyController {
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         Company createdCompany = companyService.createOrUpdate(companyDTO);
-        return new ResponseEntity<>(companyDTOMapper.fromCompanytoDTO(createdCompany), HttpStatus.CREATED);
+        CompanyDTO dto = (CompanyDTO) new DtoUtils().convertToDto(createdCompany, new CompanyDTO());
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
 

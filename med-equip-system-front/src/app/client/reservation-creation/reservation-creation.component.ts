@@ -108,7 +108,7 @@ export class ReservationCreationComponent {
           console.log("Reservation creation works");
         },
         error => {
-          alert(error.error);
+          alert(error.error.message);
           console.log(error);
         }
       );
