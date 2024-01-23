@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,6 +87,17 @@ public class ClientService {
         client.setUser(user);
         return this.clientRepository.save(client);
     }
+    public boolean checkPassword(long userId, String password){
+        Client client = getByUserId(userId);
+        if(client == null)
+            return false;
+
+        boolean isPasswordMatch = passwordEncoder.matches(password, client.getUser().getPassword());
+        if(!isPasswordMatch)
+            return false;
+
+        return true;
+    }
 
     public Client mapClientDtoToDomain(ClientRegistrationDTO clientDTO) {
         User user = new User();
@@ -105,6 +118,19 @@ public class ClientService {
         client.setPoints(0);
         client.setUser(user);
         return client;
+    }
+    public void updatePenaltyPoints() {
+        Calendar cal = Calendar.getInstance();
+        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH);
+        if(dayOfMonth != 1)
+            return;
+        for(Client c: getAll()){
+            if(c.getVersionPenalty() == month)
+                return;
+            c.setPenaltyPoints(0);
+            clientRepository.save(c);
+        }
     }
 
     public void confirmEmail(Client client){

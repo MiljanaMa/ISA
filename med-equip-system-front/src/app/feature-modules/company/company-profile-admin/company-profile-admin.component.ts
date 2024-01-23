@@ -4,7 +4,7 @@ import { CompanyProfile as Company }  from '../model/company-profile-model';
 import { CompanyService } from '../company.service';
 import { CompanyAdmin } from 'src/app/layout/model/companyAdmin.model';
 import { CompanyEquipmentProfile, EquipmentType } from '../model/companyEquipmentProfile.model';
-import { Appointment, AppointmentStatus } from '../model/appointment.model';
+import { Appointment, AppointmentStatus } from '../../../client/model/appointment.model';
 import { Location } from 'src/app/layout/model/location.model';
 import { MatTableDataSource } from '@angular/material/table';
 import timeGridPlugin from '@fullcalendar/timegrid';

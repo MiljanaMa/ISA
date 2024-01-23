@@ -144,23 +144,22 @@ INSERT INTO public.system_admins(
 INSERT INTO public.system_admins(
 	id, user_id, is_main, is_initial_password_changed)
 	VALUES (2, 6, false, true);
-
 --Client 1
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (1, 'General hospital', 'Doctor', 0, 0, 2);
+	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
+	VALUES (1, 'General hospital', 'Doctor', 0, 0, 0, 2);
 --Client 2
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (2, 'General hospital', 'Nurse', 0, 0, 3);
+	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
+	VALUES (2, 'General hospital', 'Nurse', 0, 0, 0, 3);
 --Client 3
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (3, 'General hospital', 'Surgeon', 0, 0, 4);
+	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
+	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 0, 4);
 --Client 4
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, user_id)
-	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 5);
+	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
+	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 0, 5);
 
 
 --Company Admins -- this needs to be changed, user composition
@@ -191,9 +190,9 @@ INSERT INTO public.company_admins(
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (1, '2023-12-20', '10:00', '10:30', 0, 1),
+    (1, '2023-12-20', '09:00', '10:30', 0, 1),
     (2, '2023-12-21', '13:00', '13:30', 0, 1),
-    (3, '2023-12-22', '15:00', '15:30', 0, 1);
+    (3, '2023-12-20', '15:00', '15:30', 0, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
@@ -229,22 +228,22 @@ VALUES
 --Reservations
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (1, 1, 1, 1);
+VALUES (1, 2, 1, 3);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (2, 1, 2, 1);
+VALUES (2, 0, 2, 3);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
 VALUES
-    (3, 0, 3, 1);
+    (3, 2, 3, 3);
 --Reservation items
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (1, 2, 1, 1);
+    id, count, equipment_id, reservation_id, price)
+VALUES (1, 2, 1, 1, 500);
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (2, 5, 4, 2);
+    id, count, equipment_id, reservation_id, price)
+VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id)
-VALUES (3, 1, 1, 3);
+    id, count, equipment_id, reservation_id, price)
+VALUES (3, 1, 1, 3, 345);
 

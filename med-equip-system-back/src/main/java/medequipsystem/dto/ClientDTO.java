@@ -19,6 +19,7 @@ public class ClientDTO {
     private int points;
     private String loyaltyType;
     private double discount;
+    private int versionPenalty;
 
     public ClientDTO(){}
 
@@ -35,6 +36,7 @@ public class ClientDTO {
         this.hospitalInfo = client.getHospitalInfo();
         this.penaltyPoints = client.getPenaltyPoints();
         this.points = client.getPoints();
+        this.versionPenalty = client.getVersionPenalty();
     }
 
     public int getPoints() {
@@ -147,5 +149,13 @@ public class ClientDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public int getVersionPenalty() {
+        return versionPenalty;
+    }
+
+    public void setVersionPenalty(int versionPenalty) {
+        this.versionPenalty = versionPenalty;
     }
 }

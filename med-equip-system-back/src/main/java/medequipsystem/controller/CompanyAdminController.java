@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyDTO;
-import medequipsystem.mapper.CompanyAdminDTOMapper;
 import medequipsystem.service.CompanyAdminService;
 import medequipsystem.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,6 @@ public class CompanyAdminController {
 
     @Autowired
     private CompanyService companyService;
-
-    @Autowired
-    private CompanyAdminDTOMapper companyAdminDTOMapper;
 
     @Autowired
     private RoleRepository roleRepository;

@@ -3,6 +3,7 @@ package medequipsystem.dto;
 public class PasswordChangeDTO {
     private String newPassword;
     private String oldPassword;
+    //uzmi i izvuci iz principle user id, nemoj ga stavljati ovako
     private Long userId;
 
     public PasswordChangeDTO(){

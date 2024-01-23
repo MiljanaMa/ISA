@@ -1,5 +1,10 @@
 package medequipsystem.service;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import medequipsystem.domain.*;
 import medequipsystem.domain.enums.AppointmentStatus;
 import medequipsystem.domain.enums.ReservationStatus;
@@ -8,10 +13,10 @@ import medequipsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -40,7 +45,7 @@ public class ReservationService {
             if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
         reservation.setReservationItems(changedItems);
 
@@ -67,7 +72,7 @@ public class ReservationService {
             if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce));
+            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
         reservation.setReservationItems(changedItems);
 
@@ -83,5 +88,42 @@ public class ReservationService {
                 .filter(reservation -> reservation.getClient().getUser().getId().equals(id))
                 .collect(Collectors.toSet());
         return userReservations;
+    }
+    //potentionally move this to utils
+    public byte[] generateQRCode(String qrData) {
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<>();
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            BitMatrix bitMatrix = qrCodeWriter.encode(qrData, BarcodeFormat.QR_CODE, 300, 300, hintMap);
+
+            BufferedImage qrImage = new BufferedImage(300, 300, BufferedImage.TYPE_INT_RGB);
+            qrImage.createGraphics();
+
+            for (int x = 0; x < 300; x++) {
+                for (int y = 0; y < 300; y++) {
+                    qrImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                }
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(qrImage, "png", baos);
+            return baos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
+    public byte[] getQrCode(Reservation reservation){
+        String qrData = "Reservation details: \n"
+                + "- Appointment date: " + reservation.getAppointment().getDate() + "\n"
+                + "- Appointment time: " + reservation.getAppointment().getStartTime()
+                + "-" + reservation.getAppointment().getEndTime() + "\n"
+                + "- Reservation items: \n";
+
+        for(ReservationItem item: reservation.getReservationItems()){
+            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "], Price: [" + item.getPrice() +"]\n";
+        }
+        return generateQRCode(qrData);
     }
 }

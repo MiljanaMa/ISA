@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
-import { Reservation } from '../model/reservation.model';
+import { QRCode, Reservation } from '../model/reservation.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ClientService } from '../client.service';
 
@@ -12,6 +12,13 @@ import { ClientService } from '../client.service';
 export class ReservationsComponent implements OnInit {
   currentUser?: CurrentUser;
   public userReservations: Reservation[] = [];
+  public takenReservations: Reservation[] = [];
+  public reservedReservations: Reservation[] = [];
+  public qrCodes: QRCode[] = [];
+  public filteredQrCodes: QRCode[] = [];
+  public sortType: string = 'DATE';
+  public orderType: string = 'DESC';
+  public filterType: string = 'ANY';
 
   constructor(private authService: AuthService, private clientService: ClientService
   ) { }
@@ -26,19 +33,28 @@ export class ReservationsComponent implements OnInit {
       }
     });
     this.getUserReservations();
+    this.getQrCodes();
   }
 
   getUserReservations(): void {
     this.clientService.getUserReservations().subscribe(
       (data: Reservation[]) => {
         this.userReservations = data;
-          });
+        this.takenReservations = this.userReservations.filter(r => r.status === 'TAKEN');
+        this.reservedReservations = this.userReservations.filter(r => r.status === 'RESERVED');
+        this.onSortChange();
+      });
+  }
+  getQrCodes(): void {
+    this.clientService.getQrCodes().subscribe(
+      (data: QRCode[]) => {
+        this.qrCodes = data;
+        this.filteredQrCodes = data;
+      });
   }
   formatTime(time: any): String {
-    if (!time || time.length !== 2) {
-      // Handle invalid or unexpected input
+    if (!time || time.length !== 2)
       return '';
-    }
 
     const [hours, minutes] = time;
     const formattedHours = this.padWithZero(hours);
@@ -51,12 +67,72 @@ export class ReservationsComponent implements OnInit {
     return stringValue.length === 1 ? '0' + stringValue : stringValue;
   }
   formatDate(date: any): string {
-    if (!date) {
-      // Handle invalid or unexpected input
+    if (!date)
       return '';
-    }
-  
-    const formattedDate = new Date(date).toLocaleDateString('sr-RS'); // Adjust the locale as needed
-    return formattedDate;
+    return new Date(date).toLocaleDateString('sr-RS');
+  }
+  onSortChange(): void {
+    if(this.sortType === 'DATE' && this.orderType === 'DESC')
+      this.takenReservations = this.takenReservations.sort((b, a) => {
+        const dateComparison = new Date(a.appointment.date).getTime() - new Date(b.appointment.date).getTime();
+        if (dateComparison === 0)
+          return this.compareHours(a, b);
+
+      return dateComparison;
+    });
+    else if(this.sortType === 'DATE' && this.orderType === 'ASC')
+      this.takenReservations = this.takenReservations.sort((b, a) => 
+      {
+        const dateComparison = new Date(b.appointment.date).getTime() - new Date(a.appointment.date).getTime();
+        if (dateComparison === 0)
+          return this.compareHours(b, a)
+        
+      return dateComparison;
+    });
+    else if(this.sortType === 'DURATION' && this.orderType === 'ASC')
+      this.takenReservations = this.takenReservations.sort((b, a) => 
+    this.calculateDuration(b.appointment.startTime, b.appointment.endTime) - this.calculateDuration(a.appointment.startTime, a.appointment.endTime));
+    else if(this.sortType === 'DURATION' && this.orderType === 'DESC')
+      this.takenReservations = this.takenReservations.sort((b, a) =>
+    this.calculateDuration(a.appointment.startTime, a.appointment.endTime) - this.calculateDuration(b.appointment.startTime, b.appointment.endTime));
+    else if(this.sortType === 'PRICE' && this.orderType === 'ASC')
+      this.takenReservations = this.takenReservations.sort((b, a) => this.calculatePrice(b) - this.calculatePrice(a));
+    else if(this.sortType === 'PRICE' && this.orderType === 'DESC')
+      this.takenReservations = this.takenReservations.sort((b, a) => this.calculatePrice(a) - this.calculatePrice(b));
+  }
+  private compareHours(a: Reservation, b: Reservation) {
+    if(a.appointment.startTime[0] > b.appointment.startTime[0])
+      return 1;
+    else if(a.appointment.startTime[0] === b.appointment.startTime[0])
+      return this.compareMinutes(a, b)
+    return -1;
+  }
+
+  private compareMinutes(a: Reservation, b: Reservation) {
+    if(a.appointment.startTime[1] > b.appointment.startTime[1])
+      return 1;
+    else if(a.appointment.startTime[1] < b.appointment.startTime[1])
+      return -1;
+    return 0;
+  }
+  private calculateDuration(start: any, end: any): number {  
+    return ((end[0] *60 + end[1]) - (start[0] *60 + start[1]));
+  }
+  private calculatePrice(r: Reservation): number {  
+    let total = r.reservationItems.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+    return total;
+  }
+  getQRCodeDataURL(qrCode: QRCode): string {
+    return `data:image/png;base64,${qrCode.qrCode}`;
+  }
+  onFilterChange(): void{
+    if(this.filterType === 'ANY')
+      this.filteredQrCodes = this.qrCodes;
+    else if(this.filterType === 'TAKEN')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'TAKEN');
+    else if(this.filterType === 'RESERVED')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'RESERVED');
+    else
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
   }
 }

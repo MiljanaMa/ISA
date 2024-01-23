@@ -5,7 +5,6 @@ import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.CompanyEquipmentDTO;
-import medequipsystem.mapper.CompanyAdminDTOMapper;
 import medequipsystem.repository.CompanyAdminRepository;
 import medequipsystem.repository.CompanyRepository;
 import medequipsystem.repository.LocationRepository;
@@ -31,9 +30,6 @@ public class CompanyService {
     private  CompanyEquipmentService companyEquipmentService;
     @Autowired
     private LocationRepository locationRepository;
-
-    @Autowired
-    private CompanyAdminDTOMapper companyAdminDTOMapper;
 
 
     public List<Company> getAll() {

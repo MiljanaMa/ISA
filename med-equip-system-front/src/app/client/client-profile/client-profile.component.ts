@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Client } from '../model/client.model';
+import { Client, Passwords } from '../model/client.model';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../client.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -59,15 +59,17 @@ export class ClientProfileComponent {
             jobTitle: this.client.jobTitle,
             hospitalInfo: this.client.hospitalInfo
           });
-          this.passwordForm.patchValue({
-            oldPassword: '',
-            newPassword: '',
-            passwordCheck: ''
-          });
+          this.resetPasswordUpdateForm();
         }
       });
   }
-
+  public resetPasswordUpdateForm(){
+    this.passwordForm.patchValue({
+      oldPassword: '',
+      newPassword: '',
+      passwordCheck: ''
+    });
+  }
   public notEmptyString: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
     const value = control.value;
     if (value === null || value === undefined || value === '') {
@@ -98,13 +100,10 @@ export class ClientProfileComponent {
   }
 
   update(): void {
-    if (!this.clientForm.valid) {
+    if (!this.clientForm.valid)
       window.alert("All fields are required.");
-    }
-    else if (this.clientForm.value.password !== this.clientForm.value.passwordCheck) {
-      window.alert("Passwords don't match.");
-    }
-    else {
+    else 
+    {
       let client: Client = {
         id: this.client?.id,
         email: '',
@@ -125,7 +124,7 @@ export class ClientProfileComponent {
 
       this.clientService.updateClient(client).subscribe({
         next: (client) => {
-          window.alert("You have been successfully update your profile.");
+          window.alert("You have been successfully updated your profile.");
           this.getCurrentClient();
           this.updateMode = false;
         },
@@ -137,24 +136,27 @@ export class ClientProfileComponent {
     }
   }
   updatePassword(): void {
-    if (!this.passwordForm.valid) {
+    if (!this.passwordForm.valid)
       window.alert("All fields are required.");
-    }
-    else if (this.client?.password !== this.passwordForm.value.oldPassword) {
-      window.alert("Wrong old password.");
-    }
-    else if (this.passwordForm.value.newPassword !== this.passwordForm.value.passwordCheck) {
+    else if (this.passwordForm.value.newPassword !== this.passwordForm.value.passwordCheck)
       window.alert("Passwords don't match.");
-    }
-    else {
-      this.clientService.updatePassword(this.passwordForm.value.newPassword).subscribe({
+    else 
+    {
+      let passwords : Passwords = {
+        userId : 0,
+        newPassword : this.passwordForm.value.newPassword,
+        oldPassword : this.passwordForm.value.oldPassword
+      } 
+      this.clientService.updatePassword(passwords).subscribe({
         next: (client) => {
-          window.alert("You have been successfully update your profile.");
+          window.alert("You have been successfully updated your password.");
           this.getCurrentClient();
           this.updatePasswordMode = false;
+          this.resetPasswordUpdateForm();
         },
-        error: () => {
-          window.alert("Something went wrong try again.");
+        error: (err) => {
+          if(err.error.status === 400)
+            window.alert("Wrong old password");
         }
 
       });

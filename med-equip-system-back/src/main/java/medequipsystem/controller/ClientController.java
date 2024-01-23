@@ -3,6 +3,7 @@ package medequipsystem.controller;
 import medequipsystem.domain.Client;
 import medequipsystem.domain.LoyaltyProgram;
 import medequipsystem.dto.ClientDTO;
+import medequipsystem.dto.PasswordChangeDTO;
 import medequipsystem.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,13 +67,12 @@ public class ClientController {
 
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/updatePassword")
-    // password is now hash value, checking the old password on the frontend doesn't make any sense
-    // now it works just when hash is entered as an old password on frontend, change this
-    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PLAKYYYYYYYYYYYYYYYYYYYYYYYY
-    // something wrong when password changes - it goes craazyy
-    public ResponseEntity<ClientDTO> updatePassword(@RequestBody String password, Principal user) {
+    public ResponseEntity<ClientDTO> updatePassword(@RequestBody PasswordChangeDTO passwords, Principal user) {
         Long userId = userService.getByEmail(user.getName()).getId();
-        Client client = clientService.updatePassword(userId, password);
+        boolean isOldPasswordCorrect = clientService.checkPassword(userId, passwords.getOldPassword());
+        if(!isOldPasswordCorrect)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Client client = clientService.updatePassword(userId, passwords.getNewPassword());
         if(client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

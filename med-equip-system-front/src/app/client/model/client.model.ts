@@ -14,3 +14,8 @@ export interface Client {
     loyaltyType: string;
     discount: number;
 }
+export interface Passwords {
+    userId: number;
+    newPassword: string;
+    oldPassword: string;
+}

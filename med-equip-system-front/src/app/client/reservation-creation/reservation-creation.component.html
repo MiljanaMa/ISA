@@ -3,7 +3,6 @@
   <br>
   <h3 style="margin-top: 20px; font-size: 20px;" *ngIf="reservationItems?.length === 0">Reservation list is empty!</h3>
   <h3 style="margin-top: 20px; font-size: 20px;" *ngIf="reservationItems?.length !== 0">Reservation list:</h3>
-  <!-- Display the equipment list in a table -->
   <table style="margin-top: 10px; margin-bottom: 10px;" *ngIf="reservationItems?.length !== 0">
     <thead>
       <tr>
@@ -24,12 +23,10 @@
           </div>
         </td>
         <td>
-          <!-- Input for equipment count with added styles -->
           <input class="input" type="number" [(ngModel)]="item.count" (change)="onCountChange"
             style="width: 60px; padding: 5px;" />
         </td>
         <td style="text-align: center; vertical-align: middle;">
-          <!-- Centered button -->
           <button (click)="removeItem(item)" style="margin: 0 auto;">Remove</button>
         </td>
       </tr>
@@ -78,40 +75,6 @@
         </div>
       </div>
     </form>
-
-    <div *ngIf="showForm">
-      <form (ngSubmit)="onFormSubmit()" style="margin-bottom: 20px; margin-top: 20px">
-        <div style="padding-top: 8px;">
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Choose a date" [min]="minDate" readonly
-              [(ngModel)]="selectedDate" name="selectedDate" (ngModelChange)="onDateChange($event)">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div style="display: flex; gap: 8px; padding-top: 8px;">
-          <mat-form-field appearance="fill" style="width: 200px;">
-            <input matInput type="text" placeholder="Start (HH:mm)" pattern="[0-2][0-9]:[0-5][0-9]"
-              [(ngModel)]="startTime" name="startTime" required #startTimeInput="ngModel">
-            <mat-error *ngIf="startTimeInput.invalid && (startTimeInput.dirty || startTimeInput.touched)">
-              Start time should be in HH:mm format
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" style="width: 200px;">
-            <input matInput type="text" placeholder="End (HH:mm)" pattern="[0-2][0-9]:[0-5][0-9]" [(ngModel)]="endTime"
-              name="endTime" required #endTimeInput="ngModel">
-            <mat-error *ngIf="endTimeInput.invalid && (endTimeInput.dirty || endTimeInput.touched)">
-              End time should be in HH:mm format
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid()" style="margin-top: 16px;">
-          Submit
-        </button>
-      </form>
-    </div>
   </div>
   <button (click)="makeReservation()">Make reservation</button>
 </div>

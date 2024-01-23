@@ -8,6 +8,18 @@
   <button class="primary" type="button" (click)="searchCompanies()">Search</button>
   <button class="primary" type="button" (click)="clearSearch()">Clear</button>
 </div>
+<div class="search-container">
+  <label for="sort">Sort by:</label>
+                <select id="sort" class="sort" [(ngModel)]="sortType" (change)="onSortChange()">
+                    <option value="NAME" selected>NAME</option>
+                    <option value="CITY">CITY</option>
+                    <option value="RATING">RATING</option>
+                </select>
+                <select id="order" class="sort" [(ngModel)]="orderType" (change)="onSortChange()">
+                  <option value="DESC" selected>DESC</option>
+                  <option value="ASC">ASC</option>
+              </select>
+</div>
 <div class="company-container">
   <div *ngFor="let company of filteredCompanies" class="company-card" (click)="viewCompanyProfile(company.id)">
     <h3>{{ company.name }}</h3>
