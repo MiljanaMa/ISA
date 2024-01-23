@@ -146,20 +146,20 @@ INSERT INTO public.system_admins(
 	VALUES (2, 6, false, true);
 --Client 1
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (1, 'General hospital', 'Doctor', 0, 0, 0, 2);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, 'General hospital', 'Doctor', 0, 0, 2);
 --Client 2
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (2, 'General hospital', 'Nurse', 0, 0, 0, 3);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, 'General hospital', 'Nurse', 0, 0, 3);
 --Client 3
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 0, 4);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 4);
 --Client 4
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 0, 5);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 5);
 
 
 --Company Admins -- this needs to be changed, user composition

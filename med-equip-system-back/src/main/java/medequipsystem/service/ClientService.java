@@ -9,6 +9,7 @@ import medequipsystem.repository.RoleRepository;
 import medequipsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -119,15 +120,9 @@ public class ClientService {
         client.setUser(user);
         return client;
     }
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void updatePenaltyPoints() {
-        Calendar cal = Calendar.getInstance();
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        int month = cal.get(Calendar.MONTH);
-        if(dayOfMonth != 1)
-            return;
         for(Client c: getAll()){
-            if(c.getVersionPenalty() == month)
-                return;
             c.setPenaltyPoints(0);
             clientRepository.save(c);
         }
