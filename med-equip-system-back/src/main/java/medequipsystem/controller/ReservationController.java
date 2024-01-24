@@ -107,6 +107,17 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":An error occurred during reservation creation}");
         }
     }
+
+    @PostMapping(value = "/cancel")
+    @PreAuthorize("hasAnyRole('CLIENT')")
+    public ResponseEntity<String> cancel(@RequestBody ReservationDTO reservationDTO, Principal curentUser) {
+        this.reservationService.cancel(reservationDTO.getId());
+        User user = userService.getByEmail(curentUser.getName());
+        Long clientId = clientService.getByUserId(user.getId()).getId(); //change this, clientId will not exist, just userId
+        this.clientService.penalize(clientId, reservationDTO.getAppointment().getDate(), reservationDTO.getAppointment().getStartTime());
+        return ResponseEntity.ok().body("{\"message\": \"You have successfully cancelled your reservation\"}");
+    }
+
     @GetMapping(value = "/user")
     @PreAuthorize("hasAnyRole('CLIENT')")
     public ResponseEntity<Set<ReservationDTO>> getUserReservations(Principal user){

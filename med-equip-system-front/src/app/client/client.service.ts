@@ -46,5 +46,8 @@ export class ClientService {
   getQrCodes(): Observable<QRCode[]>{
     return this.http.get<QRCode[]>(environment.apiHost +`reservations/qrCodes`)
   }
-  
+
+  cancelReservation(reservation: Reservation): Observable<string>{
+    return this.http.post<string> (environment.apiHost+ `reservations/cancel`, reservation);
+  }
 }

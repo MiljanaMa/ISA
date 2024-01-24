@@ -126,4 +126,24 @@ public class ReservationService {
         }
         return generateQRCode(qrData);
     }
+
+    public Reservation getById(Long id){
+        Optional<Reservation> reservationOptional = this.reservationRepository.findById(id);
+        return reservationOptional.orElse(null);
+    }
+
+    public void cancel(Long id){ //change void to something else
+        Reservation reservation = getById(id);
+        CompanyEquipment ce;
+        for(ReservationItem ri: reservation.getReservationItems()){
+            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());;
+            ce.setReservedCount(ce.getReservedCount() - ri.getCount());
+        }
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        this.reservationRepository.save(reservation);
+
+        Appointment appointment = reservation.getAppointment();
+        appointment.setStatus(AppointmentStatus.AVAILABLE);
+        this.appointmentRepository.save(appointment);
+    }
 }
