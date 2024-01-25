@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CurrentUser } from './model/current-user.model';
 import { ClientRegistration } from './model/client-registration.model';
 import { SystemAdmin } from '../system-admin/model/system-admin.model';
+import { CompanyAdmin } from '../layout/model/companyAdmin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -64,13 +65,12 @@ export class AuthService {
     );
   }
 
-  /*getByUserId(userId: number): Observable<SystemAdmin>{
-    return this.http.get<SystemAdmin>(`http://localhost:8092/api/systemadmins/getbyuserid/${userId}`);
-  }*/
-
   getByUserId(userId: number): Observable<SystemAdmin>{
     return this.http.get<SystemAdmin>(environment.apiHost + 'systemadmins/getbyuserid/' + userId);
   }
 
+  getCompanyAdminByUserId(userId: number): Observable<CompanyAdmin>{
+    return this.http.get<CompanyAdmin>(environment.apiHost + 'companyadmins/user/' + userId);
+  }
   
 }

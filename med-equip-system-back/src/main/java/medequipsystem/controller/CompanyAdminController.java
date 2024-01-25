@@ -4,6 +4,7 @@ import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.repository.RoleRepository;
 import org.apache.coyote.Response;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -126,6 +127,7 @@ public class CompanyAdminController {
 
     }
 
+    @PreAuthorize("hasAnyRole('CLIENT', 'SYSADMIN', 'COMPADMIN')")
     @GetMapping(value="user/{id}")
     public ResponseEntity<CompanyAdminRegistrationDTO> getAdminByUserId(@PathVariable Long id){
         CompanyAdmin admin = companyAdminService.getByUserId(id);
