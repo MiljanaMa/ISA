@@ -147,9 +147,11 @@ export class ReservationsComponent implements OnInit {
       (data: { message: string, reservationId: number }) => {
         console.log(data.message);
         this.uploadedReservationId = data.reservationId;
+        alert(data.message);
       },
       error => {
         console.error('Error uploading QR code:', error);
+        alert('Error uploading QR code.');
       }
     );
   }
@@ -159,6 +161,7 @@ export class ReservationsComponent implements OnInit {
       this.clientService.takeReservation(this.uploadedReservationId).subscribe(
         (data: { message: string }) => {
           console.log(data.message);
+          alert(data.message);
         },
         error => {
           console.error('Error taking reservation:', error);
