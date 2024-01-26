@@ -22,7 +22,7 @@
                             <p>Price: {{ item.equipment.price }}</p>
                             <p>Description: {{ item.equipment.description }}</p>
                             <p>Reserved count: {{ item.count }}</p>
-                            <p>Price: {{ item.price }}</p>
+                            <p>Total price: {{ item.price }}</p>
                         </div>
                     </td>
                     <td>
@@ -48,7 +48,7 @@
                             <p>Price: {{ item.equipment.price }}</p>
                             <p>Description: {{ item.equipment.description }}</p>
                             <p>Reserved count: {{ item.count }}</p>
-                            <p>Price: {{ item.price }}</p>
+                            <p>Total price: {{ item.price }}</p>
                         </div>
                     </td>
                     <td>
@@ -71,10 +71,40 @@
                               <option value="TAKEN">TAKEN</option>
                               <option value="CANCELLED">CANCELLED</option>
                               <option value="RESERVED">RESERVED</option>
+                              <option value="EXPIRED">EXPIRED</option>
                           </select>
           </div>
         <div *ngFor="let qrCode of filteredQrCodes">
             <img [src]="getQRCodeDataURL(qrCode)" alt="QR Code">
           </div>
     </mat-tab>
+
+    <!--mat-tab label="TAKE RESERVATION">
+        <div class="take-reservation-container">
+            <p class="take-reservation-message">Upload QR code to take reservation.</p>
+            <div class="upload-container">
+                <label for="qrCodeFile" class="custom-file-upload">
+                    <input type="file" id="qrCodeFile" accept="image/*" (change)="onFileChange($event)">
+                    Upload QR Code
+                </label>
+
+            </div>
+            <button class="take-reservation-button" *ngIf="uploadedReservationId" (click)="takeReservation()">Take Reservation</button>
+        </div>
+    </mat-tab-->
+    <mat-tab label="TAKE RESERVATION">
+        <div class="take-reservation-container">
+          <p class="take-reservation-message">Upload QR code to take reservation.</p>
+          <div class="upload-container">
+            <label for="qrCodeFile" class="custom-file-upload">
+              <input type="file" id="qrCodeFile" accept="image/*" (change)="onFileChange($event)">
+              Upload QR Code
+            </label>
+          </div>
+          <img *ngIf="uploadedImage" [src]="uploadedImage" alt="Uploaded QR Code" class="uploaded-image">
+          <button class="take-reservation-button" *ngIf="uploadedReservationId" (click)="takeReservation()">Take Reservation</button>
+        </div>
+      </mat-tab>
+      
+
   </mat-tab-group>

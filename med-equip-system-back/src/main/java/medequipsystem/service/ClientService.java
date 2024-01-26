@@ -138,4 +138,9 @@ public class ClientService {
        user.setEnabled(true);
        userRepository.save(user);
     }
+
+    public void penalize(Client client, int penaltyPoints){
+        client.setPenaltyPoints(client.getPenaltyPoints() + 2);
+        this.clientRepository.save(client);
+    }
 }
