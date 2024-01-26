@@ -90,3 +90,10 @@
 .take-reservation-button:hover {
   background-color: #7638bd;
 }
+
+.uploaded-image {
+  width: 300px;
+  max-width: 400px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}

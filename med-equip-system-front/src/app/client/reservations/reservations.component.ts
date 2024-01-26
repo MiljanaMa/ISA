@@ -21,6 +21,8 @@ export class ReservationsComponent implements OnInit {
   public orderType: string = 'DESC';
   public filterType: string = 'ANY';
   public uploadedReservationId: number | null = null;
+  uploadedImage: string | undefined;
+
 
   constructor(private authService: AuthService, private clientService: ClientService
   ) { }
@@ -141,7 +143,7 @@ export class ReservationsComponent implements OnInit {
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
   }
 
-  onFileChange(event: any): void {
+  /*onFileChange(event: any): void {
     const file = event.target.files[0];
     this.clientService.uploadQRCode(file).subscribe(
       (data: { message: string, reservationId: number }) => {
@@ -154,7 +156,44 @@ export class ReservationsComponent implements OnInit {
         alert('Error uploading QR code.');
       }
     );
+  }*/
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    
+    if (file) {
+      this.readAndConvertImage(file).then(base64Image => {
+        this.uploadedImage = 'data:image/png;base64,' + base64Image;
+        
+        this.clientService.uploadQRCode(file).subscribe(
+          (data: { message: string, reservationId: number }) => {
+            console.log(data.message);
+            this.uploadedReservationId = data.reservationId;
+          },
+          error => {
+            console.error('Error uploading QR code:', error);
+          }
+        );
+      });
+    }
   }
+  private readAndConvertImage(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onloadend = () => {
+        const base64String = reader.result?.toString().split(',')[1] || '';
+        resolve(base64String);
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+  
 
   takeReservation(): void {
     if (this.uploadedReservationId) {
