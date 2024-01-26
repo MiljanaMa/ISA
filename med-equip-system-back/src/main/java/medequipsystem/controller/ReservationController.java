@@ -148,7 +148,7 @@ public class ReservationController {
         Reservation reservation = this.reservationService.getById(reservationId);
 
         if(reservation.status != ReservationStatus.RESERVED)
-            return ResponseEntity.badRequest().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
+            return ResponseEntity.ok().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
 
         if(this.reservationService.isReservationExpired(reservation.getAppointment().getDate(), reservation.getAppointment().getEndTime())){
             this.reservationService.updateStatus(reservation, ReservationStatus.EXPIRED);
