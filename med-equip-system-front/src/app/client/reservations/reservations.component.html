@@ -22,7 +22,7 @@
                             <p>Price: {{ item.equipment.price }}</p>
                             <p>Description: {{ item.equipment.description }}</p>
                             <p>Reserved count: {{ item.count }}</p>
-                            <p>Price: {{ item.price }}</p>
+                            <p>Total price: {{ item.price }}</p>
                         </div>
                     </td>
                     <td>
@@ -48,7 +48,7 @@
                             <p>Price: {{ item.equipment.price }}</p>
                             <p>Description: {{ item.equipment.description }}</p>
                             <p>Reserved count: {{ item.count }}</p>
-                            <p>Price: {{ item.price }}</p>
+                            <p>Total price: {{ item.price }}</p>
                         </div>
                     </td>
                     <td>
@@ -71,10 +71,32 @@
                               <option value="TAKEN">TAKEN</option>
                               <option value="CANCELLED">CANCELLED</option>
                               <option value="RESERVED">RESERVED</option>
+                              <option value="EXPIRED">EXPIRED</option>
                           </select>
           </div>
         <div *ngFor="let qrCode of filteredQrCodes">
             <img [src]="getQRCodeDataURL(qrCode)" alt="QR Code">
           </div>
     </mat-tab>
+
+    <mat-tab label="TAKE RESERVATION">
+        <div class="sort-container">
+            <input type="file" accept="image/*" (change)="onFileChange($event)">
+            <button *ngIf="uploadedReservationId" (click)="takeReservation()">Take Reservation</button>
+        </div>
+        <!--div class="sort-container">
+            <label for="sort">Filter by:</label>
+                          <select id="sort" class="sort" [(ngModel)]="filterType" (change)="onFilterChange()">
+                              <option value="ANY" selected>ANY</option>
+                              <option value="TAKEN">TAKEN</option>
+                              <option value="CANCELLED">CANCELLED</option>
+                              <option value="RESERVED">RESERVED</option>
+                              <option value="EXPIRED">EXPIRED</option>
+                          </select>
+          </div>
+        <div *ngFor="let qrCode of filteredQrCodes">
+            <img [src]="getQRCodeDataURL(qrCode)" alt="QR Code">
+        </div-->
+    </mat-tab>
+
   </mat-tab-group>

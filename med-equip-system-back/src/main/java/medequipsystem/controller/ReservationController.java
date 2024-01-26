@@ -1,6 +1,13 @@
 package medequipsystem.controller;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import medequipsystem.domain.*;
+import medequipsystem.domain.enums.ReservationStatus;
 import medequipsystem.dto.*;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.*;
@@ -8,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -127,5 +138,53 @@ public class ReservationController {
 
         return new ResponseEntity<>(qrCodes, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/take")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<String> take(@RequestBody Long reservationId, Principal user) {
+        Long userId = userService.getByEmail(user.getName()).getId();
+        Long clientId = clientService.getByUserId(userId).getId();
+        Client client = this.clientService.getById(clientId);
+        Reservation reservation = this.reservationService.getById(reservationId);
+
+        if(reservation.status != ReservationStatus.RESERVED)
+            return ResponseEntity.badRequest().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
+
+        if(this.reservationService.isReservationExpired(reservation.getAppointment().getDate(), reservation.getAppointment().getEndTime())){
+            this.reservationService.updateStatus(reservation, ReservationStatus.EXPIRED);
+            this.clientService.penalize(client, 2);
+            return ResponseEntity.ok().body("{\"message\": \"Your reservation has expired. You have received 2 penalty points.\"}");
+        }
+
+        //  NAPOMENA za Prasku:
+
+        //  treba dodati negde da admin oznacava da je preuzeta oprema, verovatno da poziva ovu metodu,
+        // a da klijent kada zeli da preuzme opremu posalje neki zahtev za pruzimanje... Vidi kako ti odgovara, a ja cu na frontu
+        // za sada pozivati ovu metodu na frontu, pa ako budes pravio nesto preko zahteva javi da ispravim,
+        // ili promeni i moje, s obzirom da cemo pozivati iste metode
+
+        //  ova metoda radi sve vezano za opremu, pa je mozes pozvati kod sebe, samo eto vidi to za admina, jer mislim da bi on mozda
+        //  trebao da ovu poziva...
+
+        this.reservationService.take(reservationId);
+        //TODO: posalji mejl
+        emailService.sendEquipmentPickupConfirmationMail(user.getName(), reservation);
+
+        return ResponseEntity.ok().body("{\"message\": \"You have successfully taken your reservation\"}");
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping("/uploadQRCode")
+    public ResponseEntity<String> uploadQRCode(@RequestParam("file") MultipartFile file) {
+        try {
+            String reservationDetails = this.reservationService.processQRCode(file);
+            Long reservationId = this.reservationService.extractReservationId(reservationDetails);
+            return ResponseEntity.ok().body("{\"message\": \"You have successfully uploaded QR code\", \"reservationId\": " + reservationId + "}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 
 }

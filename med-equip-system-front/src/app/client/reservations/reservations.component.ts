@@ -14,11 +14,13 @@ export class ReservationsComponent implements OnInit {
   public userReservations: Reservation[] = [];
   public takenReservations: Reservation[] = [];
   public reservedReservations: Reservation[] = [];
+  public expiredReservations: Reservation[] = [];
   public qrCodes: QRCode[] = [];
   public filteredQrCodes: QRCode[] = [];
   public sortType: string = 'DATE';
   public orderType: string = 'DESC';
   public filterType: string = 'ANY';
+  public uploadedReservationId: number | null = null;
 
   constructor(private authService: AuthService, private clientService: ClientService
   ) { }
@@ -42,6 +44,7 @@ export class ReservationsComponent implements OnInit {
         this.userReservations = data;
         this.takenReservations = this.userReservations.filter(r => r.status === 'TAKEN');
         this.reservedReservations = this.userReservations.filter(r => r.status === 'RESERVED');
+        this.expiredReservations = this.userReservations.filter(r => r.status === 'EXPIRED');
         this.onSortChange();
       });
   }
@@ -132,7 +135,36 @@ export class ReservationsComponent implements OnInit {
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'TAKEN');
     else if(this.filterType === 'RESERVED')
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'RESERVED');
+    else if(this.filterType === 'EXPIRED')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'EXPIRED');
     else
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
   }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    this.clientService.uploadQRCode(file).subscribe(
+      (data: { message: string, reservationId: number }) => {
+        console.log(data.message);
+        this.uploadedReservationId = data.reservationId;
+      },
+      error => {
+        console.error('Error uploading QR code:', error);
+      }
+    );
+  }
+
+  takeReservation(): void {
+    if (this.uploadedReservationId) {
+      this.clientService.takeReservation(this.uploadedReservationId).subscribe(
+        (data: { message: string }) => {
+          console.log(data.message);
+        },
+        error => {
+          console.error('Error taking reservation:', error);
+        }
+      );
+    }
+  }
+
 }
