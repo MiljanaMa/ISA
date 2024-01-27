@@ -132,7 +132,7 @@ channel2 = connection2.channel()
 update_queue = channel2.queue_declare(queue = 'update_queue', exclusive= True).method.queue
 
 keys = ["finish", "start", "cancel"]
-channel2.exchange_declare(exchange = 'direct_updates', exchange_type='direct')
+channel2.exchange_declare(exchange = 'direct_updates', exchange_type='direct', durable= True)
 
 for k in keys: 
     channel2.queue_bind(exchange='direct_updates', queue = update_queue, routing_key=k)
