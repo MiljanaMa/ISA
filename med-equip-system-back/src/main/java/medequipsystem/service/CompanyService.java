@@ -32,6 +32,7 @@ public class CompanyService {
     private LocationRepository locationRepository;
 
 
+    public Optional<Company> getByName(String name){return this.companyRepository.findFirstByName(name);}
     public List<Company> getAll() {
         return this.companyRepository.findAll();
     }
