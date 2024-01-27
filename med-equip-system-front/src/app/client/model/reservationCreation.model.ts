@@ -1,6 +1,5 @@
 import {  CompanyEquipmentProfile } from "../../feature-modules/company/model/companyEquipmentProfile.model";
 import { Appointment, CustomAppointment } from "./appointment.model";
-import { Time } from "@angular/common";
 
 export interface ReservationCreation {
     reservationItems: ReservationItem[];
@@ -8,7 +7,8 @@ export interface ReservationCreation {
 }
 export interface CustomReservation {
     reservationItems: ReservationItem[];
-    appointment: CustomAppointment;
+    //appointment: CustomAppointment;
+    appointment: Appointment;
     companyId: number;
 }
 export interface ReservationItem {

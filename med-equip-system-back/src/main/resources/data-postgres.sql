@@ -213,8 +213,8 @@ VALUES
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (9, '2023-11-28', '10:00', '10:30', 1, 1),
-    (10, '2023-11-29', '13:00', '13:30', 1, 1);
+    (9, '2024-11-28', '10:00', '10:30', 1, 1),
+    (10, '2024-11-29', '13:00', '13:30', 1, 1);
 
 
 --INSERT INTO public.reservations (id, status, client_id, appointment_id)

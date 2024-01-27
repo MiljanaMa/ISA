@@ -25,35 +25,44 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
     private CompanyEquipmentRepository equipmentRepository;
+    //morala sam da uradim ovo, bice hibridne klase nazalost
+    @Autowired
+    private AppointmentService appointmentService;
 
 
+    //Transactional
     public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
-        Optional<Appointment> appointmentOptional = appointmentRepository.findById(appointment.getId());
-        if( appointmentOptional == null)
-            return null;
-        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, appointment, reservationItems);
-        //korak za smanjivanje kolicine robe
+        Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
+        if( availableAppointment == null)
+            new Exception("Appointment is reserved");
+        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
+        if( updatedItems == null)
+            new Exception("Not enough equipment in storage");
+        availableAppointment.setStatus(AppointmentStatus.RESERVED);
+        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, availableAppointment, updatedItems);
+        //da li spring sam odradi update, ako odradi i za equipment
+        appointmentRepository.save(availableAppointment);
+
+        return reservationRepository.save(reservation);
+    }
+
+    //potentialy move to equipment service
+    private Set<ReservationItem> checkEquipment(Set<ReservationItem> reservationItems) {
+        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
         CompanyEquipment ce;
-        Set<ReservationItem> changedItems = new HashSet<>();
-        for(ReservationItem ri: reservation.getReservationItems()){
+        Set<ReservationItem> updatedItems = new HashSet<>();
+        for(ReservationItem ri: reservationItems){
+            //exception not handeled
             ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
             if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
+            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
-        reservation.setReservationItems(changedItems);
-
-        Appointment existingAppointment = appointmentOptional.get();
-        existingAppointment.setStatus(AppointmentStatus.RESERVED);
-        appointmentRepository.save(existingAppointment);
-
-        return reservationRepository.save(reservation);
+        return updatedItems;
     }
 
 
@@ -62,23 +71,19 @@ public class ReservationService {
         return reservationRepository.getReservationsInProgress();
     }
 
-    public Reservation createCustom(CustomAppointmentDTO appointment, Set<ReservationItem> reservationItems, Client client, Set<CompanyAdmin> admins){
-        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, new Appointment(), reservationItems);
-        //korak za smanjivanje kolicine robe
-        CompanyEquipment ce;
-        Set<ReservationItem> changedItems = new HashSet<>();
-        for(ReservationItem ri: reservation.getReservationItems()){
-            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
-            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
-                return null;
-            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            changedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
-        }
-        reservation.setReservationItems(changedItems);
-
-        Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, admins.stream().findFirst().get());
+    public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
+        //move this
+        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
+        if( updatedItems == null)
+            new Exception("Not enough equipment in storage");
+        Company company = updatedItems.stream().findFirst().get().getEquipment().getCompany();
+        Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company,appointment.getDate(), appointment.getStartTime());
+        if(availableAdmins.isEmpty())
+            new Exception("Appointment is not available anymore");
+        //do here to find available admin
+        Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, availableAdmins.stream().findFirst().get());
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
-        reservation.setAppointment(savedAppointment);
+        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, savedAppointment, updatedItems);
         return reservationRepository.save(reservation);
     }
     public Set<Reservation> getUserReservations(Long id){
