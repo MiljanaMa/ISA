@@ -141,7 +141,8 @@ public class ClientService {
        userRepository.save(user);
     }
 
-    public void penalize(Long clientId, LocalDate appointmentDate, LocalTime appointmentTime){
+
+    public void penalizeCancellation(Long clientId, LocalDate appointmentDate, LocalTime appointmentTime){
         Client client = getById(clientId);
         int penaltyPoints = calculatePenaltyPoints(appointmentDate, appointmentTime);
         client.setPenaltyPoints(client.getPenaltyPoints() + penaltyPoints);
@@ -159,5 +160,9 @@ public class ClientService {
         return 1;
     }
 
+    public void penalizeExpiration(Client client, int penaltyPoints){
+        client.setPenaltyPoints(client.getPenaltyPoints() + 2);
+        this.clientRepository.save(client);
+    }
 
 }

@@ -15,11 +15,15 @@ export class ReservationsComponent implements OnInit {
   public takenReservations: Reservation[] = [];
   public reservedReservations: Reservation[] = [];
   public cancelledReservations: Reservation[] = [];
+  public expiredReservations: Reservation[] = [];
   public qrCodes: QRCode[] = [];
   public filteredQrCodes: QRCode[] = [];
   public sortType: string = 'DATE';
   public orderType: string = 'DESC';
   public filterType: string = 'ANY';
+  public uploadedReservationId: number | null = null;
+  uploadedImage: string | undefined;
+
 
   constructor(private authService: AuthService, private clientService: ClientService
   ) { }
@@ -44,6 +48,7 @@ export class ReservationsComponent implements OnInit {
         this.takenReservations = this.userReservations.filter(r => r.status === 'TAKEN');
         this.reservedReservations = this.userReservations.filter(r => r.status === 'RESERVED');
         this.cancelledReservations = this.userReservations.filter(r => r.status === 'CANCELLED');
+        this.expiredReservations = this.userReservations.filter(r => r.status === 'EXPIRED');
         this.onSortChange();
       });
   }
@@ -134,9 +139,12 @@ export class ReservationsComponent implements OnInit {
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'TAKEN');
     else if(this.filterType === 'RESERVED')
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'RESERVED');
+    else if(this.filterType === 'EXPIRED')
+      this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'EXPIRED');
     else
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
   }
+
 
   cancel(reservation: Reservation): void {
     this.clientService.cancelReservation(reservation).subscribe(
@@ -145,4 +153,71 @@ export class ReservationsComponent implements OnInit {
         alert("You have succesfully cancelled your reservation");
       });
   }
+
+  /*onFileChange(event: any): void {
+    const file = event.target.files[0];
+    this.clientService.uploadQRCode(file).subscribe(
+      (data: { message: string, reservationId: number }) => {
+        console.log(data.message);
+        this.uploadedReservationId = data.reservationId;
+        alert(data.message);
+      },
+      error => {
+        console.error('Error uploading QR code:', error);
+        alert('Error uploading QR code.');
+      }
+    );
+  }*/
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    
+    if (file) {
+      this.readAndConvertImage(file).then(base64Image => {
+        this.uploadedImage = 'data:image/png;base64,' + base64Image;
+        
+        this.clientService.uploadQRCode(file).subscribe(
+          (data: { message: string, reservationId: number }) => {
+            console.log(data.message);
+            this.uploadedReservationId = data.reservationId;
+          },
+          error => {
+            console.error('Error uploading QR code:', error);
+          }
+        );
+      });
+    }
+  }
+  private readAndConvertImage(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onloadend = () => {
+        const base64String = reader.result?.toString().split(',')[1] || '';
+        resolve(base64String);
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+  
+
+  takeReservation(): void {
+    if (this.uploadedReservationId) {
+      this.clientService.takeReservation(this.uploadedReservationId).subscribe(
+        (data: { message: string }) => {
+          console.log(data.message);
+          alert(data.message);
+        },
+        error => {
+          console.error('Error taking reservation:', error);
+        }
+      );
+    }
+  }
+
 }
