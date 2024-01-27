@@ -138,6 +138,22 @@ public class ReservationService {
         return generateQRCode(qrData);
     }
 
+    public void cancel(Long id) { //change void to something else
+        Reservation reservation = getById(id);
+        CompanyEquipment ce;
+        for (ReservationItem ri : reservation.getReservationItems()) {
+            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            ;
+            ce.setReservedCount(ce.getReservedCount() - ri.getCount());
+        }
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        this.reservationRepository.save(reservation);
+
+        Appointment appointment = reservation.getAppointment();
+        appointment.setStatus(AppointmentStatus.AVAILABLE);
+        this.appointmentRepository.save(appointment);
+    }
+
     public boolean isReservationExpired(LocalDate appointmentDate, LocalTime appointmentTime) {
         LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
         LocalDateTime currentDateTime = LocalDateTime.now();

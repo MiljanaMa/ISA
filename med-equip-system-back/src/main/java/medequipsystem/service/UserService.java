@@ -27,20 +27,6 @@ public class UserService {
     public User getByEmail(String email){
         return this.userRepository.findByEmail(email);
     }
-    /*
 
 
-
-    public User updatePassword(long userId, String password){
-        User user = getById(userId);
-        if(user == null) return null;
-        user.setPassword(password);
-        return this.userRepository.save(user);
-    }
-
-    public User setEmailAsConfirmed(User user){
-        user.setEmailConfirmed(true);
-        return this.userRepository.save(user);
-    }
-*/
 }

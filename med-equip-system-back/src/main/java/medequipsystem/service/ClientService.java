@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -139,8 +141,28 @@ public class ClientService {
        userRepository.save(user);
     }
 
-    public void penalize(Client client, int penaltyPoints){
+
+    public void penalizeCancellation(Long clientId, LocalDate appointmentDate, LocalTime appointmentTime){
+        Client client = getById(clientId);
+        int penaltyPoints = calculatePenaltyPoints(appointmentDate, appointmentTime);
+        client.setPenaltyPoints(client.getPenaltyPoints() + penaltyPoints);
+        clientRepository.save(client);
+    }
+
+    public int calculatePenaltyPoints(LocalDate appointmentDate, LocalTime appointmentTime){
+        boolean isAppointmentNextDay = appointmentDate.equals(LocalDate.now().plusDays(1));
+        boolean isAppointmentTimePassed = appointmentTime.isBefore(LocalTime.now());
+        boolean isAppointmentToday = appointmentDate.equals(LocalDate.now());
+
+        if((isAppointmentNextDay && isAppointmentTimePassed) || isAppointmentToday){
+            return 2;
+        }
+        return 1;
+    }
+
+    public void penalizeExpiration(Client client, int penaltyPoints){
         client.setPenaltyPoints(client.getPenaltyPoints() + 2);
         this.clientRepository.save(client);
     }
+
 }

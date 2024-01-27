@@ -47,6 +47,10 @@ export class ClientService {
     return this.http.get<QRCode[]>(environment.apiHost +`reservations/qrCodes`)
   }
 
+  cancelReservation(reservation: Reservation): Observable<string>{
+    return this.http.post<string> (environment.apiHost+ `reservations/cancel`, reservation);
+  }
+
   uploadQRCode(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
