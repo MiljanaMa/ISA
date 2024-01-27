@@ -42,10 +42,12 @@ public class ReservationService {
         if( updatedItems == null)
             new Exception("Not enough equipment in storage");
         availableAppointment.setStatus(AppointmentStatus.RESERVED);
+        //odmah po referenci azurira
         Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, availableAppointment, updatedItems);
         //da li spring sam odradi update, ako odradi i za equipment
-        appointmentRepository.save(availableAppointment);
+        //appointmentRepository.save(availableAppointment);
 
+        //da li on lockuje sve tabele zajedno ako ima asocijacije ka njima
         return reservationRepository.save(reservation);
     }
 
@@ -81,6 +83,7 @@ public class ReservationService {
         if(availableAdmins.isEmpty())
             new Exception("Appointment is not available anymore");
         //do here to find available admin
+        //treba ubaciti metodu koja radi check da li je termin i dalje slobodan
         Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, availableAdmins.stream().findFirst().get());
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
         Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, savedAppointment, updatedItems);
