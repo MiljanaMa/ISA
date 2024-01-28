@@ -35,6 +35,17 @@ Contract {
     @Column(name = "status", nullable = false)
     private ContractStatus status;
 
+    @Column(name = "hospital", nullable = false)
+    private String hospital;
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
+    }
+
     public ContractStatus getStatus() {
         return status;
     }

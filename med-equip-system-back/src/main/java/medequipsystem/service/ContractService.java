@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,12 @@ public class ContractService {
     public Contract create(Contract contract){ return this.contractRepository.save(contract); }
 
     public Set<Contract> getByCompany(Long id){ return this.contractRepository.getByCompanyId(id); }
+
+    public Optional<Contract> getByHospitalAndStatus(String hospital,
+                                            ContractStatus status)
+    { return this.contractRepository.findFirstByHospitalAndStatus(hospital, status);}
+
+
     public Contract cancelContract(Long id){
         Contract contract = contractRepository.findById(id).get();
         contract.setStatus(ContractStatus.CANCELLED);
@@ -30,6 +37,7 @@ public class ContractService {
         senderService.cancel(cancelledContract.getId());
         return cancelledContract;
     }
+
     @Scheduled(cron = "0 14 13 * * ?")
     public void startDelivery(){
         for(Contract c: contractRepository.findAll()){

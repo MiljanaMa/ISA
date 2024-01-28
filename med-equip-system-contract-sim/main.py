@@ -15,12 +15,13 @@ def add_contract(auto = False):
     global new_id, contracts 
     if not auto: 
         id = None
-        date = validate_day()#validate_date()
+        date = validate_int('Enter day in month: ')
         time = '12:00'
         equipment = input("Enter equipment: ")
-        total = validate_int()
+        total = validate_int('Enter total count: ')
         company = input("Enter company: ")
         status = Status.INACTIVE
+        hospital = input("Enter hospital: ")
     else: 
         id = None 
         date = '28'
@@ -29,9 +30,10 @@ def add_contract(auto = False):
         total = 5 
         company = 'Tech Innovators'
         status = Status.INACTIVE
+        hospital = 'Beverly Hospital'
 
 
-    new_contract = Contract(id, date, time, equipment, total, company, status)
+    new_contract = Contract(id, date, time, equipment, total, company, status, hospital)
     send_message(json.dumps(new_contract.to_dict(),indent=1))
     
     channel.basic_consume(callback_queue, on_message_callback=callback, auto_ack= True)
@@ -51,10 +53,10 @@ def update_contract():
 
     if contract:
         if contract.status == Status.INACTIVE: 
-            contract.date = validate_day#validate_date()
+            contract.date = validate_int('Enter day of the month:')
             contract.time = '12:00'
             contract.equipment = input("Enter new equpiment: ")
-            contract.total = validate_int()
+            contract.total = validate_int('Enter the total count: ')
             contract.company = input("Enter new company: ")
             if contract.status == Status.INACTIVE: 
                 send_message(json.dumps(contract.to_dict(), indent= 1))

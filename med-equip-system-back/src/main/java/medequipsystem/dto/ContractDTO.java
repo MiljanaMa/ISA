@@ -22,6 +22,16 @@ public class ContractDTO implements DTOEntity {
 
     ContractStatus status;
 
+    String hospital;
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
+    }
+
     public ContractStatus getStatus() {
         return status;
     }
