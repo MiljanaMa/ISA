@@ -1,0 +1,15 @@
+<table>
+    <tbody>
+        <tr *ngFor="let c of contracts">
+                <div class="contract-card">
+                    <p>Company: {{ c.company.name }}</p>
+                    <p>Equipemnt: {{ c.companyEquipment.name }}</p>
+                    <p>Count: {{ c.total }}</p>
+                    <p>Date: {{ c.date }}</p>
+                    <p>Date: {{ formatTime(c.time) }}</p>
+                    <p>Status: {{ c.status }}</p>
+                    <button *ngIf="c.status ==='INACTIVE' && today < parseDateString(c.date)" (click)="cancel(c)" class="primary">Cancel the delivery</button>
+                </div>
+        </tr>
+    </tbody>
+</table>

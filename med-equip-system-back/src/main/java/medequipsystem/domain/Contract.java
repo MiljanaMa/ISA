@@ -8,7 +8,8 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "contracts")
-public class Contract {
+public class
+Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +24,11 @@ public class Contract {
     @Column(name = "total", nullable = false)
     private Integer total;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_id", nullable = true)
     private CompanyEquipment companyEquipment;
 

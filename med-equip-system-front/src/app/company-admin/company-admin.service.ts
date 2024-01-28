@@ -6,6 +6,7 @@ import { Appointment } from '../client/model/appointment.model';
 import { CurrentUser } from '../auth/model/current-user.model';
 import { environment } from 'src/env/environment';
 import { CompanyAdmin } from '../layout/model/companyAdmin.model';
+import { Contract } from './model/contract.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,11 @@ export class CompanyAdminService {
   constructor(private http: HttpClient) { }
 
   getReservedAppointments(companyId: number): Observable<Array<ReservedAppointment>> {
-    return this.http.get<Array<ReservedAppointment>>(`http://localhost:8092/api/appointments/companycalendar/${companyId}`);
+    return this.http.get<Array<ReservedAppointment>>(environment.apiHost +`appointments/companycalendar/${companyId}`);
   }
 
   getNotReservedAppointmentsByCompany(companyId: number): Observable<Appointment[]>{
-    return this.http.get<Appointment[]>(`http://localhost:8092/api/appointments/notreservedappointments/${companyId}`);
+    return this.http.get<Appointment[]>(environment.apiHost +`appointments/notreservedappointments/${companyId}`);
   }
 
   getCurrentUser(): Observable<CurrentUser>{
@@ -29,6 +30,12 @@ export class CompanyAdminService {
   }
 
   getCompanyAdminByUserId(id: number): Observable<CompanyAdmin>{ 
-    return this.http.get<CompanyAdmin>(`http://localhost:8092/api/companyadmins/user/${id}`);
+    return this.http.get<CompanyAdmin>(environment.apiHost +`companyadmins/user/${id}`);
+  }
+  getContracts(): Observable<Contract[]>{ 
+    return this.http.get<Contract[]>(environment.apiHost +`contracts/get`);
+  }
+  cancelContract(contract: Contract): Observable<Contract>{ 
+    return this.http.post<Contract>(environment.apiHost +`contracts/cancel`, contract);
   }
 }

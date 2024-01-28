@@ -1,14 +1,13 @@
 package medequipsystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import medequipsystem.domain.Contract;
 import medequipsystem.domain.enums.ContractStatus;
 import medequipsystem.mapper.MapperUtils.DTOEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ContractDTO implements DTOEntity {
+public class FullContractDTO implements DTOEntity {
     Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     LocalDate date;
@@ -16,9 +15,9 @@ public class ContractDTO implements DTOEntity {
 
     Integer total;
 
-    String companyName;
+    CompanyDTO company;
 
-    String equipmentName;
+    CompanyEquipmentDTO companyEquipment;
 
     ContractStatus status;
 
@@ -30,7 +29,7 @@ public class ContractDTO implements DTOEntity {
         this.status = status;
     }
 
-    public ContractDTO(){}
+    public FullContractDTO(){}
     public Long getId() {
         return id;
     }
@@ -43,16 +42,12 @@ public class ContractDTO implements DTOEntity {
         return time;
     }
 
-    public Integer getTotal() {
-        return total;
+    public CompanyDTO getCompany() {
+        return company;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public String getEquipmentName() {
-        return equipmentName;
+    public CompanyEquipmentDTO getCompanyEquipment() {
+        return companyEquipment;
     }
 
     public void setId(Long id) {
@@ -66,17 +61,19 @@ public class ContractDTO implements DTOEntity {
     public void setTime(LocalTime time) {
         this.time = time;
     }
+    public Integer getTotal() {
+        return total;
+    }
 
     public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
     }
 
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
+    public void setCompanyEquipment(CompanyEquipmentDTO equipment) {
+        this.companyEquipment = equipment;
     }
 }
-

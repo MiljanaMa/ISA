@@ -23,7 +23,7 @@ def add_contract(auto = False):
         status = Status.INACTIVE
     else: 
         id = None 
-        date = '22.12.2025'
+        date = '28.01.2024'
         time = '12:12'
         equipment = 'LabTech 2000'
         total = 5 

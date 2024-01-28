@@ -246,4 +246,3 @@ VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
 VALUES (3, 1, 1, 3, 345);
-
