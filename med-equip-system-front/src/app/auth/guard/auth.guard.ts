@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { CurrentUser } from "../model/current-user.model";
 import { Observable, map, take } from "rxjs";
@@ -11,18 +11,20 @@ import { __await } from "tslib";
   export class AuthGuard implements CanActivate {
     constructor( private router: Router, private authService: AuthService) {}
 
-    canActivate(): Observable<boolean> {
+    canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+      const requiredRoleName = route.data['requiredRole'] as string;
         return  this.authService.getCurrentUser().pipe(
           take(1),
           map((user: CurrentUser | null) => {
             if (user && user.email !== '') {
-              return true; 
+              return user.role !== null && user.role.name === requiredRoleName;     
             } else {
-              this.router.navigate(['/login']);
+              this.router.navigate(['']);
               return false;
             }
           })
         );
       }
-      
+
+     
 }
