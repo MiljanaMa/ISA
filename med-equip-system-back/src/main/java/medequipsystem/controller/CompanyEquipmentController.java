@@ -54,8 +54,12 @@ public class CompanyEquipmentController {
 
         CompanyEquipment equipment = (CompanyEquipment) new DtoUtils().convertToEntity(new CompanyEquipment(), companyEquipmentDTO);
 
+        if(companyEquipmentService.getById(equipment.getId()) == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Company company = (Company) new DtoUtils().convertToEntity(new Company(), companyDTO);
         equipment.setCompany(company);
+
         companyEquipmentService.update(equipment);
         return new ResponseEntity<>(HttpStatus.OK);
 

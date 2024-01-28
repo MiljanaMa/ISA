@@ -26,8 +26,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             + "AND a.date = ?2")
     public Set<Appointment> getByCompanyIdAndDate(Long id, LocalDate date, AppointmentStatus status);
 
+
+
     @Query("SELECT a FROM Appointment a WHERE a.date = ?1")
     public Set<Appointment> getByDate(LocalDate date);
+
 
     @Query("SELECT NEW medequipsystem.dto.ReservedAppointmentDTO(" +
             "a.date, a.startTime, a.endTime, cu.firstName, cu.lastName, cau.firstName, cau.lastName) " +

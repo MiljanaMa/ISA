@@ -40,10 +40,15 @@ public class AppointmentService {
 
     @Transactional(readOnly = false) //kreiranje nove
     public Appointment createAppointment(Appointment a) {
-        Set<Appointment> appointmentsForDate = appointmentRepository.getByDate(a.getDate());
+        Set<Appointment> appointmentsForCompany = appointmentRepository.getByCompanyId(a.getCompanyAdmin().getCompany().getId());
+        Set<Appointment> appointmentsForDate = appointmentsForCompany.stream().filter(
+            appointment -> appointment.getDate().equals(a.getDate())
+        ).collect(Collectors.toSet());
+
         Set<LocalTime> takenTimeSlots = generateTakenTimeSlots(appointmentsForDate);
         Set<LocalTime> requiredTimeSlots = generateTimeSlotsInRange(a.getStartTime(), a.getEndTime());
         requiredTimeSlots.retainAll(takenTimeSlots);
+
         if (requiredTimeSlots.isEmpty() && inWorkingHours(a)
                 && a.getStartTime().isBefore(a.getEndTime())
                 && a.getDate().isAfter(LocalDate.now())
