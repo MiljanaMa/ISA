@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,11 @@ public class ContractReceiverService {
         String correlationId = message.getMessageProperties().getCorrelationId();
 
         String response;
+        if(contract.getDate() < 1 || contract.getDate() > 28)
+        {
+            response = "We do delivery only from 1 to 28 in month";
+            System.out.println("[x] Sending message: " + response);
+        }
 
         if(equipment.isEmpty() || company.isEmpty()){
             response = "Couldn't find company or equipment";
@@ -63,6 +69,7 @@ public class ContractReceiverService {
             if((equipmentValue.getCount() - equipmentValue.getReservedCount()) >= contract.getTotal()){
                 contract.setCompanyEquipment(equipmentValue);
                 contract.setCompany(company.get());
+                contract.setTime(LocalTime.of(12, 0, 0, 0));
 
                 Contract savedContract = contractService.create(contract);
 

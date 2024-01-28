@@ -1,5 +1,6 @@
 package medequipsystem.service;
 
+import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.Contract;
 import medequipsystem.domain.enums.ContractStatus;
 import medequipsystem.rabbitmq.ContractSenderService;
@@ -29,10 +30,10 @@ public class ContractService {
         senderService.cancel(cancelledContract.getId());
         return cancelledContract;
     }
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 14 13 * * ?")
     public void startDelivery(){
         for(Contract c: contractRepository.findAll()){
-            if(c.getDate().equals(LocalDate.now())){
+            if(shouldStartDelivery(c)){
                 c.setStatus(ContractStatus.ACTIVE);
                 contractRepository.save(c);
                 senderService.start(c.getId());
@@ -40,16 +41,52 @@ public class ContractService {
 
         }
     }
-    @Scheduled(cron = "40 0 12 * * ?")
+    @Scheduled(cron = "40 14 13 * * ?")
     public void endDelivery(){
         for(Contract c: contractRepository.findAll()){
-            if(c.getDate().equals(LocalDate.now())){
-                c.setStatus(ContractStatus.FINISHED);
+            if(c.getStatus() == ContractStatus.ACTIVE){
+                c.setStatus(ContractStatus.INACTIVE);
                 contractRepository.save(c);
                 senderService.finish(c.getId());
+            }else if(shouldChangeCancelled(c)){
+                c.setStatus(ContractStatus.INACTIVE);
+                contractRepository.save(c);
             }
 
         }
+    }
+    @Scheduled(cron = "0 0 11 * * ?")
+    public void cancelDelivery(){
+        for(Contract c: contractRepository.findAll()){
+            if(shouldCancelDelivery(c)){
+                c.setStatus(ContractStatus.CANCELLED);
+                contractRepository.save(c);
+                senderService.cancel(c.getId());
+            }
+
+        }
+    }
+    private boolean shouldCancelDelivery(Contract contract){
+        boolean isDayValid = contract.getDate() == LocalDate.now().plusDays(3).getDayOfMonth();
+        if(!isDayValid)
+            return false;
+        CompanyEquipment equipment = contract.getCompanyEquipment();
+        boolean notEnoughEquipment = (equipment.getCount() - equipment.getReservedCount()) - contract.getTotal() < 0;
+        if(contract.getStatus() == ContractStatus.INACTIVE && notEnoughEquipment)
+            return true;
+        return false;
+    }
+    private boolean shouldStartDelivery(Contract contract){
+        boolean isDateValid = contract.getDate() == LocalDate.now().getDayOfMonth();
+        if(isDateValid && contract.getStatus() == ContractStatus.INACTIVE)
+            return true;
+        return false;
+    }
+    private boolean shouldChangeCancelled(Contract contract){
+        boolean isDateValid = contract.getDate() == LocalDate.now().getDayOfMonth();
+        if(isDateValid && contract.getStatus() == ContractStatus.CANCELLED)
+            return true;
+        return false;
     }
 
 }

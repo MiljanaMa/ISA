@@ -40,3 +40,13 @@ def validate_int():
             print("Not an integer")
     
     return count 
+def validate_day(): 
+    while True: 
+        day_input = input("Enter day of monthly delivery: ")
+        try: 
+            count = int(day_input)
+            break 
+        except ValueError: 
+            print("Not an integer")
+    
+    return count 

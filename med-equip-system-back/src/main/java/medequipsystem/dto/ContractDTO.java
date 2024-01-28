@@ -10,8 +10,8 @@ import java.time.LocalTime;
 
 public class ContractDTO implements DTOEntity {
     Long id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-    LocalDate date;
+
+    Integer date;
     LocalTime time;
 
     Integer total;
@@ -35,7 +35,7 @@ public class ContractDTO implements DTOEntity {
         return id;
     }
 
-    public LocalDate getDate() {
+    public Integer getDate() {
         return date;
     }
 
@@ -59,7 +59,7 @@ public class ContractDTO implements DTOEntity {
         this.id = id;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Integer date) {
         this.date = date;
     }
 

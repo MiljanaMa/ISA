@@ -10,21 +10,11 @@ import { CompanyAdminService } from '../company-admin.service';
 })
 export class ContractsComponent implements OnInit {
   public contracts: Contract[] = [];
-  public today: Date = new Date();
-  constructor(private authService: AuthService, private service: CompanyAdminService
-  ) { }
+
+  constructor(private authService: AuthService, private service: CompanyAdminService) { }
 
   ngOnInit(): void {
-    this.setDate();
     this.getContracts();
-  }
-
-  private setDate() {
-    var currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    var tomorrow = new Date(currentDate);
-    tomorrow.setDate(currentDate.getDate() + 2);
-    this.today = tomorrow;
   }
 
   getContracts(): void {
@@ -54,9 +44,14 @@ export class ContractsComponent implements OnInit {
     const stringValue = String(value);
     return stringValue.length === 1 ? '0' + stringValue : stringValue;
   }
-  public parseDateString(date: string) {
-    const parts = date.split('.');
-    const dateObject = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-    return dateObject;
+  public check(date: number): boolean{
+    if(date === 1)
+      return new Date().getDate() != 1
+    return this.addDays(1).getDate() <= date;
+  }
+  private addDays(days: number): Date {
+    var date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
   }
 }

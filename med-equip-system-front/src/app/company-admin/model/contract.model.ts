@@ -3,7 +3,7 @@ import { CompanyEquipment } from "src/app/layout/model/equipment.model";
 
 export interface Contract{
     id?: number;
-    date: string;
+    date: number;
     time: string;
     total: number;
     company: Company;

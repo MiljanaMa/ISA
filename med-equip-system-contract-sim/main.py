@@ -15,19 +15,19 @@ def add_contract(auto = False):
     global new_id, contracts 
     if not auto: 
         id = None
-        date = validate_date()
-        time = validate_time()
+        date = validate_day()#validate_date()
+        time = '12:00'
         equipment = input("Enter equipment: ")
         total = validate_int()
         company = input("Enter company: ")
         status = Status.INACTIVE
     else: 
         id = None 
-        date = '28.01.2024'
+        date = '28'
         time = '12:12'
-        equipment = 'LabTech 2000'
+        equipment = 'SafetyKit Plus'
         total = 5 
-        company = 'Global Consultants'
+        company = 'Tech Innovators'
         status = Status.INACTIVE
 
 
@@ -51,8 +51,8 @@ def update_contract():
 
     if contract:
         if contract.status == Status.INACTIVE: 
-            contract.date = validate_date()
-            contract.time = validate_time()
+            contract.date = validate_day#validate_date()
+            contract.time = '12:00'
             contract.equipment = input("Enter new equpiment: ")
             contract.total = validate_int()
             contract.company = input("Enter new company: ")

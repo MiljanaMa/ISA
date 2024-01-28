@@ -16,7 +16,7 @@ Contract {
     private Long id;
 
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private Integer date;
 
     @Column(name = "time", nullable = false)
     private LocalTime time;
@@ -51,11 +51,11 @@ Contract {
         this.id = id;
     }
 
-    public LocalDate getDate() {
+    public Integer getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Integer date) {
         this.date = date;
     }
 
