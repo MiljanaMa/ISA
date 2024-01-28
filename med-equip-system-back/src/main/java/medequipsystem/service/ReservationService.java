@@ -13,6 +13,7 @@ import medequipsystem.dto.CustomAppointmentDTO;
 import medequipsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -38,12 +39,12 @@ public class ReservationService {
     private AppointmentService appointmentService;
 
 
-    //Transactional
+    @Transactional(readOnly = false)
     public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
         Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
         if( availableAppointment == null)
             new Exception("Appointment is reserved");
-        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
+        Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
         if( updatedItems == null)
             new Exception("Not enough equipment in storage");
         availableAppointment.setStatus(AppointmentStatus.RESERVED);
@@ -56,22 +57,6 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    //potentialy move to equipment service
-    private Set<ReservationItem> checkEquipment(Set<ReservationItem> reservationItems) {
-        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
-        CompanyEquipment ce;
-        Set<ReservationItem> updatedItems = new HashSet<>();
-        for(ReservationItem ri: reservationItems){
-            //exception not handeled
-            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
-            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
-                return null;
-            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
-        }
-        return updatedItems;
-    }
-
     public Reservation getById(Long id){
         Optional<Reservation> reservationOptional = this.reservationRepository.findById(id);
         return reservationOptional.orElse(null);
@@ -82,10 +67,10 @@ public class ReservationService {
 
         return reservationRepository.getReservationsInProgress();
     }
-
+    @Transactional(readOnly = false)
     public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
         //move this
-        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
+        Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
         if( updatedItems == null)
             new Exception("Not enough equipment in storage");
         Company company = updatedItems.stream().findFirst().get().getEquipment().getCompany();
@@ -106,6 +91,20 @@ public class ReservationService {
                 .filter(reservation -> reservation.getClient().getUser().getId().equals(id))
                 .collect(Collectors.toSet());
         return userReservations;
+    }
+    public Set<ReservationItem> getEquipmentForReservation(Set<ReservationItem> reservationItems) {
+        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
+        CompanyEquipment ce;
+        Set<ReservationItem> updatedItems = new HashSet<>();
+        for(ReservationItem ri: reservationItems){
+            //exception not handeled
+            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
+                return null;
+            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
+            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
+        }
+        return updatedItems;
     }
     //potentionally move this to utils
     public byte[] generateQRCode(String qrData) {

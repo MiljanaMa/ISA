@@ -8,7 +8,9 @@ import medequipsystem.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +32,7 @@ public class CompanyEquipmentService {
         return this.companyEquipmentRepository.save(companyEquipment);
     }
 
+    @Transactional(readOnly = false)
     public void update(CompanyEquipment companyEquipment){
         this.companyEquipmentRepository.save(companyEquipment);
     }
@@ -62,6 +65,20 @@ public class CompanyEquipmentService {
             }
         }
         return false;
+    }
+    public Set<ReservationItem> getEquipmentForReservation(Set<ReservationItem> reservationItems) {
+        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
+        CompanyEquipment ce;
+        Set<ReservationItem> updatedItems = new HashSet<>();
+        for(ReservationItem ri: reservationItems){
+            //exception not handeled
+            ce = companyEquipmentRepository.getReferenceById(ri.getEquipment().getId());
+            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
+                return null;
+            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
+            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
+        }
+        return updatedItems;
     }
 
 }

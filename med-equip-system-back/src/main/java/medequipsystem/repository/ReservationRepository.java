@@ -4,8 +4,12 @@ import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Reservation;
 import medequipsystem.domain.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Set;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -20,4 +24,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r WHERE r.status = 0")
     Set<Reservation> getReservationsInProgress();
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    public Reservation save(Reservation reservation);
 }

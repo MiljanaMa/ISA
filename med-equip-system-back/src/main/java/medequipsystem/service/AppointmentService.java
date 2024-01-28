@@ -11,6 +11,7 @@ import medequipsystem.repository.CompanyAdminRepository;
 import medequipsystem.util.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +38,7 @@ public class AppointmentService {
         return appointmentOptional.orElse(null);
     }
 
+    @Transactional(readOnly = false) //kreiranje nove
     public Appointment createAppointment(Appointment a) {
         Set<Appointment> appointmentsForDate = appointmentRepository.getByDate(a.getDate());
         Set<LocalTime> takenTimeSlots = generateTakenTimeSlots(appointmentsForDate);
