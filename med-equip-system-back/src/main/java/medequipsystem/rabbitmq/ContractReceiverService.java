@@ -73,8 +73,6 @@ public class ContractReceiverService {
 
                 if ((equipmentValue.getCount() - equipmentValue.getReservedCount()) >= contract.getTotal()) {
 
-
-
                     if(contractDTO.getId() == null){
 
                         if(contractService.getByHospitalAndStatus(contractDTO.getHospital(),
@@ -92,7 +90,7 @@ public class ContractReceiverService {
                         else{
                             Optional<Contract> oldContract = contractService.getByHospitalAndStatus(contractDTO.getHospital(),
                                     ContractStatus.INACTIVE);
-                            oldContract.ifPresent(value -> contractService.cancelContract(value.getId()));
+                            oldContract.ifPresent(value -> contractService.invalidateContract(value.getId()));
                         }
                     }
 

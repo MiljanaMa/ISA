@@ -15,5 +15,5 @@ export enum ContractStatus {
     INACTIVE = 'INACTIVE',
     ACTIVE = 'ACTIVE',
     CANCELLED = 'CANCELLED',
-    FINISHED = 'FINISHED',
+    INVALID = 'INVALID',
   }

@@ -4,14 +4,14 @@ class Status(Enum):
     INACTIVE = 1 
     ACTIVE = 2 
     CANCELLED = 3
-    FINISHED = 4
-    STARTED = 5 
+    INVALID = 4
+    FINISH = 5 
 
 status_mapping = {
     "start": Status.ACTIVE, 
-    "finish": Status.FINISHED,
+    "invalid": Status.INVALID,
     "cancel": Status.CANCELLED,
-    "started": Status.STARTED,
+    "finish": Status.FINISH,
 }
 
 class Contract:

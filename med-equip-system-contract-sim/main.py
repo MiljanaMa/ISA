@@ -24,7 +24,7 @@ def add_contract(auto = False):
         hospital = input("Enter hospital: ")
     else: 
         id = None 
-        date = '28'
+        date = '29'
         time = '12:12'
         equipment = 'SafetyKit Plus'
         total = 5 
@@ -133,7 +133,7 @@ callback_queue = channel.queue_declare(queue = '', exclusive=True).method.queue
 channel2 = connection2.channel()
 update_queue = channel2.queue_declare(queue = 'update_queue', exclusive= True).method.queue
 
-keys = ["finish", "start", "cancel"]
+keys = ["invalid", "start", "cancel", "finish"]
 channel2.exchange_declare(exchange = 'direct_updates', exchange_type='direct', durable= True)
 
 for k in keys: 

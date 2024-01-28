@@ -27,5 +27,9 @@ public class ContractSenderService {
             System.out.println(" [x] Sending message CANCEL for contract id: " + contractId);
             template.convertAndSend(exchange.getName(), "cancel", Long.toString(contractId));
     }
+    public void invalidate(Long contractId){
+        System.out.println(" [x] Sending message INVALID for contract id: " + contractId);
+        template.convertAndSend(exchange.getName(), "invalid", Long.toString(contractId));
+    }
 
 }
