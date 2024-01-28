@@ -1,8 +1,9 @@
 package medequipsystem.service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import medequipsystem.domain.*;
@@ -12,10 +13,14 @@ import medequipsystem.dto.CustomAppointmentDTO;
 import medequipsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,6 +70,11 @@ public class ReservationService {
             updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
         }
         return updatedItems;
+    }
+
+    public Reservation getById(Long id){
+        Optional<Reservation> reservationOptional = this.reservationRepository.findById(id);
+        return reservationOptional.orElse(null);
     }
 
 
@@ -124,6 +134,7 @@ public class ReservationService {
     }
     public byte[] getQrCode(Reservation reservation){
         String qrData = "Reservation details: \n"
+                + "- Reservation id: " + reservation.getId() + "\n"
                 + "- Appointment date: " + reservation.getAppointment().getDate() + "\n"
                 + "- Appointment time: " + reservation.getAppointment().getStartTime()
                 + "-" + reservation.getAppointment().getEndTime() + "\n"
@@ -133,5 +144,68 @@ public class ReservationService {
             qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "], Price: [" + item.getPrice() +"]\n";
         }
         return generateQRCode(qrData);
+    }
+
+    public void cancel(Long id) { //change void to something else
+        Reservation reservation = getById(id);
+        CompanyEquipment ce;
+        for (ReservationItem ri : reservation.getReservationItems()) {
+            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            ;
+            ce.setReservedCount(ce.getReservedCount() - ri.getCount());
+        }
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        this.reservationRepository.save(reservation);
+
+        Appointment appointment = reservation.getAppointment();
+        appointment.setStatus(AppointmentStatus.AVAILABLE);
+        this.appointmentRepository.save(appointment);
+    }
+
+    public boolean isReservationExpired(LocalDate appointmentDate, LocalTime appointmentTime) {
+        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return currentDateTime.isAfter(appointmentDateTime);
+    }
+
+    public void updateStatus(Reservation reservation, ReservationStatus status){
+        reservation.setStatus(status);
+        this.reservationRepository.save(reservation);
+    }
+
+    public void take(Long reservationId){
+        Reservation reservation = getById(reservationId);
+        CompanyEquipment ce;
+        for(ReservationItem ri: reservation.getReservationItems()){
+            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());;
+            ce.setReservedCount(ce.getReservedCount() - ri.getCount()); //oduzmi sa stanja rezervisanih
+            ce.setCount(ce.getCount() - ri.getCount()); //oduzmi sa stanja dostupnih
+            this.equipmentRepository.save(ce);
+        }
+        reservation.setStatus(ReservationStatus.TAKEN);
+        this.reservationRepository.save(reservation);
+    }
+
+    public String processQRCode(MultipartFile file) {
+        try {
+            BufferedImage qrImage = ImageIO.read(file.getInputStream());
+            LuminanceSource source = new BufferedImageLuminanceSource(qrImage);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (Exception e) {
+            throw new RuntimeException("Error processing QR code");
+        }
+    }
+    public Long extractReservationId(String reservationDetails) {
+        try {
+            int startIndex = reservationDetails.indexOf("Reservation id:") + "Reservation id:".length();
+            int endIndex = reservationDetails.indexOf("\n", startIndex);
+
+            String idString = reservationDetails.substring(startIndex, endIndex).trim();
+            return Long.parseLong(idString);
+        } catch (Exception e) {
+            throw new RuntimeException("Error extracting reservation id");
+        }
     }
 }

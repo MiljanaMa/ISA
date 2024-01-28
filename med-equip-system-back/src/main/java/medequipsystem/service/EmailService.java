@@ -5,6 +5,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.Reservation;
 import medequipsystem.domain.ReservationItem;
 import medequipsystem.util.EmailToken;
@@ -71,4 +72,34 @@ public class EmailService {
             System.out.println("Failed to send email with QR code");
         }
     }
+
+    @Async
+    public void sendEquipmentPickupConfirmationMail(String email, Reservation reservation) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject("Equipment Pickup Confirmation");
+            helper.setText(buildEquipmentPickupConfirmationMessage(reservation));
+            javaMailSender.send(message);
+            System.out.println("Email sent successfully for equipment pickup confirmation");
+        } catch (MessagingException | MailException e) {
+            System.out.println("Failed to send email for equipment pickup confirmation");
+        }
+    }
+
+    private String buildEquipmentPickupConfirmationMessage(Reservation reservation) {
+        StringBuilder message = new StringBuilder();
+        message.append("You have successfully picked up the equipment!\n");
+        message.append("Reservation ID: ").append(reservation.getId()).append("\n");
+        message.append("Equipment list:\n");
+        for (ReservationItem reservationItem : reservation.getReservationItems()) {
+            CompanyEquipment equipment = reservationItem.getEquipment();
+            message.append("- ").append(equipment.getName()).append(", Quantity: ").append(reservationItem.getCount())
+                    .append(", Price per piece: ").append(equipment.getPrice()).append("\n");
+        }
+        return message.toString();
+    }
+
+
 }

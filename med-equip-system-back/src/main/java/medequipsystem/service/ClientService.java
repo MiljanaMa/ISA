@@ -1,6 +1,5 @@
 package medequipsystem.service;
 
-import jdk.jshell.spi.ExecutionControl;
 import medequipsystem.domain.Client;
 import medequipsystem.domain.User;
 import medequipsystem.dto.ClientDTO;
@@ -10,16 +9,12 @@ import medequipsystem.repository.RoleRepository;
 import medequipsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.attribute.UserPrincipalNotFoundException;
-import java.security.InvalidKeyException;
 import java.security.Principal;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -158,4 +153,29 @@ public class ClientService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+
+
+    public void penalizeCancellation(Long clientId, LocalDate appointmentDate, LocalTime appointmentTime){
+        Client client = getById(clientId);
+        int penaltyPoints = calculatePenaltyPoints(appointmentDate, appointmentTime);
+        client.setPenaltyPoints(client.getPenaltyPoints() + penaltyPoints);
+        clientRepository.save(client);
+    }
+
+    public int calculatePenaltyPoints(LocalDate appointmentDate, LocalTime appointmentTime){
+        boolean isAppointmentNextDay = appointmentDate.equals(LocalDate.now().plusDays(1));
+        boolean isAppointmentTimePassed = appointmentTime.isBefore(LocalTime.now());
+        boolean isAppointmentToday = appointmentDate.equals(LocalDate.now());
+
+        if((isAppointmentNextDay && isAppointmentTimePassed) || isAppointmentToday){
+            return 2;
+        }
+        return 1;
+    }
+
+    public void penalizeExpiration(Client client, int penaltyPoints){
+        client.setPenaltyPoints(client.getPenaltyPoints() + 2);
+        this.clientRepository.save(client);
+    }
+
 }

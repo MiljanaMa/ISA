@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Client, Passwords } from './model/client.model';
 import { Observable } from 'rxjs';
@@ -45,6 +45,23 @@ export class ClientService {
   }
   getQrCodes(): Observable<QRCode[]>{
     return this.http.get<QRCode[]>(environment.apiHost +`reservations/qrCodes`)
+  }
+
+  cancelReservation(reservation: Reservation): Observable<string>{
+    return this.http.post<string> (environment.apiHost+ `reservations/cancel`, reservation);
+  }
+
+  uploadQRCode(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    return this.http.post(environment.apiHost +`reservations/uploadQRCode`, formData, { headers });
+  }
+
+  takeReservation(reservationId: number): Observable<any> {
+    return this.http.post(environment.apiHost +`reservations/take`, reservationId );
   }
   
 }

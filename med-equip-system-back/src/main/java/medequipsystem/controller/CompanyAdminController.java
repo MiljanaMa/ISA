@@ -4,6 +4,7 @@ import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.repository.RoleRepository;
 import org.apache.coyote.Response;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -42,11 +43,6 @@ public class CompanyAdminController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyAdminRegistrationDTO>> getAll() {
         List<CompanyAdmin> admins = companyAdminService.getAll();
-
-        /*List<CompanyAdminDTO> adminsDTO = admins.stream()
-                .map(companyAdminDTOMapper::fromCompanyAdmintoDTO)
-                .collect(Collectors.toList());*/
-
         List<CompanyAdminRegistrationDTO> adminsDTO = new ArrayList<>();
         for(CompanyAdmin ca : admins){
             adminsDTO.add(new CompanyAdminRegistrationDTO(ca));
@@ -57,11 +53,6 @@ public class CompanyAdminController {
     @GetMapping(value = "/free")
     public ResponseEntity<List<CompanyAdminRegistrationDTO>> getFree() {
         List<CompanyAdmin> freeAdmins = companyAdminService.getFreeAdmins();
-
-        /*List<CompanyAdminRegistrationDTO> adminsDTO = freeAdmins.stream()
-                .map(companyAdminDTOMapper::fromCompanyAdmintoDTO)
-                .collect(Collectors.toList());
-        */
         List<CompanyAdminRegistrationDTO> adminsDTO = new ArrayList<>();
         for(CompanyAdmin ca : freeAdmins){
             adminsDTO.add(new CompanyAdminRegistrationDTO(ca));
@@ -72,25 +63,6 @@ public class CompanyAdminController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<CompanyAdminRegistrationDTO> create(@RequestBody CompanyAdminRegistrationDTO companyAdminDTO) {
-        /*CompanyAdmin companyAdminToCreate = new CompanyAdmin();
-
-        User user = new User();
-        user.setEmail(companyAdminDTO.getEmail());
-        user.setPassword(companyAdminDTO.getPassword());
-        user.setFirstName(companyAdminDTO.getFirstName());
-        user.setLastName(companyAdminDTO.getLastName());
-        user.setCity(companyAdminDTO.getCity());
-        user.setCountry(companyAdminDTO.getCountry());
-        user.setPhoneNumber(companyAdminDTO.getPhoneNumber());
-        companyAdminToCreate.setUser(user);
-
-        if (companyAdminDTO.getCompanyId() == 0) {
-            companyAdminToCreate.setCompany(null);
-        } else {
-            Company existingCompany = companyService.getById(companyAdminDTO.getCompanyId());
-            companyAdminToCreate.setCompany(existingCompany);
-        }*/
-
         CompanyAdmin companyAdminToCreate = mapDtoToDomain(companyAdminDTO);
         CompanyAdmin createdCompanyAdmin = companyAdminService.create(companyAdminToCreate);
         return new ResponseEntity<>(new CompanyAdminRegistrationDTO(createdCompanyAdmin), HttpStatus.OK);
@@ -126,17 +98,11 @@ public class CompanyAdminController {
 
     }
 
+    @PreAuthorize("hasAnyRole('CLIENT', 'SYSADMIN', 'COMPADMIN')")
     @GetMapping(value="user/{id}")
     public ResponseEntity<CompanyAdminRegistrationDTO> getAdminByUserId(@PathVariable Long id){
         CompanyAdmin admin = companyAdminService.getByUserId(id);
-        System.out.println("\n\n*********\nadmin id" + admin.getId().toString());
-        System.out.println("*********\nadmin company id " + admin.getCompany().getId().toString());
         admin.setCompany(companyService.getById(admin.getCompany().getId()));
-        System.out.println("\n\n*********\nadmin company id " + admin.getCompany().getId().toString());
-        System.out.println("*********\ncomp name" + admin.getCompany().getName());
-        System.out.println("*********\n company description " + admin.getCompany().getDescription()
-        );
-
 
         return new ResponseEntity<>(new CompanyAdminRegistrationDTO(admin),HttpStatus.OK);
     }
