@@ -114,7 +114,7 @@ VALUES
 INSERT INTO public.users(
     id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
 VALUES
-    (5, 'Tokyo', 'Japan', 'anastasijanov2323@gmail.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23232323', 3);
+    (5, 'Tokyo', 'Japan', 'anastano@email.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23232323', 3);
 
 -- User 6 - system admin
 INSERT INTO public.users(
@@ -146,20 +146,20 @@ INSERT INTO public.system_admins(
 	VALUES (2, 6, false, true);
 --Client 1
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (1, 'General hospital', 'Doctor', 0, 0, 0, 2);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, 'General hospital', 'Doctor', 0, 0, 2);
 --Client 2
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (2, 'General hospital', 'Nurse', 0, 0, 0, 3);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, 'General hospital', 'Nurse', 0, 0, 3);
 --Client 3
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 0, 4);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 4);
 --Client 4
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 0, 5);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 5);
 
 
 --Company Admins -- this needs to be changed, user composition
@@ -207,16 +207,23 @@ INSERT INTO public.appointments(
 VALUES
     (6, '2024-01-25', '11:00', '11:30', 1, 1),
     (7, '2024-01-26', '14:00', '14:30', 1, 1),
-    (8, '2024-02-02', '16:00', '16:30', 1, 1);
+    (8, '2024-01-27', '16:00', '16:30', 1, 1);
 
 -- Appointments created by Admin 4 and 5
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (9, '2023-11-28', '10:00', '10:30', 1, 1),
-    (10, '2023-11-29', '13:00', '13:30', 1, 1);
+    (9, '2024-11-28', '10:00', '10:30', 1, 1),
+    (10, '2024-11-29', '13:00', '13:30', 1, 1);
 
 
+--INSERT INTO public.reservations (id, status, client_id, appointment_id)
+--VALUES
+  --  (52, 0, 1, 8);
+
+--INSERT INTO public.reservation_items (id, count, equipment_id, reservation_id)
+--VALUES
+    --(52, 3, 9, 52);
 
 --Reservations
 INSERT INTO public.reservations(
@@ -229,7 +236,6 @@ INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
 VALUES
     (3, 2, 3, 3);
-
 --Reservation items
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
@@ -240,31 +246,4 @@ VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
 VALUES (3, 1, 1, 3, 345);
-
-
-
----------AAAAA
---anastasija, za rezervacije podaci za odbranu
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (4, 0, 7, 4); --to be expired
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (5, 2, 6, 4); --taken
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (6, 0, 8, 4); --reserved
---anastasija, podaci za odbranu
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (4, 2, 1, 4, 500);
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (5, 5, 4, 5, 1200);
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (6, 1, 1, 6, 345);
 

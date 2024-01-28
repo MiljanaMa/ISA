@@ -14,6 +14,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a WHERE a.companyAdmin.id IN (SELECT ca.id FROM CompanyAdmin ca WHERE ca.company.id= ?1)")
     public Set<Appointment> getByCompanyId(Long id);
+    @Query("SELECT a FROM Appointment a WHERE a.id = ?1 AND a.status =?2")
+    public Appointment getAvailableById(Long id, AppointmentStatus status);
     @Query("SELECT a FROM Appointment a WHERE a.companyAdmin.id IN (SELECT ca.id FROM CompanyAdmin ca WHERE ca.company.id= ?1)"
             + "AND a.date = ?2")
     public Set<Appointment> getByCompanyIdAndDate(Long id, LocalDate date, AppointmentStatus status);

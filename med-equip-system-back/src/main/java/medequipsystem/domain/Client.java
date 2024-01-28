@@ -26,8 +26,6 @@ public class Client {
 
     @Column(name = "points", nullable = true)
     private int points;
-    @Column(name = "version_panalty", nullable = false)
-    private int versionPenalty;
 
     public Client(){}
 
@@ -77,13 +75,5 @@ public class Client {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public int getVersionPenalty() {
-        return versionPenalty;
-    }
-
-    public void setVersionPenalty(int versionPenalty) {
-        this.versionPenalty = versionPenalty;
     }
 }
