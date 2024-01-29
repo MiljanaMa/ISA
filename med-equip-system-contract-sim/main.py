@@ -4,15 +4,20 @@ from validation import *
 from termcolor import colored 
 
 def callback_update(ch, method, properties, body):
+    global contract_added_event 
+  
+    contract_added_event.wait()
     contract = next((c for c in contracts if c.id == int(body)),None)
     contract.status = status_mapping[method.routing_key]
-    inbox.append(["[x] Status of contract ID: " +" changed to " + status_mapping[method.routing_key].name, False])
+    inbox.append(["[x] Status of contract ID: "+str(int(body)) +" changed to " + status_mapping[method.routing_key].name, False])
     if not input_mode:
         refresh_display()
     
+    contract_added_event.clear()
+    
 
 def add_contract(auto = False):
-    global new_id, contracts 
+    global new_id, contracts, lock 
     if not auto: 
         id = None
         date = validate_int('Enter day in month: ')
@@ -37,12 +42,13 @@ def add_contract(auto = False):
     send_message(json.dumps(new_contract.to_dict(),indent=1))
     
     channel.basic_consume(callback_queue, on_message_callback=callback, auto_ack= True)
-    connection.process_data_events(time_limit=None)
+    connection.process_data_events(time_limit = None)
 
-    if(new_id != -1):
-        new_contract.id = new_id 
-        contracts.append(new_contract)
-    
+    with lock: 
+        if(new_id != -1):
+            new_contract.id = new_id 
+            contracts.append(new_contract)
+            contract_added_event.set()
    
  
 
@@ -117,6 +123,8 @@ contracts = []
 corr_id = None 
 input_mode = False 
 inbox = []
+lock = threading.Lock()
+contract_added_event = threading.Event()
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host = 'localhost')
 )
@@ -165,11 +173,13 @@ def main():
     add_contract(True)
     add_contract(True)
     
-    read_contracts()
+    first = True
     while True:
-          refresh_display()
+          
+          if not first: 
+            refresh_display()
 
-        
+         
         
           
           choice = input("Enter your choice: ")
@@ -190,6 +200,7 @@ def main():
             print("Invalid choice try again")
           input("Press enter to continue...")
           input_mode = False 
+          first = False 
           
     
     connection.close()
