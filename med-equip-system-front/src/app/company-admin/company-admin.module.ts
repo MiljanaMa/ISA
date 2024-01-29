@@ -12,12 +12,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { LocationSimulatorComponent } from './location-simulator/location-simulator.component';
+import { SimulatorMapComponent } from './simulator-map/simulator-map.component';
 
 
 @NgModule({
   declarations: [
     CompanyWorkCalendarComponent,
-    LocationSimulatorComponent
+    LocationSimulatorComponent,
+    SimulatorMapComponent
   ],
   imports: [
     CommonModule,

@@ -30,7 +30,7 @@ const routes: Routes = [
   {path: 'admin-profile/:id', component: AdminProfileComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }},
   {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }}, 
   {path: 'company-work-calendar', component: CompanyWorkCalendarComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }},
-  {path: 'location-simulator', component: LocationSimulatorComponent},
+  {path: 'location-simulator', component: LocationSimulatorComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }},
 
   {path: 'companyadminCreation', component: CompanyAdminCreationComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_SYSADMIN' }},
   {path: 'systemAdminCreation', component: SystemAdminCreationComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_SYSADMIN' }},

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { CurrentLocation } from '../model/currentLocation.model';
+import { SimulatorMapComponent } from '../simulator-map/simulator-map.component';
 
 
 @Component({
@@ -12,12 +13,13 @@ import { CurrentLocation } from '../model/currentLocation.model';
 })
 export class LocationSimulatorComponent{
 
+  @ViewChild(SimulatorMapComponent) mapComponent!: SimulatorMapComponent;
   private serverUrl = 'http://localhost:8092/socket'
   private stompClient: any;
 
   isLoaded: boolean = false;
   isCustomSocketOpened = false;
-  currentLocation:  CurrentLocation = { id: 0, latitude: 0.0, longitude: 0.1 };
+  currentLocation:  CurrentLocation = {latitude: 45.2396, longitude: 19.8227};
 
   constructor() { }
 
@@ -40,15 +42,13 @@ export class LocationSimulatorComponent{
   openGlobalSocket() {
     if (this.isLoaded) {
       this.stompClient.subscribe("/socket-publisher", (message: { body: string; }) => {
-        const locationResult: CurrentLocation = JSON.parse(message.body);
-        console.log("REZULTAT: ",locationResult);
         this.handleResult(message);
+        this.mapComponent.updateMarkerPosition(this.currentLocation.latitude, this.currentLocation.longitude);
       });
     }
   }
 
-  clickButton() : void {
-
+  startDelivery() : void {
       this.stompClient.send("/socket-subscriber/send/message", {},  JSON.stringify(this.currentLocation));
   }
 
