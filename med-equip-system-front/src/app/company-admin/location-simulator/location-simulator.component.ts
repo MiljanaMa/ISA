@@ -4,6 +4,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { CurrentLocation } from '../model/currentLocation.model';
 import { SimulatorMapComponent } from '../simulator-map/simulator-map.component';
+import { CompanyAdminService } from '../company-admin.service';
 
 
 @Component({
@@ -19,9 +20,7 @@ export class LocationSimulatorComponent{
 
   isLoaded: boolean = false;
   isCustomSocketOpened = false;
-  currentLocation:  CurrentLocation = {latitude: 45.2396, longitude: 19.8227};
-
-  constructor() { }
+  currentLocation:  CurrentLocation = {latitude: 45.240025, longitude: 19.825688};
 
   ngOnInit() {
     this.initializeWebSocketConnection();
@@ -48,15 +47,15 @@ export class LocationSimulatorComponent{
     }
   }
 
-  startDelivery() : void {
-      this.stompClient.send("/socket-subscriber/send/message", {},  JSON.stringify(this.currentLocation));
-  }
-
   handleResult(message: { body: string; }) {
     if (message.body) {
       let locationResult: CurrentLocation = JSON.parse(message.body);
       this.currentLocation = locationResult;
     }
+  }
+
+  startDelivery() : void {
+       this.stompClient.send("/socket-subscriber/send/message", {},  JSON.stringify(this.currentLocation));
   }
 
 }

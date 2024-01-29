@@ -1,7 +1,7 @@
 <div class="center"> 
     <app-simulator-map [markerLatitude]="currentLocation.latitude" [markerLongitude]="currentLocation.longitude"></app-simulator-map>
+    <p> Vehicle coordinates: {{currentLocation.latitude}} , {{currentLocation.longitude}} </p>
     <button class="primary" (click)="startDelivery()">Start delivery</button>
-    <p> {{currentLocation.latitude}} , {{currentLocation.longitude}} </p>
 
 </div>
 
