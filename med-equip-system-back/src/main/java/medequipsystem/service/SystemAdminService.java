@@ -42,7 +42,6 @@ public class SystemAdminService {
         User user = userRepository.getById(userId);
         systemAdmin.setUser(user);
         return systemAdmin;
-        //return  this.systemAdminRepository.findByUserId(userId);
     }
 
     public SystemAdmin create(SystemAdminDTO systemAdminDTO){
@@ -94,23 +93,12 @@ public class SystemAdminService {
 
     public boolean checkOldPassword(long userId, String passwordToCheck){
         SystemAdmin systemAdmin = getByUserId(userId);
-        if(systemAdmin == null){
-            System.out.println("\nCheck old password error: system admin not found by id");
+        if(systemAdmin == null)
             return false;
-        }
-        User user = systemAdmin.getUser();
-        String oldPassword =  "123";  //napravi da je ovo defaultna lozinka, jer drugacije se ne moza proveriti sa hesiranom lozinkom da li se stara poklapa  //user.getPassword();
-
-        String passwordToCheckEncoded = passwordEncoder.encode(passwordToCheck);
-        System.out.println("\n\n ****** ******* ********stara stvarna loz: " + oldPassword);
-        System.out.println("stara nova loz: " + passwordToCheckEncoded); /// AHHHH SVAKI PUT DRUGACIJE ENKODIRA PA NE MOZE DA PROVERI
-
-        if(passwordToCheck.equals(oldPassword)){
+        boolean isPasswordMatch = passwordEncoder.matches(passwordToCheck, systemAdmin.getUser().getPassword());
+        if(isPasswordMatch)
             return true;
-        }
-        else {
-            return false;
-        }
+        return false;
     }
 
     public SystemAdmin mapDtoToDomain(SystemAdminDTO systemAdminDTO){

@@ -7,6 +7,7 @@ import { CompanyService } from '../../feature-modules/company/company.service';
 import { DateAdapter } from '@angular/material/core';
 import { CompanyProfile as Company } from '../../feature-modules/company/model/company-profile-model';
 import { ClientService } from '../client.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'xp-reservation-creation',
@@ -108,9 +109,15 @@ export class ReservationCreationComponent {
           console.log("Reservation creation works");
         },
         error => {
-          alert(error.error.message);
-          console.log(error);
+          let errorMessage = 'An error occurred while making the reservation.';
+    
+          if (error instanceof HttpErrorResponse && error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
+    
+          alert(errorMessage);
         }
+        
       );
       return;
     }
@@ -131,8 +138,15 @@ export class ReservationCreationComponent {
         this.router.navigate(['/reservations']);
       },
       error => {
-        alert("There is not enough items in storage.");
+        let errorMessage = 'An error occurred while making the reservation.';
+    
+        if (error instanceof HttpErrorResponse && error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+    
+        alert(errorMessage);
       }
+      
 
     );
   }

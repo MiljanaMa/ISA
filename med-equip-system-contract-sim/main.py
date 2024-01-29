@@ -24,7 +24,7 @@ def add_contract(auto = False):
         hospital = input("Enter hospital: ")
     else: 
         id = None 
-        date = '29'
+        date = '27'
         time = '12:12'
         equipment = 'SafetyKit Plus'
         total = 5 

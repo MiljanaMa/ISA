@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -60,11 +60,14 @@ public class AppointmentController {
 
     @GetMapping(value = "/custom")
     @PreAuthorize("hasAnyRole('CLIENT')")
-    public ResponseEntity<Set<CustomAppointmentDTO>> getCustomAppointments(@RequestParam String date, @RequestParam Long companyId, Principal user){
+    public ResponseEntity<Set<AppointmentDTO>> getCustomAppointments(@RequestParam String date, @RequestParam Long companyId, Principal user){
         Company company = companyService.getById(companyId);
         if(company == null)
             return ResponseEntity.notFound().build();
-        Set<CustomAppointmentDTO> customAppointments = appointmentService.getCustomAppointments(company, LocalDate.parse(date));
-        return new ResponseEntity<>(customAppointments, HttpStatus.OK);
+        Set<Appointment> customAppointments = appointmentService.getCustomAppointments(company, LocalDate.parse(date));
+        Set<AppointmentDTO> customAppointmentsDTO = (Set<AppointmentDTO>)new DtoUtils().convertToDtos(customAppointments, new AppointmentDTO());
+        Set<AppointmentDTO> sortedAppointments = new TreeSet<>(Comparator.comparing(AppointmentDTO::getStartTime));
+        sortedAppointments.addAll(customAppointmentsDTO);
+        return new ResponseEntity<>(sortedAppointments, HttpStatus.OK);
     }
 }

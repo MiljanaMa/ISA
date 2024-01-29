@@ -1,5 +1,5 @@
 import {  CompanyEquipmentProfile } from "../../feature-modules/company/model/companyEquipmentProfile.model";
-import { Appointment } from "./appointment.model";
+import { Appointment, CustomAppointment } from "./appointment.model";
 
 export interface ReservationCreation {
     reservationItems: ReservationItem[];
