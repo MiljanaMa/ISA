@@ -20,9 +20,7 @@ export class LocationSimulatorComponent{
 
   isLoaded: boolean = false;
   isCustomSocketOpened = false;
-  currentLocation:  CurrentLocation = {latitude: 45.2396, longitude: 19.8227};
-
-  constructor(private service: CompanyAdminService) { }
+  currentLocation:  CurrentLocation = {latitude: 45.240025, longitude: 19.825688};
 
   ngOnInit() {
     this.initializeWebSocketConnection();
@@ -49,10 +47,6 @@ export class LocationSimulatorComponent{
     }
   }
 
-  startDelivery() : void {
-      this.stompClient.send("/socket-subscriber/send/message", {},  JSON.stringify(this.currentLocation));
-  }
-
   handleResult(message: { body: string; }) {
     if (message.body) {
       let locationResult: CurrentLocation = JSON.parse(message.body);
@@ -60,15 +54,8 @@ export class LocationSimulatorComponent{
     }
   }
 
-  startSendingCoordinates(): void {
-    this.service.startSendingCoordinates().subscribe(
-      response => {
-        console.log(response);
-      },
-      error => {
-        console.error(error);
-      }
-    );
+  startDelivery() : void {
+       this.stompClient.send("/socket-subscriber/send/message", {},  JSON.stringify(this.currentLocation));
   }
 
 }

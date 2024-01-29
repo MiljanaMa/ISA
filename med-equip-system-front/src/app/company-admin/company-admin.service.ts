@@ -38,8 +38,4 @@ export class CompanyAdminService {
   cancelContract(contract: Contract): Observable<Contract>{ 
     return this.http.post<Contract>(environment.apiHost +`contracts/cancel`, contract);
   }
-
-  startSendingCoordinates(): Observable<string> {
-    return this.http.post<string>(environment.apiHost + `companyadmins/startsending`, {});
-  }
 }

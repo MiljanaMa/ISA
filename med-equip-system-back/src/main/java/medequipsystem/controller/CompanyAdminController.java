@@ -39,20 +39,6 @@ public class CompanyAdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private SignalSenderService signalSenderService;
-
-
-    ////////////////////////////
-    @PostMapping("/startsending")
-    public ResponseEntity<String> startSendingCoordinates() {
-        signalSenderService.startSendingLocations();
-
-        return ResponseEntity.ok("Signal sent to start sending coordinates.");
-    }
-    ///////////////////////////////
-
-
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyAdminRegistrationDTO>> getAll() {
         List<CompanyAdmin> admins = companyAdminService.getAll();
