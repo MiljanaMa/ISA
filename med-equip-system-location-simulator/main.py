@@ -7,11 +7,19 @@ connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
 
 channel = connection.channel()
-channel.queue_declare(queue='coordinates')
+channel.queue_declare(queue='coordinates', durable=True)
+channel.queue_declare(queue='startsending', durable=False)
 
 def send_message(m):
     channel.basic_publish(exchange='', routing_key='coordinates', body=m)
     print(" [x] Sent:\n " + m)
+
+def start_sending_coordinates():
+    while True:
+        method_frame, header_frame, body = channel.basic_get(queue='startsending')
+        if method_frame:
+            main()
+
 
 def main():
 
@@ -32,4 +40,4 @@ def main():
     connection.close()
 
 if __name__ == '__main__':
-    main()
+    start_sending_coordinates()

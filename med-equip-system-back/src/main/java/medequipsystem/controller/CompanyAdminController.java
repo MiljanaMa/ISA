@@ -2,6 +2,7 @@ package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
+import medequipsystem.rabbitmqcoordinates.SignalSenderService;
 import medequipsystem.repository.RoleRepository;
 import org.apache.coyote.Response;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,6 +39,18 @@ public class CompanyAdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SignalSenderService signalSenderService;
+
+
+    ////////////////////////////
+    @PostMapping("/startsending")
+    public ResponseEntity<String> startSendingCoordinates() {
+        signalSenderService.startSendingLocations();
+
+        return ResponseEntity.ok("Signal sent to start sending coordinates.");
+    }
+    ///////////////////////////////
 
 
     @GetMapping(value = "/all")

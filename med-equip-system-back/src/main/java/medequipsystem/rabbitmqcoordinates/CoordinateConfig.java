@@ -11,4 +11,9 @@ public class CoordinateConfig {
         return new Queue("coordinates");
     }
 
+    @Bean
+    public Queue startSendingQueue() {
+        return new Queue("startsending");
+    }
+
 }

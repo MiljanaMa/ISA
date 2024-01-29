@@ -1,11 +1,14 @@
 package medequipsystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import medequipsystem.rabbitmqcoordinates.SignalSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,6 +19,9 @@ import java.util.concurrent.TimeUnit;
 @CrossOrigin(origins = "http://localhost:4200/")
 @Controller
 public class WebSocketController {
+
+    @Autowired
+    private SignalSenderService signalSenderService;
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
@@ -29,6 +35,7 @@ public class WebSocketController {
     public void broadcastNotification() {
         scheduler.scheduleAtFixedRate(this::sendPeriodicLocationUpdate, 0, 5, TimeUnit.SECONDS);
     }
+
 
     private void sendPeriodicLocationUpdate() {
         String newLocation = generateNewLocation();
