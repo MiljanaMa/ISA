@@ -15,6 +15,7 @@ import { CompanyWorkCalendarComponent } from './company-admin/company-work-calen
 import { ReservationsComponent } from './client/reservations/reservations.component';
 import { ChangePasswordComponent } from './system-admin/change-password/change-password.component';
 import { AuthGuard } from './auth/guard/auth.guard';
+import { ContractsComponent } from './company-admin/contracts/contracts.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'admin-profile/:id', component: AdminProfileComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }},
   { path: 'company-profile/:id', component: CompanyProfileComponent},
   {path: 'equipmentSearch', component: EquipmentSearchComponent},
+  {path: 'contracts', component: ContractsComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }},
   {path: 'companyadminCreation', component: CompanyAdminCreationComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_SYSADMIN' }},
   {path: 'systemAdminCreation', component: SystemAdminCreationComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_SYSADMIN' }},
   {path: 'company-profile-admin/:id', component: CompanyProfileAdminComponent, canActivate: [AuthGuard], data: { requiredRole: 'ROLE_COMPADMIN' }}, 
