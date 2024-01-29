@@ -1,14 +1,12 @@
 
 
 class Coordinate:
-    def __init__(self, id, latitude, longitude):
-        self.id = id
+    def __init__(self, latitude, longitude):
         self.latitude = latitude
         self.longitude = longitude
 
     def to_dict(self):
         return {
-                 "id": self.id,
                  "latitude": self.latitude,
                  "longitude": self.longitude  
                 }
