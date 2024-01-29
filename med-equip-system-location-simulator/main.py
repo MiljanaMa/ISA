@@ -1,4 +1,6 @@
-import json, pika, uuid, threading, os 
+import json
+import pika
+import threading
 from coordinate import *
 import time
 
@@ -7,22 +9,30 @@ connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
 
 channel = connection.channel()
+
+channel.queue_delete(queue='startsending')
+channel.queue_delete(queue='coordinates')
+channel.queue_declare(queue='coordinates', durable=True)
+
+#channel.queue_purge(queue='startsending')
+#channel.queue_purge(queue='coordinates')
+
 channel.queue_declare(queue='coordinates', durable=True)
 channel.queue_declare(queue='startsending', durable=False)
+
+stop_sending = False
 
 def send_message(m):
     channel.basic_publish(exchange='', routing_key='coordinates', body=m)
     print(" [x] Sent:\n " + m)
 
 def start_sending_coordinates():
-    while True:
+    while not stop_sending:
         method_frame, header_frame, body = channel.basic_get(queue='startsending')
         if method_frame:
             main()
 
-
 def main():
-
     coordinates_data = [
         (45.240025, 19.825688),
         (45.241906, 19.825255),
@@ -36,8 +46,14 @@ def main():
         send_message(json.dumps(new_coordinate.to_dict(), indent=1))
         coordinates.append(new_coordinate)
         time.sleep(10) 
-   
-    connection.close()
 
 if __name__ == '__main__':
-    start_sending_coordinates()
+    try:
+        while True:
+            method_frame, header_frame, body = channel.basic_get(queue='startsending')
+            if method_frame:
+                main()
+    except KeyboardInterrupt:
+        stop_sending = True
+        connection.close()
+
