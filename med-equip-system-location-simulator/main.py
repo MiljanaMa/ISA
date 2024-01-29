@@ -8,8 +8,6 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 channel.queue_declare(queue='coordinates')
 
-coordinates_exchange_name = 'coordinates_exchange'
-channel.exchange_declare(exchange=coordinates_exchange_name, exchange_type='direct')
 
 
 def send_message(m):
