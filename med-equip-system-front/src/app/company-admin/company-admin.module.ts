@@ -11,11 +11,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { LocationSimulatorComponent } from './location-simulator/location-simulator.component';
 
 
 @NgModule({
   declarations: [
-    CompanyWorkCalendarComponent
+    CompanyWorkCalendarComponent,
+    LocationSimulatorComponent
   ],
   imports: [
     CommonModule,
