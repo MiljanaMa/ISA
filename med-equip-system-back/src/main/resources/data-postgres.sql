@@ -146,20 +146,20 @@ INSERT INTO public.system_admins(
 	VALUES (2, 6, false, true);
 --Client 1
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (1, 'General hospital', 'Doctor', 0, 0, 0, 2);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (1, 'General hospital', 'Doctor', 0, 0, 2);
 --Client 2
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (2, 'General hospital', 'Nurse', 0, 0, 0, 3);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (2, 'General hospital', 'Nurse', 0, 0, 3);
 --Client 3
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 0, 4);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (3, 'General hospital', 'Surgeon', 4, 0, 4);
 --Client 4
 INSERT INTO public.clients(
-	id, hospital_info, job_title, penal_points, points, version_panalty, user_id)
-	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 0, 5);
+	id, hospital_info, job_title, penal_points, points, user_id)
+	VALUES (4, 'General hospital', 'Radiologist', 0, 0, 5);
 
 
 --Company Admins -- this needs to be changed, user composition
@@ -213,8 +213,8 @@ VALUES
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (9, '2023-11-28', '10:00', '10:30', 1, 1),
-    (10, '2023-11-29', '13:00', '13:30', 1, 1);
+    (9, '2024-11-28', '10:00', '10:30', 1, 1),
+    (10, '2024-11-29', '13:00', '13:30', 1, 1);
 
 
 --INSERT INTO public.reservations (id, status, client_id, appointment_id)
@@ -246,4 +246,3 @@ VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
 VALUES (3, 1, 1, 3, 345);
-

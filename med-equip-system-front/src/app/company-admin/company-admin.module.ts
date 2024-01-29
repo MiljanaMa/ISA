@@ -13,13 +13,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { LocationSimulatorComponent } from './location-simulator/location-simulator.component';
 import { SimulatorMapComponent } from './simulator-map/simulator-map.component';
+import { ContractsComponent } from './contracts/contracts.component';
 
 
 @NgModule({
   declarations: [
     CompanyWorkCalendarComponent,
     LocationSimulatorComponent,
-    SimulatorMapComponent
+    SimulatorMapComponent,
+    ContractsComponent
+
   ],
   imports: [
     CommonModule,

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,6 +98,16 @@ public class CompanyAdminService {
         companyAdmin.setCompany(company);
         return this.companyAdminRepository.save(companyAdmin);
 
+    }
+    public CompanyAdmin getLogged(Principal loggedUser) {
+        User user = userRepository.findByEmail(loggedUser.getName());
+        if (user == null)
+            new Exception("User not found");
+
+        CompanyAdmin admin = this.companyAdminRepository.findByUserId(user.getId());
+        if (admin == null)
+            new Exception("Admin not found");
+        return admin;
     }
 
    /* public CompanyAdmin mapDtoToDomain(CompanyAdminRegistrationDTO companyAdminDTO){

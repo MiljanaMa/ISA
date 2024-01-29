@@ -8,6 +8,7 @@ import medequipsystem.domain.enums.AppointmentStatus;
 import medequipsystem.dto.CustomAppointmentDTO;
 import medequipsystem.repository.AppointmentRepository;
 import medequipsystem.repository.CompanyAdminRepository;
+import medequipsystem.util.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class AppointmentService {
         return null;
     }
 
-    public Set<CustomAppointmentDTO> getCustomAppointments(Company company, LocalDate date) {
+    public Set<Appointment> getCustomAppointments(Company company, LocalDate date) {
         Long idGenerator = 0L;
         var splitHours = company.getWorkingHours().split("-");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
@@ -59,14 +60,14 @@ public class AppointmentService {
         LocalTime endTime = LocalTime.parse(splitHours[1], formatter);
 
         Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyIdAndDate(company.getId(), date, AppointmentStatus.RESERVED);
-        Set<LocalTime> allTimeSlots = generateTimeSlotsInWorkingHours(startTime, endTime);
-        Set<CustomAppointmentDTO> customAppointments = new HashSet<>();
+        Set<TimeSlot> allTimeSlots = TimeSlot.generateTimeSlots(startTime, endTime);
+        Set<Appointment> customAppointments = new HashSet<>();
 
-        for (LocalTime timeSlot : allTimeSlots) {
-            List<Long> reservedAdminIds = isTimeSlotReserved(reservedAppointments, timeSlot);
-            //if there is no reserved add automatically
+        for (TimeSlot timeSlot : allTimeSlots) {
+            List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(reservedAppointments);
+
             if (reservedAdminIds.isEmpty()) {
-                customAppointments.add(new CustomAppointmentDTO(idGenerator++, date, timeSlot, timeSlot.plusMinutes(duration), AppointmentStatus.AVAILABLE));
+                customAppointments.add(new Appointment(idGenerator++, date, timeSlot.startTime, timeSlot.endTime, AppointmentStatus.AVAILABLE, null));
                 continue;
             }
             // If there are reserved admins, check for available admins
@@ -76,55 +77,35 @@ public class AppointmentService {
 
             // If there are available admins, add an available appointment
             if (!availableAdminIds.isEmpty()) {
-                customAppointments.add(new CustomAppointmentDTO(0L, date, timeSlot, timeSlot.plusMinutes(duration), AppointmentStatus.AVAILABLE));
+                customAppointments.add(new Appointment(0L, date, timeSlot.startTime, timeSlot.endTime, AppointmentStatus.AVAILABLE, null));
             }
 
         }
 
-        List<CustomAppointmentDTO> sortedAppointments = new ArrayList<>(customAppointments);
-        sortedAppointments.sort(Comparator.comparing(CustomAppointmentDTO::getStartTime));
-        Set<CustomAppointmentDTO> sortedSet = new LinkedHashSet<>(sortedAppointments);
+        List<Appointment> sortedAppointments = new ArrayList<>(customAppointments);
+        sortedAppointments.sort(Comparator.comparing(Appointment::getStartTime));
+        Set<Appointment> sortedSet = new LinkedHashSet<>(sortedAppointments);
         return sortedSet;
     }
 
-    public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime timeSlot) {
+    public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime startTime) {
         Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyIdAndDate(company.getId(), date, AppointmentStatus.RESERVED);
-        List<Long> reservedAdminIds = isTimeSlotReserved(reservedAppointments, timeSlot);
-        if (reservedAdminIds.isEmpty())
+        TimeSlot timeSlot = new TimeSlot(startTime);
+        List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(reservedAppointments);
+
+        if (reservedAdminIds.isEmpty()) {
             return company.getCompanyAdmins();
+        } else {
+            Set<Long> availableAdminIds = company.getCompanyAdmins().stream()
+                    .map(CompanyAdmin::getId)
+                    .filter(adminId -> !reservedAdminIds.contains(adminId))
+                    .collect(Collectors.toSet());
 
-        Set<Long> allAdminIds = company.getCompanyAdmins().stream().map(CompanyAdmin::getId).collect(Collectors.toSet());
-        Set<Long> availableAdminIds = new HashSet<>(allAdminIds);
-        availableAdminIds.removeAll(reservedAdminIds);
-
-        Set<CompanyAdmin> availableAdmins = company.getCompanyAdmins().stream()
-                .filter(admin -> availableAdminIds.contains(admin.getId()))
-                .collect(Collectors.toSet());
-
-        // If there are available admins, add an available appointment
-        if (!availableAdminIds.isEmpty())
-            return availableAdmins;
-
-        return new HashSet<CompanyAdmin>();
-    }
-
-    private List<Long> isTimeSlotReserved(Set<Appointment> reservedAppointments, LocalTime timeSlot) {
-        List<Long> reservedAdminIds = new ArrayList<>();
-
-        for (Appointment appointment : reservedAppointments) {
-            if (isTimeSlotOverlap(timeSlot, appointment.getStartTime(), appointment.getEndTime())) {
-                reservedAdminIds.add(appointment.getCompanyAdmin().getId());
-            }
+            return company.getCompanyAdmins().stream()
+                    .filter(admin -> availableAdminIds.contains(admin.getId()))
+                    .collect(Collectors.toSet());
         }
-        return reservedAdminIds;
     }
-
-    private boolean isTimeSlotOverlap(LocalTime timeSlot, LocalTime startTime, LocalTime endTime) {
-        // Check if two time slots overlap
-        return !((timeSlot.plusMinutes(duration).isBefore(startTime) || timeSlot.plusMinutes(duration).equals(startTime))
-                || (timeSlot.isAfter(endTime) || timeSlot.equals(endTime)));
-    }
-
     public boolean inWorkingHours(Appointment a) {
         Company c = adminRepository.getById(a.getCompanyAdmin().getId()).getCompany();
 
@@ -144,18 +125,6 @@ public class AppointmentService {
             timeSlots.add(LocalTime.of(it.getHour(), it.getMinute()));
 
         }
-        return timeSlots;
-    }
-
-    public Set<LocalTime> generateTimeSlotsInWorkingHours(LocalTime start, LocalTime end) {
-        Set<LocalTime> timeSlots = new HashSet<>();
-        LocalTime currentTime = start;
-
-        while (!currentTime.isAfter(end.minusMinutes(duration))) {
-            timeSlots.add(currentTime);
-            currentTime = currentTime.plusMinutes(duration);
-        }
-
         return timeSlots;
     }
 
