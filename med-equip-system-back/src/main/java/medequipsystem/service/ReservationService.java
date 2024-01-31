@@ -9,10 +9,14 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import medequipsystem.domain.*;
 import medequipsystem.domain.enums.AppointmentStatus;
 import medequipsystem.domain.enums.ReservationStatus;
-import medequipsystem.dto.CustomAppointmentDTO;
-import medequipsystem.repository.*;
+import medequipsystem.repository.AppointmentRepository;
+import medequipsystem.repository.CompanyEquipmentRepository;
+import medequipsystem.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -38,68 +42,64 @@ public class ReservationService {
     private AppointmentService appointmentService;
 
 
-    //Transactional
-    public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
-        Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
-        if( availableAppointment == null)
-            new Exception("Appointment is reserved");
-        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
-        if( updatedItems == null)
-            new Exception("Not enough equipment in storage");
-        availableAppointment.setStatus(AppointmentStatus.RESERVED);
-        //odmah po referenci azurira
-        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, availableAppointment, updatedItems);
-        //da li spring sam odradi update, ako odradi i za equipment
-        //appointmentRepository.save(availableAppointment);
+    @Transactional(readOnly = false)
+    public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws ObjectOptimisticLockingFailureException, Exception {
+        try {
+            if(reservationRepository.findByAppointmentIdAndClientId(appointment.getId(), client.getId()) != null){
+                throw new Exception("You've already tried to reserve this appointment.");
+            }
+            Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
+            if (availableAppointment == null)
+                throw new Exception("Appointment is reserved");
+            Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
+            if (updatedItems == null)
+                throw new Exception("Not enough equipment in storage");
+            availableAppointment.setStatus(AppointmentStatus.RESERVED);
+            //odmah po referenci azurira
+            Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, availableAppointment, updatedItems);
 
-        //da li on lockuje sve tabele zajedno ako ima asocijacije ka njima
-        return reservationRepository.save(reservation);
-    }
-
-    //potentialy move to equipment service
-    private Set<ReservationItem> checkEquipment(Set<ReservationItem> reservationItems) {
-        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
-        CompanyEquipment ce;
-        Set<ReservationItem> updatedItems = new HashSet<>();
-        for(ReservationItem ri: reservationItems){
-            //exception not handeled
-            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
-            if(ri.getCount() > (ce.getCount() - ce.getReservedCount()))
-                return null;
-            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
-            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount()*ce.getPrice()));
+            return reservationRepository.save(reservation);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new ObjectOptimisticLockingFailureException("Appointment is not available anymore", e.getCause());
+        } catch(Exception e){
+            throw new Exception("Ooops problem (You've already tried to reserve this appointment or there is not enough equipment in storage.) ", e.getCause());
         }
-        return updatedItems;
     }
 
-    public Reservation getById(Long id){
+    public Reservation getById(Long id) {
         Optional<Reservation> reservationOptional = this.reservationRepository.findById(id);
         return reservationOptional.orElse(null);
     }
 
 
-    public Set<Reservation> getReservationsInProgress(){
+    public Set<Reservation> getReservationsInProgress() {
 
         return reservationRepository.getReservationsInProgress();
     }
 
-    public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client){
-        //move this
-        Set<ReservationItem> updatedItems = checkEquipment(reservationItems);
-        if( updatedItems == null)
-            new Exception("Not enough equipment in storage");
-        Company company = updatedItems.stream().findFirst().get().getEquipment().getCompany();
-        Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company,appointment.getDate(), appointment.getStartTime());
-        if(availableAdmins.isEmpty())
-            new Exception("Appointment is not available anymore");
-        //do here to find available admin
-        //treba ubaciti metodu koja radi check da li je termin i dalje slobodan
-        Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, availableAdmins.stream().findFirst().get());
-        Appointment savedAppointment = appointmentRepository.save(newAppointment);
-        Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, savedAppointment, updatedItems);
-        return reservationRepository.save(reservation);
+    @Transactional(readOnly = false)
+    public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws Exception {
+        try {
+            Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
+            if (updatedItems == null)
+                throw new Exception("Not enough equipment in storage");
+            Company company = updatedItems.stream().findFirst().get().getEquipment().getCompany();
+            Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company, appointment.getDate(), appointment.getStartTime());
+            if (availableAdmins.isEmpty())
+                throw new Exception("Appointment is not available anymore");
+            Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, availableAdmins.stream().findFirst().get());
+            Appointment savedAppointment = appointmentRepository.save(newAppointment);
+            Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, savedAppointment, updatedItems);
+            return reservationRepository.save(reservation);
+
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new ObjectOptimisticLockingFailureException("Available count is changed, please try again.", e.getCause());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
+        }
     }
-    public Set<Reservation> getUserReservations(Long id){
+
+    public Set<Reservation> getUserReservations(Long id) {
         //stavi da sortira
         List<Reservation> reservations = reservationRepository.findAll();
         Set<Reservation> userReservations = reservations.stream()
@@ -107,6 +107,35 @@ public class ReservationService {
                 .collect(Collectors.toSet());
         return userReservations;
     }
+
+    public Set<Reservation> getReservationsByAdminId(Long adminId){
+        return reservationRepository.findReservationsByAdminId(adminId);
+    }
+
+    public void requestTaking(Long reservationId) {
+        Reservation reservation = getById(reservationId);
+        reservation.setStatus(ReservationStatus.TAKING_REQUESTED);
+        this.reservationRepository.save(reservation);
+    }
+
+    public Set<ReservationItem> getEquipmentForReservation(Set<ReservationItem> reservationItems) {
+        //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
+        CompanyEquipment ce;
+        Set<ReservationItem> updatedItems = new HashSet<>();
+
+        for (ReservationItem ri : reservationItems) {
+            //exception not handeled
+            ce = equipmentRepository.getById(ri.getEquipment().getId());
+            if(ce == null)
+                return null;
+            if (ri.getCount() > (ce.getCount() - ce.getReservedCount()))
+                return null;
+            ce.setReservedCount(ce.getReservedCount() + ri.getCount());
+            updatedItems.add(new ReservationItem(ri.getId(), ri.getCount(), ce, ri.getCount() * ce.getPrice()));
+        }
+        return updatedItems;
+    }
+
     //potentionally move this to utils
     public byte[] generateQRCode(String qrData) {
         try {
@@ -132,7 +161,8 @@ public class ReservationService {
             return new byte[0];
         }
     }
-    public byte[] getQrCode(Reservation reservation){
+
+    public byte[] getQrCode(Reservation reservation) {
         String qrData = "Reservation details: \n"
                 + "- Reservation id: " + reservation.getId() + "\n"
                 + "- Appointment date: " + reservation.getAppointment().getDate() + "\n"
@@ -140,8 +170,8 @@ public class ReservationService {
                 + "-" + reservation.getAppointment().getEndTime() + "\n"
                 + "- Reservation items: \n";
 
-        for(ReservationItem item: reservation.getReservationItems()){
-            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "], Price: [" + item.getPrice() +"]\n";
+        for (ReservationItem item : reservation.getReservationItems()) {
+            qrData += "  -> " + item.getEquipment().getName() + ", Count: [" + item.getCount() + "], Price: [" + item.getPrice() + "]\n";
         }
         return generateQRCode(qrData);
     }
@@ -168,16 +198,24 @@ public class ReservationService {
         return currentDateTime.isAfter(appointmentDateTime);
     }
 
+    public boolean isReservationAppointmentWithinToday(LocalDate appointmentDate, LocalTime appointmentStartTime, LocalTime appointmentEndTime) {
+        LocalDateTime appointmentStartDateTime = LocalDateTime.of(appointmentDate, appointmentStartTime);
+        LocalDateTime appointmentEndDateTime = LocalDateTime.of(appointmentDate, appointmentEndTime);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return currentDateTime.isAfter(appointmentStartDateTime) && currentDateTime.isBefore(appointmentEndDateTime);
+    }
+
     public void updateStatus(Reservation reservation, ReservationStatus status){
         reservation.setStatus(status);
         this.reservationRepository.save(reservation);
     }
-
-    public void take(Long reservationId){
+    @Transactional(readOnly = false)
+    public void take(Long reservationId) {
         Reservation reservation = getById(reservationId);
         CompanyEquipment ce;
-        for(ReservationItem ri: reservation.getReservationItems()){
-            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());;
+        for (ReservationItem ri : reservation.getReservationItems()) {
+            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            ;
             ce.setReservedCount(ce.getReservedCount() - ri.getCount()); //oduzmi sa stanja rezervisanih
             ce.setCount(ce.getCount() - ri.getCount()); //oduzmi sa stanja dostupnih
             this.equipmentRepository.save(ce);
@@ -197,6 +235,7 @@ public class ReservationService {
             throw new RuntimeException("Error processing QR code");
         }
     }
+
     public Long extractReservationId(String reservationDetails) {
         try {
             int startIndex = reservationDetails.indexOf("Reservation id:") + "Reservation id:".length();

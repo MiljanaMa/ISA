@@ -1,8 +1,10 @@
 package medequipsystem.controller;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import medequipsystem.domain.*;
 import medequipsystem.dto.*;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.CompanyService;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,13 @@ public class CompanyController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<Set<CompanyDTO>> getAll() {
+        try{
         Set<Company> companies = new HashSet<>(companyService.getAll());
         Set<CompanyDTO> companiesDTO = (Set<CompanyDTO>) new DtoUtils().convertToDtos(companies, new CompanyDTO());
         return new ResponseEntity<>(companiesDTO, HttpStatus.OK);
+        }catch(RequestNotPermitted r){
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
     }
 
 

@@ -87,9 +87,7 @@ public class CompanyAdminService {
     }
 
     public CompanyAdmin getByUserId(Long userId){
-        CompanyAdmin companyAdmin = companyAdminRepository.findByUserId(userId);
-
-        return companyAdmin;
+        return  this.companyAdminRepository.findByUserId(userId);
     }
 
     public CompanyAdmin connectWithCompany(Long adminsUserId, Company company){
