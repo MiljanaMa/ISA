@@ -77,18 +77,18 @@
 }
 
 .take-reservation-button {
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  background-color: #7638bd;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  padding: 15px 30px !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  background-color: #9055d3 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 5px !important;
 }
 
 .take-reservation-button:hover {
-  background-color: #7638bd;
+  background-color: #7638bd !important;
 }
 
 .uploaded-image {

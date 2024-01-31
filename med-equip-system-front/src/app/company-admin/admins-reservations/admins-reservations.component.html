@@ -2,7 +2,7 @@
   
     <mat-tab label="ALL">
         <div class="sort-container">
-            <label for="sort">Filter by:</label>
+            <label for="sort">Filter by status:</label>
                           <select id="sort" class="sort" [(ngModel)]="filterType" (change)="onFilterChange()">
                               <option value="ANY" selected>ANY</option>
                               <option value="TAKING_REQUESTED">TAKING REQUESTED</option>
@@ -33,8 +33,10 @@
                         </div>
                     </td>
                     <td>
-                        <tr>Status: {{ reservation.status  }}</tr>
-                        <tr><button class="take-reservation-button" *ngIf="reservation.status === 'TAKING_REQUESTED'" class="primary" type="button" (click)="giveReservation(reservation)">Give reserved equipment</button></tr>
+                        <div class="equipment-card">
+                            <p>Reservation status: {{ reservation.status  }}</p>
+                            <button class="take-reservation-button" *ngIf="reservation.status === 'TAKING_REQUESTED'" type="button" (click)="giveReservation(reservation)">Give reserved equipment</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>

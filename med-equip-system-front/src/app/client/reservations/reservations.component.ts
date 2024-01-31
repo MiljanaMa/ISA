@@ -16,6 +16,7 @@ export class ReservationsComponent implements OnInit {
   public reservedReservations: Reservation[] = [];
   public cancelledReservations: Reservation[] = [];
   public expiredReservations: Reservation[] = [];
+  public requestedTakingReservations: Reservation[] = []; 
   public qrCodes: QRCode[] = [];
   public filteredQrCodes: QRCode[] = [];
   public sortType: string = 'DATE';
@@ -49,6 +50,7 @@ export class ReservationsComponent implements OnInit {
         this.reservedReservations = this.userReservations.filter(r => r.status === 'RESERVED');
         this.cancelledReservations = this.userReservations.filter(r => r.status === 'CANCELLED');
         this.expiredReservations = this.userReservations.filter(r => r.status === 'EXPIRED');
+        this.requestedTakingReservations = this.userReservations.filter(r => r.status === 'TAKING_REQUESTED');
         this.onSortChange();
       });
   }

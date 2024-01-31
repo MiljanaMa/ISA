@@ -205,8 +205,8 @@ VALUES
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id)
 VALUES
-    (6, '2024-01-31', '16:00', '17:30', 1, 1),
-    (7, '2024-01-31', '16:00', '17:30', 1, 1),
+    (6, '2024-01-31', '16:00', '18:30', 1, 1),
+    (7, '2024-01-31', '16:00', '18:30', 1, 1),
     (8, '2024-01-30', '16:00', '16:30', 1, 1);
 
 -- Appointments created by Admin 4 and 5
