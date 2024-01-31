@@ -190,9 +190,9 @@ INSERT INTO public.company_admins(
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (1, '2023-12-20', '09:00', '10:30', 0, 1, 1),
-    (2, '2024-01-26', '13:00', '13:30', 0, 1, 1),
-    (3, '2023-12-20', '15:00', '15:30', 0, 1, 1);
+    (1, '2024-01-31', '09:00', '20:30', 0, 1, 1),
+    (2, '2024-01-31', '13:00', '20:30', 0, 1, 1),
+    (3, '2024-01-31', '15:00', '20:30', 0, 1, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
@@ -228,14 +228,14 @@ VALUES
 --Reservations
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (1, 2, 1, 3);
+VALUES (1, 0, 1, 4);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (2, 0, 2, 3);
+VALUES (2, 0, 2, 4);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
 VALUES
-    (3, 2, 3, 3);
+    (3, 0, 3, 4);
 --Reservation items
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
