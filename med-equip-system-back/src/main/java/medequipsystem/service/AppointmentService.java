@@ -28,6 +28,7 @@ public class AppointmentService {
     private CompanyAdminRepository adminRepository;
     private int duration = 30;
 
+    @Transactional(readOnly = false)
     public Set<Appointment> getByCompany(Long id) {
         return appointmentRepository.getByCompanyId(id);
     }
@@ -97,6 +98,7 @@ public class AppointmentService {
         return sortedSet;
     }
 
+    @Transactional(readOnly = false)
     public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime startTime) throws Exception {
         try {
             Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyId(company.getId());
