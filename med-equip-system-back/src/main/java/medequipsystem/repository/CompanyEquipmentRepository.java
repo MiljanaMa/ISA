@@ -14,9 +14,7 @@ import java.util.Set;
 
 @Repository
 public interface CompanyEquipmentRepository extends JpaRepository<CompanyEquipment, Long> {
-    //nemoj da citas prljave podatke dok neko azurira
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+
     public CompanyEquipment save(CompanyEquipment equipment);
 
 }

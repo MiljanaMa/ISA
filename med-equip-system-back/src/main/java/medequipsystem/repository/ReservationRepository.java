@@ -25,7 +25,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r WHERE r.status = 0")
     Set<Reservation> getReservationsInProgress();
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public Reservation save(Reservation reservation);
 }
