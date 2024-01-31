@@ -2,15 +2,15 @@ package medequipsystem.service;
 
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Company;
-import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.domain.CompanyAdmin;
 import medequipsystem.domain.enums.AppointmentStatus;
-import medequipsystem.dto.CustomAppointmentDTO;
+import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.repository.AppointmentRepository;
 import medequipsystem.repository.CompanyAdminRepository;
 import medequipsystem.util.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,19 +37,28 @@ public class AppointmentService {
         return appointmentOptional.orElse(null);
     }
 
-    public Appointment createAppointment(Appointment a) {
-        Set<Appointment> appointmentsForDate = appointmentRepository.getByDate(a.getDate());
-        Set<LocalTime> takenTimeSlots = generateTakenTimeSlots(appointmentsForDate);
-        Set<LocalTime> requiredTimeSlots = generateTimeSlotsInRange(a.getStartTime(), a.getEndTime());
-        requiredTimeSlots.retainAll(takenTimeSlots);
-        if (requiredTimeSlots.isEmpty() && inWorkingHours(a)
-                && a.getStartTime().isBefore(a.getEndTime())
-                && a.getDate().isAfter(LocalDate.now())
-                && (!a.getDate().equals(LocalDate.now()) || a.getStartTime().isBefore(LocalTime.now()))
-        ) {
-            return appointmentRepository.save(a);
+    @Transactional(readOnly = false) //kreiranje nove
+    public Appointment createAppointment(Appointment a) throws Exception {
+        try {
+            Set<Appointment> appointmentsForCompany = appointmentRepository.getByCompanyId(a.getCompanyAdmin().getCompany().getId());
+            Set<Appointment> appointmentsForDate = appointmentsForCompany.stream().filter(
+                    appointment -> appointment.getDate().equals(a.getDate())
+            ).collect(Collectors.toSet());
+
+            Set<LocalTime> takenTimeSlots = generateTakenTimeSlots(appointmentsForDate);
+            Set<LocalTime> requiredTimeSlots = generateTimeSlotsInRange(a.getStartTime(), a.getEndTime());
+            requiredTimeSlots.retainAll(takenTimeSlots);
+
+            if (requiredTimeSlots.isEmpty() && inWorkingHours(a)
+                    && a.getStartTime().isBefore(a.getEndTime())
+                    && a.getDate().isAfter(LocalDate.now())
+                    && (!a.getDate().equals(LocalDate.now()) || a.getStartTime().isBefore(LocalTime.now()))
+            )
+                return appointmentRepository.save(a);
+            return null;
+        } catch (Exception e) {
+            throw new Exception("Service is unable to save your appointment. Please try again.");
         }
-        return null;
     }
 
     public Set<Appointment> getCustomAppointments(Company company, LocalDate date) {
@@ -88,24 +97,31 @@ public class AppointmentService {
         return sortedSet;
     }
 
-    public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime startTime) {
-        Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyIdAndDate(company.getId(), date, AppointmentStatus.RESERVED);
-        TimeSlot timeSlot = new TimeSlot(startTime);
-        List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(reservedAppointments);
+    public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime startTime) throws Exception {
+        try {
+            Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyId(company.getId());
+            Set<Appointment> appointmentsForDate = reservedAppointments.stream().filter(
+                    appointment -> appointment.getDate().equals(date)).collect(Collectors.toSet());
+            TimeSlot timeSlot = new TimeSlot(startTime);
+            List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(reservedAppointments);
 
-        if (reservedAdminIds.isEmpty()) {
-            return company.getCompanyAdmins();
-        } else {
-            Set<Long> availableAdminIds = company.getCompanyAdmins().stream()
-                    .map(CompanyAdmin::getId)
-                    .filter(adminId -> !reservedAdminIds.contains(adminId))
-                    .collect(Collectors.toSet());
+            if (reservedAdminIds.isEmpty()) {
+                return company.getCompanyAdmins();
+            } else {
+                Set<Long> availableAdminIds = company.getCompanyAdmins().stream()
+                        .map(CompanyAdmin::getId)
+                        .filter(adminId -> !reservedAdminIds.contains(adminId))
+                        .collect(Collectors.toSet());
 
-            return company.getCompanyAdmins().stream()
-                    .filter(admin -> availableAdminIds.contains(admin.getId()))
-                    .collect(Collectors.toSet());
+                return company.getCompanyAdmins().stream()
+                        .filter(admin -> availableAdminIds.contains(admin.getId()))
+                        .collect(Collectors.toSet());
+            }
+        } catch (Exception e) {
+            throw new Exception("Appointment is not available anymore", e.getCause());
         }
     }
+
     public boolean inWorkingHours(Appointment a) {
         Company c = adminRepository.getById(a.getCompanyAdmin().getId()).getCompany();
 
@@ -145,7 +161,7 @@ public class AppointmentService {
         return appointmentRepository.getReservedAppointmentsByCompanyId(companyId);
     }
 
-    public Set<Appointment> getNotReservedAppointments(Long companyId){
+    public Set<Appointment> getNotReservedAppointments(Long companyId) {
         return appointmentRepository.getNotReservedAppointments(companyId);
     }
 }

@@ -1,17 +1,25 @@
 package medequipsystem.repository;
 
 import medequipsystem.domain.Appointment;
+import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.dto.ReservedAppointmentDTO;
 import medequipsystem.domain.enums.AppointmentStatus;
+import medequipsystem.service.AppointmentService;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.Set;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "10000")})
     @Query("SELECT a FROM Appointment a WHERE a.companyAdmin.id IN (SELECT ca.id FROM CompanyAdmin ca WHERE ca.company.id= ?1)")
     public Set<Appointment> getByCompanyId(Long id);
     @Query("SELECT a FROM Appointment a WHERE a.id = ?1 AND a.status =?2")
@@ -20,8 +28,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             + "AND a.date = ?2")
     public Set<Appointment> getByCompanyIdAndDate(Long id, LocalDate date, AppointmentStatus status);
 
+
+
     @Query("SELECT a FROM Appointment a WHERE a.date = ?1")
     public Set<Appointment> getByDate(LocalDate date);
+
 
     @Query("SELECT NEW medequipsystem.dto.ReservedAppointmentDTO(" +
             "a.date, a.startTime, a.endTime, cu.firstName, cu.lastName, cau.firstName, cau.lastName) " +
@@ -36,4 +47,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a LEFT JOIN Reservation r ON a.id = r.appointment.id WHERE r.id IS NULL AND a.companyAdmin.id IN (SELECT ca.id FROM CompanyAdmin ca WHERE ca.company.id = ?1)")
     public Set<Appointment> getNotReservedAppointments(Long id);
+
+    public Appointment save(Appointment appointment);
 }
