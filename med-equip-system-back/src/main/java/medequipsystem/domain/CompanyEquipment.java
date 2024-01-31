@@ -37,15 +37,13 @@ public class CompanyEquipment {
     private int count;
     @Column(name = "reservedCount", nullable = false)
     private int reservedCount;
-
-    /*@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipment_item_id", referencedColumnName = "id")
-    private CompanyEquipmentItem companyEquipmentItem;*/
+    @Version
+    private Integer version;
 
     public CompanyEquipment() {
     }
 
-    public CompanyEquipment(Long id, String name, EquipmentType type, String description, double price, Company company, int count, int reservedCount) {
+    public CompanyEquipment(Long id, String name, EquipmentType type, String description, double price, Company company, int count, int reservedCount, Integer version) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -54,6 +52,15 @@ public class CompanyEquipment {
         this.company = company;
         this.count = count;
         this.reservedCount = reservedCount;
+        this.version = version;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Long getId() {

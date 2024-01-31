@@ -188,33 +188,33 @@ INSERT INTO public.company_admins(
 
 -- Appointments created by Admin 1
 INSERT INTO public.appointments(
-    id, date, start_time, end_time, status, admin_id)
+    id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (1, '2023-12-20', '09:00', '10:30', 0, 2),
-    (2, '2024-01-26', '13:00', '13:30', 0, 2),
-    (3, '2023-12-20', '15:00', '15:30', 0, 1);
+    (1, '2023-12-20', '09:00', '10:30', 0, 1, 1),
+    (2, '2024-01-26', '13:00', '13:30', 0, 1, 1),
+    (3, '2023-12-20', '15:00', '15:30', 0, 1, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
-    id, date, start_time, end_time, status, admin_id)
+    id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (4, '2023-12-23', '09:00', '09:30', 1, 1),
-    (5, '2023-12-24', '12:00', '12:30', 1, 1);
+    (4, '2023-12-23', '09:00', '09:30', 1, 1, 1),
+    (5, '2023-12-24', '12:00', '12:30', 1, 1, 1);
 
 -- Appointments created by Admin 1
 INSERT INTO public.appointments(
-    id, date, start_time, end_time, status, admin_id)
+    id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (6, '2024-01-31', '16:00', '18:30', 1, 1),
-    (7, '2024-01-31', '16:00', '18:30', 1, 1),
-    (8, '2024-01-30', '16:00', '16:30', 1, 1);
+    (6, '2024-01-25', '11:00', '11:30', 1, 1, 1),
+    (7, '2024-01-26', '14:00', '14:30', 1, 1, 1),
+    (8, '2024-01-27', '16:00', '16:30', 1, 1, 1);
 
 -- Appointments created by Admin 4 and 5
 INSERT INTO public.appointments(
-    id, date, start_time, end_time, status, admin_id)
+    id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (9, '2024-11-28', '10:00', '10:30', 1, 1),
-    (10, '2024-11-29', '13:00', '13:30', 1, 1);
+    (9, '2024-11-28', '10:00', '10:30', 1, 1, 1),
+    (10, '2024-11-29', '13:00', '13:30', 1, 1, 1);
 
 
 --INSERT INTO public.reservations (id, status, client_id, appointment_id)
@@ -246,28 +246,3 @@ VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
 VALUES (3, 1, 1, 3, 345);
-
-
---anastasija, za rezervacije podaci za odbranu
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (4, 0, 6, 4); --reserved, ok
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (5, 0, 7, 4); --reserved, ok
-INSERT INTO public.reservations(
-    id, status, appointment_id, client_id)
-VALUES
-    (6, 0, 8, 4); --reserved, to be expired
-
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (4, 2, 1, 4, 500);
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (5, 5, 4, 5, 1200);
-INSERT INTO public.reservation_items(
-    id, count, equipment_id, reservation_id, price)
-VALUES (6, 1, 1, 6, 345);

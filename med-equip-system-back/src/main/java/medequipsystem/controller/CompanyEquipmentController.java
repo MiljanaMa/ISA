@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
@@ -34,11 +36,11 @@ public class CompanyEquipmentController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<CompanyEquipmentProfileDTO> create(@RequestBody Map<String, Object> request){
+    public ResponseEntity<CompanyEquipmentProfileDTO> create(@RequestBody Map<String, Object> request) {
 
         CompanyEquipmentProfileDTO companyEquipmentDTO = (CompanyEquipmentProfileDTO) new DtoUtils().convertToDto(request, new CompanyEquipmentProfileDTO());
         //objectMapper.convertValue(request.get("equipDto"), CompanyEquipmentProfileDTO.class);
-        CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class );
+        CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class);
 
         CompanyEquipment equipment = (CompanyEquipment) new DtoUtils().convertToEntity(new CompanyEquipment(), companyEquipmentDTO);
         Company company = (Company) new DtoUtils().convertToEntity(new Company(), companyDTO);
@@ -48,28 +50,31 @@ public class CompanyEquipmentController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Void> update(@RequestBody Map<String, Object> request){
+    public ResponseEntity<Void> update(@RequestBody Map<String, Object> request) {
         CompanyEquipmentProfileDTO companyEquipmentDTO = objectMapper.convertValue(request.get("equipDto"), CompanyEquipmentProfileDTO.class);
-        CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class );
+        CompanyProfileDTO companyDTO = objectMapper.convertValue(request.get("companyDto"), CompanyProfileDTO.class);
 
         CompanyEquipment equipment = (CompanyEquipment) new DtoUtils().convertToEntity(new CompanyEquipment(), companyEquipmentDTO);
-
-        Company company = (Company) new DtoUtils().convertToEntity(new Company(), companyDTO);
-        equipment.setCompany(company);
-        companyEquipmentService.update(equipment);
-        return new ResponseEntity<>(HttpStatus.OK);
-
-
+        try {
+            companyEquipmentService.update(equipment);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id){
-        CompanyEquipment equipment = companyEquipmentService.getById(id);
-        if(!companyEquipmentService.IsUnpicked(id)) {
-            equipment.setCompany(null);
-            companyEquipmentService.update(equipment);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        try {
+            CompanyEquipment equipment = companyEquipmentService.getById(id);
+            if (!companyEquipmentService.IsUnpicked(id)) {
+                equipment.setCompany(null);
+                companyEquipmentService.update(equipment);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

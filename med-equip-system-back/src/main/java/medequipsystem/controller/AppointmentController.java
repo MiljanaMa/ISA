@@ -1,5 +1,6 @@
 package medequipsystem.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import medequipsystem.domain.Appointment;
 import medequipsystem.domain.Company;
 import medequipsystem.dto.AppointmentDTO;
@@ -29,10 +30,15 @@ public class AppointmentController {
     CompanyService companyService;
     @PostMapping(value = "/create")
     public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        Appointment appointment = (Appointment) new DtoUtils().convertToEntity(new Appointment(), appointmentDTO);
-        Appointment result = appointmentService.createAppointment(appointment);
-        AppointmentDTO dto = (AppointmentDTO) new DtoUtils().convertToDto(result, new AppointmentDTO());
-        return new ResponseEntity<>(dto , HttpStatus.OK);
+        try{
+            Appointment appointment = (Appointment) new DtoUtils().convertToEntity(new Appointment(), appointmentDTO);
+            Appointment result = appointmentService.createAppointment(appointment);
+            AppointmentDTO dto = (AppointmentDTO) new DtoUtils().convertToDto(result, new AppointmentDTO());
+            return new ResponseEntity<>(dto , HttpStatus.OK);
+
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping(value = "/company/{id}")

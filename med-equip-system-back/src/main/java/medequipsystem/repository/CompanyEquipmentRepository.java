@@ -12,9 +12,8 @@ import javax.persistence.QueryHint;
 @Repository
 public interface CompanyEquipmentRepository extends JpaRepository<CompanyEquipment, Long> {
 
+    public CompanyEquipment save(CompanyEquipment equipment);
+
     Optional<CompanyEquipment> findFirstByName(String name);
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
-    CompanyEquipment save(CompanyEquipment equipment);
 
 }

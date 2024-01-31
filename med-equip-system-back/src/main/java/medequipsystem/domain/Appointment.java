@@ -34,6 +34,16 @@ public class Appointment {
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private CompanyAdmin companyAdmin;
 
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public Long getId() {
         return id;
