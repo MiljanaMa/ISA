@@ -39,6 +39,9 @@ public class ReservationController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private CompanyAdminService companyAdminService;
+
     //maybe change that client has only one id connected to user and doesnt have its own id(same for sysadmin, compadmin)
     @PostMapping(value = "/create/predefined")
     @PreAuthorize("hasAnyRole('CLIENT')")
@@ -91,6 +94,16 @@ public class ReservationController {
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getbyadmin")
+    @PreAuthorize("hasRole('COMPADMIN')")
+    public ResponseEntity<Set<ReservationDTO>> getReservationsByCompanyAdmin(Principal user){
+        Long userId = userService.getByEmail(user.getName()).getId();
+        Long adminId = companyAdminService.getByUserId(userId).getId();
+        Set<Reservation> reservations = reservationService.getReservationsByAdminId(adminId);
+        Set<ReservationDTO> reservationDTOS = (Set<ReservationDTO>) new DtoUtils().convertToDtos(reservations, new ReservationDTO());
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/qrCodes")
     @PreAuthorize("hasAnyRole('CLIENT')")
     public ResponseEntity<Set<QRCodeDTO>> getQRCodes(Principal user) {
@@ -103,12 +116,15 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/take")
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasRole('COMPADMIN')")
     public ResponseEntity<String> take(@RequestBody Long reservationId, Principal user) {
-        Long userId = userService.getByEmail(user.getName()).getId();
-        Long clientId = clientService.getByUserId(userId).getId();
-        Client client = this.clientService.getById(clientId);
+        Long adminId = userService.getByEmail(user.getName()).getId();
+        CompanyAdmin companyAdmin = companyAdminService.getByUserId(adminId);
         Reservation reservation = this.reservationService.getById(reservationId);
+        Client client = this.clientService.getById(reservation.getClient().getId());
+
+        if(reservation.getAppointment().getCompanyAdmin().getId() != adminId)
+            return ResponseEntity.badRequest().body("{\"message\": \"Not authorized.\"}");
 
         if (reservation.status != ReservationStatus.RESERVED)
             return ResponseEntity.ok().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
@@ -119,21 +135,21 @@ public class ReservationController {
             return ResponseEntity.ok().body("{\"message\": \"Your reservation has expired. You have received 2 penalty points.\"}");
         }
 
-        //  NAPOMENA za Prasku:
-
-        //  treba dodati negde da admin oznacava da je preuzeta oprema, verovatno da poziva ovu metodu,
-        // a da klijent kada zeli da preuzme opremu posalje neki zahtev za pruzimanje... Vidi kako ti odgovara, a ja cu na frontu
-        // za sada pozivati ovu metodu na frontu, pa ako budes pravio nesto preko zahteva javi da ispravim,
-        // ili promeni i moje, s obzirom da cemo pozivati iste metode
-
-        //  ova metoda radi sve vezano za opremu, pa je mozes pozvati kod sebe, samo eto vidi to za admina, jer mislim da bi on mozda
-        //  trebao da ovu poziva...
-
         this.reservationService.take(reservationId);
-        //TODO: posalji mejl
-        emailService.sendEquipmentPickupConfirmationMail(user.getName(), reservation);
+        emailService.sendEquipmentPickupConfirmationMail(client.getUser().getEmail(), reservation);
 
         return ResponseEntity.ok().body("{\"message\": \"You have successfully taken your reservation\"}");
+    }
+
+    @PostMapping(value = "/requesttaking")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<String> requestTaking(@RequestBody Long reservationId) {
+        Reservation reservation = this.reservationService.getById(reservationId);
+        if(this.reservationService.isReservationAppointmentWithinToday(reservation.getAppointment().getDate(), reservation.getAppointment().getStartTime(), reservation.getAppointment().getEndTime()))
+            return ResponseEntity.ok().body("{\"message\": \"Selected reservation's appointment is not within now.\"}");
+
+        this.reservationService.requestTaking(reservationId);
+        return ResponseEntity.ok().body("{\"message\": \"You have successfully send request for taking reserved equipment.\"}");
     }
 
     @PreAuthorize("hasRole('CLIENT')")

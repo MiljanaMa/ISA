@@ -206,9 +206,9 @@ export class ReservationsComponent implements OnInit {
   }
   
 
-  takeReservation(): void {
+  requestTakingQR(): void { //ova i sledeca nisu iste, ne brisi
     if (this.uploadedReservationId) {
-      this.clientService.takeReservation(this.uploadedReservationId).subscribe(
+      this.clientService.requestTaking(this.uploadedReservationId).subscribe(
         (data: { message: string }) => {
           console.log(data.message);
           alert(data.message);
@@ -218,6 +218,19 @@ export class ReservationsComponent implements OnInit {
         }
       );
     }
+  }
+
+  requestTaking(reservation: Reservation): void {  
+    this.clientService.requestTaking(reservation.id).subscribe(
+      (data: { message: string }) => {
+        console.log(data.message);
+        alert(data.message);
+      },
+      error => {
+        console.error('Error taking reservation:', error);
+      }
+    );
+    
   }
 
 }

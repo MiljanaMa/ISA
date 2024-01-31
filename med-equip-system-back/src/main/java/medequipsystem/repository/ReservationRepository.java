@@ -20,4 +20,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r WHERE r.status = 0")
     Set<Reservation> getReservationsInProgress();
+
+    @Query("SELECT r FROM Reservation r JOIN r.appointment a WHERE a.companyAdmin.id = ?1")
+    Set<Reservation> findReservationsByAdminId(Long adminId);
+
 }

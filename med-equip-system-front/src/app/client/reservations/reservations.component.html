@@ -59,6 +59,7 @@
                             <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
                         </div>
                     </td>
+                    <button class="take-reservation-button" *ngIf="reservation.status === 'RESERVED'" class="primary" type="button" (click)="requestTaking(reservation)">Request taking equipment</button>
                 </tr>
             </tbody>
         </table>
@@ -131,7 +132,7 @@
             </label>
           </div>
           <img *ngIf="uploadedImage" [src]="uploadedImage" alt="Uploaded QR Code" class="uploaded-image">
-          <button class="take-reservation-button" *ngIf="uploadedReservationId" (click)="takeReservation()">Take Reservation</button>
+          <button class="take-reservation-button" *ngIf="uploadedReservationId" (click)="requestTakingQR()">Request taking</button>
         </div>
       </mat-tab>
       

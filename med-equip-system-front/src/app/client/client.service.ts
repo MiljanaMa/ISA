@@ -60,8 +60,8 @@ export class ClientService {
     return this.http.post(environment.apiHost +`reservations/uploadQRCode`, formData, { headers });
   }
 
-  takeReservation(reservationId: number): Observable<any> {
-    return this.http.post(environment.apiHost +`reservations/take`, reservationId );
+  requestTaking(reservationId: number): Observable<any> {
+    return this.http.post(environment.apiHost +`reservations/requesttaking`, reservationId );
   }
   
 }

@@ -107,6 +107,17 @@ public class ReservationService {
                 .collect(Collectors.toSet());
         return userReservations;
     }
+
+    public Set<Reservation> getReservationsByAdminId(Long adminId){
+        return reservationRepository.findReservationsByAdminId(adminId);
+    }
+
+    public void requestTaking(Long reservationId){
+        Reservation reservation = getById(reservationId);
+        reservation.setStatus(ReservationStatus.TAKING_REQUESTED);
+        this.reservationRepository.save(reservation);
+    }
+
     //potentionally move this to utils
     public byte[] generateQRCode(String qrData) {
         try {
@@ -166,6 +177,13 @@ public class ReservationService {
         LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
         LocalDateTime currentDateTime = LocalDateTime.now();
         return currentDateTime.isAfter(appointmentDateTime);
+    }
+
+    public boolean isReservationAppointmentWithinToday(LocalDate appointmentDate, LocalTime appointmentStartTime, LocalTime appointmentEndTime) {
+        LocalDateTime appointmentStartDateTime = LocalDateTime.of(appointmentDate, appointmentStartTime);
+        LocalDateTime appointmentEndDateTime = LocalDateTime.of(appointmentDate, appointmentEndTime);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return !currentDateTime.isBefore(appointmentStartDateTime) && !currentDateTime.isAfter(appointmentEndDateTime);
     }
 
     public void updateStatus(Reservation reservation, ReservationStatus status){
