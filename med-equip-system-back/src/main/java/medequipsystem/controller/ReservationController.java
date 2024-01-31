@@ -123,11 +123,11 @@ public class ReservationController {
         Reservation reservation = this.reservationService.getById(reservationId);
         Client client = this.clientService.getById(reservation.getClient().getId());
 
-        if(reservation.getAppointment().getCompanyAdmin().getId() != adminId)
-            return ResponseEntity.badRequest().body("{\"message\": \"Not authorized.\"}");
+       // if(reservation.getAppointment().getCompanyAdmin().getId() != adminId)
+         //   return ResponseEntity.badRequest().body("{\"message\": \"Not authorized.\"}");
 
-        if (reservation.status != ReservationStatus.RESERVED)
-            return ResponseEntity.ok().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
+        //if (reservation.status != ReservationStatus.TAKING_REQUESTED)
+        //    return ResponseEntity.ok().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
 
         if (this.reservationService.isReservationExpired(reservation.getAppointment().getDate(), reservation.getAppointment().getEndTime())) {
             this.reservationService.updateStatus(reservation, ReservationStatus.EXPIRED);
@@ -145,8 +145,16 @@ public class ReservationController {
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<String> requestTaking(@RequestBody Long reservationId) {
         Reservation reservation = this.reservationService.getById(reservationId);
-        if(this.reservationService.isReservationAppointmentWithinToday(reservation.getAppointment().getDate(), reservation.getAppointment().getStartTime(), reservation.getAppointment().getEndTime()))
+        Client client = this.clientService.getById(reservation.getClient().getId());
+        if (this.reservationService.isReservationExpired(reservation.getAppointment().getDate(), reservation.getAppointment().getEndTime())) {
+            this.reservationService.updateStatus(reservation, ReservationStatus.EXPIRED);
+            this.clientService.penalizeExpiration(client, 2);
+            return ResponseEntity.ok().body("{\"message\": \"Your reservation has expired. You have received 2 penalty points.\"}");
+        }
+
+        if(!this.reservationService.isReservationAppointmentWithinToday(reservation.getAppointment().getDate(), reservation.getAppointment().getStartTime(), reservation.getAppointment().getEndTime()))
             return ResponseEntity.ok().body("{\"message\": \"Selected reservation's appointment is not within now.\"}");
+
 
         this.reservationService.requestTaking(reservationId);
         return ResponseEntity.ok().body("{\"message\": \"You have successfully send request for taking reserved equipment.\"}");

@@ -15,7 +15,6 @@
         <table>
             <tbody>
                 <tr *ngFor="let reservation of filteredReservations">
-                    <p>Status: {{ reservation.status  }}</p>
                     <td *ngFor="let item of reservation.reservationItems">
                         <div class="equipment-card">
                             <h3>{{ item.equipment.name }}</h3>
@@ -33,7 +32,10 @@
                             <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
                         </div>
                     </td>
-                    <button class="take-reservation-button" *ngIf="reservation.status === 'TAKING_REQUESTED'" class="primary" type="button" (click)="giveReservation(reservation)">Give reserved equipment</button>
+                    <td>
+                        <tr>Status: {{ reservation.status  }}</tr>
+                        <tr><button class="take-reservation-button" *ngIf="reservation.status === 'TAKING_REQUESTED'" class="primary" type="button" (click)="giveReservation(reservation)">Give reserved equipment</button></tr>
+                    </td>
                 </tr>
             </tbody>
         </table>

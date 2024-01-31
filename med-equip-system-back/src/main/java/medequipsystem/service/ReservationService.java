@@ -183,7 +183,7 @@ public class ReservationService {
         LocalDateTime appointmentStartDateTime = LocalDateTime.of(appointmentDate, appointmentStartTime);
         LocalDateTime appointmentEndDateTime = LocalDateTime.of(appointmentDate, appointmentEndTime);
         LocalDateTime currentDateTime = LocalDateTime.now();
-        return !currentDateTime.isBefore(appointmentStartDateTime) && !currentDateTime.isAfter(appointmentEndDateTime);
+        return currentDateTime.isAfter(appointmentStartDateTime) && currentDateTime.isBefore(appointmentEndDateTime);
     }
 
     public void updateStatus(Reservation reservation, ReservationStatus status){
