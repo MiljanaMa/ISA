@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -47,6 +48,11 @@ public class CompanyEquipmentService {
             throw new Exception("Equipment is changed try again.");
         }
     }
+
+    public Optional<CompanyEquipment> getByName(String name){
+        return this.companyEquipmentRepository.findFirstByName(name);
+    }
+
 
     public CompanyEquipment getById(long id) {
         return this.companyEquipmentRepository.getById(id);

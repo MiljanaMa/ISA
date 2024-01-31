@@ -2,6 +2,7 @@ package medequipsystem.controller;
 import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyAdminRegistrationDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
+import medequipsystem.rabbitmqcoordinates.SignalSenderService;
 import medequipsystem.repository.RoleRepository;
 import org.apache.coyote.Response;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,8 +38,6 @@ public class CompanyAdminController {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<CompanyAdminRegistrationDTO>> getAll() {

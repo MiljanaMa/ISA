@@ -5,16 +5,16 @@ export interface ReservationCreation {
     reservationItems: ReservationItem[];
     appointment: Appointment
 }
-export interface CustomReservation {
-    reservationItems: ReservationItem[];
-    //appointment: CustomAppointment;
-    appointment: Appointment;
-    companyId: number;
-}
 export interface ReservationItem {
     id: number;
     count: number;
     equipment: CompanyEquipmentProfile;
     price: number;
+}
+export interface CustomReservation {
+    reservationItems: ReservationItem[];
+    //appointment: CustomAppointment;
+    appointment: Appointment;
+    companyId: number;
 }
 
