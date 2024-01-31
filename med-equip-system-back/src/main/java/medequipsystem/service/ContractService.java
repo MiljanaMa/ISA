@@ -5,7 +5,11 @@ import medequipsystem.domain.Contract;
 import medequipsystem.domain.enums.ContractStatus;
 import medequipsystem.rabbitmq.ContractSenderService;
 import medequipsystem.repository.ContractRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,9 @@ public class ContractService {
     @Autowired
     ContractSenderService senderService;
 
+    private final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
+
+
     public Contract create(Contract contract) {
         return this.contractRepository.save(contract);
     }
@@ -34,12 +41,26 @@ public class ContractService {
         return this.contractRepository.findFirstByHospitalAndStatus(hospital, status);
     }
 
+    @Cacheable("contract")
+    public Contract getById(Long id){
+        LOG.info("Contract with id: " + id + " successfully cached.");
+        return this.contractRepository.findById(id).orElse(null);
+    }
+
+    @CacheEvict(cacheNames = {"contract"}, allEntries = true)
+    public void removeAllFromCache(){
+        LOG.info("Contracts removed from cache.");
+    }
+
+    @CacheEvict(cacheNames = "contract", key = "#contractId")
+    public void removeFromCache(Long contractId){LOG.info("Contract with ID {} remove from cache.", contractId);}
 
     public Contract cancelContract(Long id) {
         Contract contract = contractRepository.findById(id).get();
         contract.setStatus(ContractStatus.CANCELLED);
         Contract cancelledContract = this.contractRepository.save(contract);
         senderService.cancel(cancelledContract.getId());
+        removeFromCache(id);
         return cancelledContract;
     }
     public Contract invalidateContract(Long id) {
@@ -47,6 +68,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.INVALID);
         Contract invalidContract = this.contractRepository.save(contract);
         senderService.invalidate(invalidContract.getId());
+        removeFromCache(id);
         return invalidContract;
     }
 
@@ -56,6 +78,7 @@ public class ContractService {
             c.setStatus(ContractStatus.ACTIVE);
             contractRepository.save(c);
             senderService.start(c.getId());
+            removeFromCache(c.getId());
         }
     }
 
@@ -65,10 +88,12 @@ public class ContractService {
             c.setStatus(ContractStatus.INACTIVE);
             contractRepository.save(c);
             senderService.finish(c.getId());
+            removeFromCache(c.getId());
         }
         for (Contract c : contractRepository.getByDateAndStatus(LocalDate.now().getDayOfMonth(), ContractStatus.CANCELLED)) {
             c.setStatus(ContractStatus.INACTIVE);
             contractRepository.save(c);
+            removeFromCache(c.getId());
         }
     }
 
@@ -79,6 +104,7 @@ public class ContractService {
                 c.setStatus(ContractStatus.CANCELLED);
                 contractRepository.save(c);
                 senderService.cancel(c.getId());
+                removeFromCache(c.getId());
             }
 
         }

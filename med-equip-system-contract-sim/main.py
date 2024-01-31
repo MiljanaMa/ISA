@@ -134,7 +134,7 @@ connection2 = pika.BlockingConnection(
 )
 channel = connection.channel()
 
-channel.queue_declare(queue = 'contract')
+channel.queue_declare(queue = 'contract', durable = True)
 callback_queue = channel.queue_declare(queue = '', exclusive=True).method.queue 
 
 

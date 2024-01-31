@@ -100,13 +100,14 @@ public class ContractReceiverService {
 
                     Contract savedContract = contractService.create(contract);
 
+
                     response = Long.toString(savedContract.getId());
 
 
                     if (contractDTO.getId() == null) {
                         System.out.println("[x] Sending id: " + response);
-
-
+                    }else{
+                        contractService.removeFromCache(savedContract.getId());
                     }
                 } else {
                     response = "Not enough equipment";
