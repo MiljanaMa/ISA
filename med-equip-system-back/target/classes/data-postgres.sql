@@ -114,7 +114,7 @@ VALUES
 INSERT INTO public.users(
     id, city, country, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, role_id)
 VALUES
-    (5, 'Tokyo', 'Japan', 'anastasijanov2323@gmail.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23232323', 3);
+    (5, 'Tokyo', 'Japan', 'anastano@email.com', true, 'Anastasija', 'Novakovic', '2023-12-12 19:10:25-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '23232323', 3);
 
 -- User 6 - system admin
 INSERT INTO public.users(
@@ -190,9 +190,9 @@ INSERT INTO public.company_admins(
 INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id, version)
 VALUES
-    (1, '2024-01-31', '09:00', '20:30', 0, 1, 1),
-    (2, '2024-01-31', '13:00', '20:30', 0, 1, 1),
-    (3, '2024-01-31', '15:00', '20:30', 0, 1, 1);
+    (1, '2023-12-20', '09:00', '10:30', 0, 1, 1),
+    (2, '2024-01-26', '13:00', '13:30', 0, 1, 1),
+    (3, '2023-12-20', '15:00', '15:30', 0, 1, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
@@ -228,14 +228,14 @@ VALUES
 --Reservations
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (1, 0, 1, 4);
+VALUES (1, 2, 1, 3);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
-VALUES (2, 0, 2, 4);
+VALUES (2, 0, 2, 3);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
 VALUES
-    (3, 0, 3, 4);
+    (3, 2, 3, 3);
 --Reservation items
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)

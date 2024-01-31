@@ -1,5 +1,7 @@
 package medequipsystem.service;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import medequipsystem.domain.*;
 import medequipsystem.dto.CompanyAdminDTO;
 import medequipsystem.dto.CompanyAdminRegistrationDTO;
@@ -8,6 +10,8 @@ import medequipsystem.dto.CompanyEquipmentDTO;
 import medequipsystem.repository.CompanyAdminRepository;
 import medequipsystem.repository.CompanyRepository;
 import medequipsystem.repository.LocationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +35,18 @@ public class CompanyService {
     @Autowired
     private LocationRepository locationRepository;
 
-
+    private final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
     public Optional<Company> getByName(String name){return this.companyRepository.findFirstByName(name);}
+
+    @RateLimiter(name = "companiesLimiter", fallbackMethod = "companiesLimiterFallback")
     public List<Company> getAll() {
         return this.companyRepository.findAll();
     }
 
+    public List<Company> companiesLimiterFallback(RequestNotPermitted rnp){
+        LOG.warn("Too many requests");
+        throw rnp;
+    }
     public Company createOrUpdate(Company company) {
         return companyRepository.save(company);
     }
