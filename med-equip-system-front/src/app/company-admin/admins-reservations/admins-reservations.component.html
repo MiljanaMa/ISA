@@ -39,35 +39,6 @@
                 </tr>
             </tbody>
         </table>
-    </mat-tab>
-  
-    <!--mat-tab label="TAKEN">     bolje napravi sort
-        <table>
-            <tbody>
-                <tr *ngFor="let reservation of takenReservations">
-                    <td *ngFor="let item of reservation.reservationItems">
-                        <div class="equipment-card">
-                            <h3>{{ item.equipment.name }}</h3>
-                            <p>Type: {{ item.equipment.type }}</p>
-                            <p>Price: {{ item.equipment.price }}</p>
-                            <p>Description: {{ item.equipment.description }}</p>
-                            <p>Reserved count: {{ item.count }}</p>
-                            <p>Total price: {{ item.price }}</p>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="equipment-card">
-                            <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
-                            <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
-                            <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </mat-tab-->
-   
-
-      
+    </mat-tab>  
 
   </mat-tab-group>
