@@ -8,6 +8,7 @@ import medequipsystem.dto.ReservationDTO;
 import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.CompanyAdminService;
 import medequipsystem.service.ContractService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -50,5 +52,24 @@ public class ContractController {
         }catch(Exception e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<FullContractDTO> findContract(@PathVariable Long id)  {
+        try {
+            Contract c = contractService.getById(id);
+            FullContractDTO contractDTO = (FullContractDTO) new DtoUtils().convertToDto(c, new FullContractDTO());
+            return new ResponseEntity<>(contractDTO, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @GetMapping(value = "/removeCache")
+    public ResponseEntity<String> removeFromCache(){
+        contractService.removeAllFromCache();
+        return ResponseEntity.ok("Contracts removed from cache");
     }
 }

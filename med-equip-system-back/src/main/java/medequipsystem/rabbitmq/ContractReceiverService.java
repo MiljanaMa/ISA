@@ -98,15 +98,14 @@ public class ContractReceiverService {
                     contract.setCompany(company.get());
                     contract.setTime(LocalTime.of(12, 0, 0, 0));
 
-                    Contract savedContract = contractService.create(contract);
+                    Contract savedContract = contractService.updateContractCache(contract);
+
 
                     response = Long.toString(savedContract.getId());
 
 
                     if (contractDTO.getId() == null) {
                         System.out.println("[x] Sending id: " + response);
-
-
                     }
                 } else {
                     response = "Not enough equipment";
