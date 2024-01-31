@@ -4,6 +4,7 @@ import { Client } from "./client.model";
 
 export interface Reservation {
 
+    id: number;
     reservationItems: ReservationItem[];
     appointment: Appointment;
     client: Client;
@@ -19,6 +20,7 @@ export enum ReservationStatus {
     CANCELLED = 'CANCELLED',
     TAKEN = 'TAKEN',
     EXPIRED = 'EXPIRED',
+    TAKING_REQUESTED = 'TAKING_REQUESTED'
   }
 
 

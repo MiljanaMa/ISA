@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CompanyAdmin } from '../model/companyAdmin.model';
 import { FormsModule } from '@angular/forms';
+import { CurrentUser } from 'src/app/auth/model/current-user.model';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,11 @@ export class HomeComponent implements OnInit {
   public inputSearch: string = '';
   public sortType: string = 'NAME';
   public orderType: string = 'DESC';
+  public companyAdmin: CompanyAdmin | undefined;
+  public adminsCompanyId: number = 0;
+  public isCompanyAdmin: boolean = false;
+  public currentUser: CurrentUser | undefined;
+
 
 
   constructor(private layoutService: LayoutService, private router: Router, private authService: AuthService) { }
@@ -26,6 +32,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCompanies();
+    this.getCurrentUser();
 
     this.authService.getCurrentUser().subscribe(
       (data) => {
@@ -38,7 +45,8 @@ export class HomeComponent implements OnInit {
               
             (data) => {
               this.loggedUser = data; 
-              
+              this.isCompanyAdmin = true;
+              this.getCompanyAdmin(user.id);
             
             }, 
             error => {
@@ -73,6 +81,7 @@ export class HomeComponent implements OnInit {
         this.companies = data;
         this.filteredCompanies = data;
         this.onSortChange();
+        this.filterCompaniesByRole();
       }
     });
   }
@@ -90,6 +99,7 @@ export class HomeComponent implements OnInit {
     this.selectedRating = 0;
     this.inputSearch = '';
     this.filteredCompanies = this.companies;
+    this.filterCompaniesByRole();
   }
   onSortChange(): void {
     if(this.sortType === 'NAME' && this.orderType === 'ASC')
@@ -109,6 +119,45 @@ export class HomeComponent implements OnInit {
   viewCompanyProfile(companyId: number): void {
    
     this.router.navigate(['/company-profile', companyId]);
+  }
+
+  filterCompaniesByRole(): void {
+    if (this.isCompanyAdmin) {
+      this.filteredCompanies = this.filteredCompanies.filter(
+        company => company.id === this.adminsCompanyId
+      );
+    }
+  }
+
+  getCompanyAdmin(userId: number): void {
+    this.authService.getCompanyAdminByUserId(userId).subscribe({
+      next: (companyAdmin) => {
+        console.log('company admin whole:' , companyAdmin);
+        this.companyAdmin = companyAdmin;
+        console.log("this.companyAdmin: ", this.companyAdmin);
+          
+        this.adminsCompanyId = companyAdmin.companyId || 0;        
+        this.getAllCompanies();
+
+      },
+      error: (error) => {
+        console.error('Error fetching company admin:', error);
+      }
+    });
+  }
+
+  getCurrentUser(): void{
+    this.authService.currentUser.subscribe((user) => {
+      if (user) {
+        console.log("User(navbar): ", user.email, " Role: ", user.role?.name);
+        this.currentUser = user;
+  
+        if (user.role?.name === 'ROLE_COMPADMIN') {
+          this.isCompanyAdmin = true;
+          this.getCompanyAdmin(user.id);
+        }
+      }
+    });
   }
 
 }

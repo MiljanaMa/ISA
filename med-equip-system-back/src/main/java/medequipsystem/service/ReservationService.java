@@ -104,6 +104,16 @@ public class ReservationService {
         return userReservations;
     }
 
+    public Set<Reservation> getReservationsByAdminId(Long adminId){
+        return reservationRepository.findReservationsByAdminId(adminId);
+    }
+
+    public void requestTaking(Long reservationId) {
+        Reservation reservation = getById(reservationId);
+        reservation.setStatus(ReservationStatus.TAKING_REQUESTED);
+        this.reservationRepository.save(reservation);
+    }
+
     public Set<ReservationItem> getEquipmentForReservation(Set<ReservationItem> reservationItems) {
         //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
         CompanyEquipment ce;
@@ -181,7 +191,14 @@ public class ReservationService {
         return currentDateTime.isAfter(appointmentDateTime);
     }
 
-    public void updateStatus(Reservation reservation, ReservationStatus status) {
+    public boolean isReservationAppointmentWithinToday(LocalDate appointmentDate, LocalTime appointmentStartTime, LocalTime appointmentEndTime) {
+        LocalDateTime appointmentStartDateTime = LocalDateTime.of(appointmentDate, appointmentStartTime);
+        LocalDateTime appointmentEndDateTime = LocalDateTime.of(appointmentDate, appointmentEndTime);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return currentDateTime.isAfter(appointmentStartDateTime) && currentDateTime.isBefore(appointmentEndDateTime);
+    }
+
+    public void updateStatus(Reservation reservation, ReservationStatus status){
         reservation.setStatus(status);
         this.reservationRepository.save(reservation);
     }

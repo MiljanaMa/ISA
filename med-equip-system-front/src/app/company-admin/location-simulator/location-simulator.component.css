@@ -1,21 +1,21 @@
 .primary {
-    background-color: #007bff;
-    /* Replace with your desired primary color */
-    color: #fff;
-    /* Text color */
-    border: none;
-    padding: 10px 20px;
-    /* Adjust padding as needed */
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin: 10px;
-  }
+  background-color: #7125c9;
+  /* Replace with your desired primary color */
+  color: #fff;
+  /* Text color */
+  border: none;
+  padding: 10px 20px;
+  /* Adjust padding as needed */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 10px;
+}
 
-  .center {
-    flex-direction: column;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-  }
+.center {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}

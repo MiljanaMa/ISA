@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { LocationSimulatorComponent } from './location-simulator/location-simulator.component';
 import { SimulatorMapComponent } from './simulator-map/simulator-map.component';
 import { ContractsComponent } from './contracts/contracts.component';
+import { AdminsReservationsComponent } from './admins-reservations/admins-reservations.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({
@@ -21,7 +23,8 @@ import { ContractsComponent } from './contracts/contracts.component';
     CompanyWorkCalendarComponent,
     LocationSimulatorComponent,
     SimulatorMapComponent,
-    ContractsComponent
+    ContractsComponent,
+    AdminsReservationsComponent
 
   ],
   imports: [
@@ -36,6 +39,7 @@ import { ContractsComponent } from './contracts/contracts.component';
     MatFormFieldModule,
     MatInputModule, 
     MatButtonModule,
+    MatTabsModule
     
   ]
 })

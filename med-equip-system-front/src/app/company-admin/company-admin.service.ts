@@ -7,6 +7,7 @@ import { CurrentUser } from '../auth/model/current-user.model';
 import { environment } from 'src/env/environment';
 import { CompanyAdmin } from '../layout/model/companyAdmin.model';
 import { Contract } from './model/contract.model';
+import { Reservation } from '../client/model/reservation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,13 @@ export class CompanyAdminService {
   }
   cancelContract(contract: Contract): Observable<Contract>{ 
     return this.http.post<Contract>(environment.apiHost +`contracts/cancel`, contract);
+  }
+
+  giveReservation(reservationId: number): Observable<any> {
+    return this.http.post(environment.apiHost +`reservations/take`, reservationId );
+  }
+
+  getAdminsReservations(): Observable<Reservation[]>{
+    return this.http.get<Reservation[]>(environment.apiHost +`reservations/getbyadmin`)
   }
 }
