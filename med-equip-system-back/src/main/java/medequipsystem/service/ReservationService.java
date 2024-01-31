@@ -15,6 +15,7 @@ import medequipsystem.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,7 +74,7 @@ public class ReservationService {
         return reservationRepository.getReservationsInProgress();
     }
 
-    //@Transactional(readOnly = false)
+    @Transactional(readOnly = false)
     public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws Exception {
         try {
             Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
@@ -205,7 +206,7 @@ public class ReservationService {
         reservation.setStatus(status);
         this.reservationRepository.save(reservation);
     }
-
+    @Transactional(readOnly = false)
     public void take(Long reservationId) {
         Reservation reservation = getById(reservationId);
         CompanyEquipment ce;

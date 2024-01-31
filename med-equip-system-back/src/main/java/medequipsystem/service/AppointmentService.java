@@ -98,14 +98,14 @@ public class AppointmentService {
         return sortedSet;
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public Set<CompanyAdmin> isCustomAppoinmentAvailable(Company company, LocalDate date, LocalTime startTime) throws Exception {
         try {
             Set<Appointment> reservedAppointments = appointmentRepository.getByCompanyId(company.getId());
             Set<Appointment> appointmentsForDate = reservedAppointments.stream().filter(
                     appointment -> appointment.getDate().equals(date)).collect(Collectors.toSet());
             TimeSlot timeSlot = new TimeSlot(startTime);
-            List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(reservedAppointments);
+            List<Long> reservedAdminIds = timeSlot.isTimeSlotReserved(appointmentsForDate);
 
             if (reservedAdminIds.isEmpty()) {
                 return company.getCompanyAdmins();
@@ -120,7 +120,7 @@ public class AppointmentService {
                         .collect(Collectors.toSet());
             }
         } catch (Exception e) {
-            throw new Exception("Appointment is not available anymore", e.getCause());
+            throw new Exception(e.getMessage(), e.getCause());
         }
     }
 
