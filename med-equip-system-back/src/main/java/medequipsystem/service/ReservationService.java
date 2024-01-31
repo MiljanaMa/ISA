@@ -42,23 +42,23 @@ public class ReservationService {
 
 
     @Transactional(readOnly = false)
-    public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws ObjectOptimisticLockingFailureException {
+    public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws ObjectOptimisticLockingFailureException, Exception {
         try {
             Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
             if (availableAppointment == null)
-                new Exception("Appointment is reserved");
+                throw new Exception("Appointment is reserved");
             Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
             if (updatedItems == null)
-                new Exception("Not enough equipment in storage");
+                throw new Exception("Not enough equipment in storage");
             availableAppointment.setStatus(AppointmentStatus.RESERVED);
             //odmah po referenci azurira
             Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, availableAppointment, updatedItems);
-            //da li spring sam odradi update, ako odradi i za equipment
-            //appointmentRepository.save(availableAppointment);
 
             return reservationRepository.save(reservation);
         } catch (ObjectOptimisticLockingFailureException e) {
             throw new ObjectOptimisticLockingFailureException("Appointment is not available anymore", e.getCause());
+        } catch(Exception e){
+            throw new Exception("Ooops problem", e.getCause());
         }
     }
 
@@ -73,16 +73,16 @@ public class ReservationService {
         return reservationRepository.getReservationsInProgress();
     }
 
-    @Transactional(readOnly = false)
+    //@Transactional(readOnly = false)
     public Reservation createCustom(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws Exception {
         try {
             Set<ReservationItem> updatedItems = getEquipmentForReservation(reservationItems);
             if (updatedItems == null)
-                new Exception("Not enough equipment in storage");
+                throw new Exception("Not enough equipment in storage");
             Company company = updatedItems.stream().findFirst().get().getEquipment().getCompany();
             Set<CompanyAdmin> availableAdmins = appointmentService.isCustomAppoinmentAvailable(company, appointment.getDate(), appointment.getStartTime());
             if (availableAdmins.isEmpty())
-                new Exception("Appointment is not available anymore");
+                throw new Exception("Appointment is not available anymore");
             Appointment newAppointment = new Appointment(0L, appointment.getDate(), appointment.getStartTime(), appointment.getEndTime(), AppointmentStatus.RESERVED, availableAdmins.stream().findFirst().get());
             Appointment savedAppointment = appointmentRepository.save(newAppointment);
             Reservation reservation = new Reservation(0L, ReservationStatus.RESERVED, client, savedAppointment, updatedItems);
@@ -118,9 +118,12 @@ public class ReservationService {
         //dok ja provjeravam neko vrslja po bazi, ali version rijesi taj problem
         CompanyEquipment ce;
         Set<ReservationItem> updatedItems = new HashSet<>();
+
         for (ReservationItem ri : reservationItems) {
             //exception not handeled
-            ce = equipmentRepository.getReferenceById(ri.getEquipment().getId());
+            ce = equipmentRepository.getById(ri.getEquipment().getId());
+            if(ce == null)
+                return null;
             if (ri.getCount() > (ce.getCount() - ce.getReservedCount()))
                 return null;
             ce.setReservedCount(ce.getReservedCount() + ri.getCount());

@@ -45,36 +45,36 @@ INSERT INTO public.loyalty_programs(
 VALUES (5, 15, 'GOLD', 0, 400);
 
 --Company equipments
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 3);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (3, 8, 'Cutting-edge laboratory equipment', 'LabTech 2000', 8000.00, 2, 3, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (4, 12, 'High-tech surgical instruments', 'SurgiMate X', 10000.00, 3, 1, 5);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (5, 7, 'Versatile medical equipment', 'MediPro', 6000.00, 4, 3, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (6, 500, 'Disposable Syringes', 'SyringeMaster 500', 2.50, 4, 1, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (7, 1000, 'Sterile Needles', 'NeedleSafe Pro', 1.50, 4, 2, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (8, 2000, 'Medical Cotton', 'CottonComfort', 0.75, 4, 3, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (9, 50, 'First Aid Kits', 'SafetyKit Plus', 15.00, 4, 1, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (10, 20, 'Digital Thermometers', 'ThermoTech Pro', 25.00, 4, 3, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (11, 30, 'Bandages', 'HealBand Pro', 5.00, 4, 1, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (12, 15, 'Gauze Pads', 'GauzeGuard', 3.00, 4, 2, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (13, 10, 'Medical Scissors', 'ScissorTech', 8.00, 4, 3, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (14, 40, 'Pain Relievers', 'PainAway', 7.00, 4, 1, 0);
-INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count)
-VALUES (15, 25, 'Hand Sanitizers', 'SafeHands', 3.50, 4, 3, 0);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 3, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (3, 8, 'Cutting-edge laboratory equipment', 'LabTech 2000', 8000.00, 2, 3, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (4, 12, 'High-tech surgical instruments', 'SurgiMate X', 10000.00, 3, 1, 5, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (5, 7, 'Versatile medical equipment', 'MediPro', 6000.00, 4, 3, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (6, 500, 'Disposable Syringes', 'SyringeMaster 500', 2.50, 4, 1, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (7, 1000, 'Sterile Needles', 'NeedleSafe Pro', 1.50, 4, 2, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (8, 2000, 'Medical Cotton', 'CottonComfort', 0.75, 4, 3, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (9, 50, 'First Aid Kits', 'SafetyKit Plus', 15.00, 4, 1, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (10, 20, 'Digital Thermometers', 'ThermoTech Pro', 25.00, 4, 3, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (11, 30, 'Bandages', 'HealBand Pro', 5.00, 4, 1, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (12, 15, 'Gauze Pads', 'GauzeGuard', 3.00, 4, 2, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (13, 10, 'Medical Scissors', 'ScissorTech', 8.00, 4, 3, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (14, 40, 'Pain Relievers', 'PainAway', 7.00, 4, 1, 0, 1);
+INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
+VALUES (15, 25, 'Hand Sanitizers', 'SafeHands', 3.50, 4, 3, 0, 1);
 
 --Roles
 INSERT INTO public.roles(id, name)
