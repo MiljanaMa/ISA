@@ -49,7 +49,6 @@
                             <p>Description: {{ item.equipment.description }}</p>
                             <p>Reserved count: {{ item.count }}</p>
                             <p>Total price: {{ item.price }}</p>
-                            <button class="primary" type="button" (click)="cancel(reservation)">CANCEL</button>
                         </div>
                     </td>
                     <td>
@@ -57,7 +56,9 @@
                             <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
                             <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
                             <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                            <button class="primary" type="button" (click)="cancel(reservation)">CANCEL</button>
                         </div>
+                       
                     </td>
                     <td>
                         <div class="equipment-card">

@@ -28,4 +28,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r JOIN r.appointment a WHERE a.companyAdmin.id = ?1")
     Set<Reservation> findReservationsByAdminId(Long adminId);
 
+    Reservation findByAppointmentIdAndClientId(Long appointmentId, Long clientId);
+
 }

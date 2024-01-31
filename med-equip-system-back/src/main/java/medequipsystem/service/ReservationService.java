@@ -45,6 +45,9 @@ public class ReservationService {
     @Transactional(readOnly = false)
     public Reservation createPredefined(Appointment appointment, Set<ReservationItem> reservationItems, Client client) throws ObjectOptimisticLockingFailureException, Exception {
         try {
+            if(reservationRepository.findByAppointmentIdAndClientId(appointment.getId(), client.getId()) != null){
+                throw new Exception("You've already tried to reserve this appointment.");
+            }
             Appointment availableAppointment = appointmentRepository.getAvailableById(appointment.getId(), AppointmentStatus.AVAILABLE);
             if (availableAppointment == null)
                 throw new Exception("Appointment is reserved");
@@ -59,7 +62,7 @@ public class ReservationService {
         } catch (ObjectOptimisticLockingFailureException e) {
             throw new ObjectOptimisticLockingFailureException("Appointment is not available anymore", e.getCause());
         } catch(Exception e){
-            throw new Exception("Ooops problem", e.getCause());
+            throw new Exception("Ooops problem (You've already tried to reserve this appointment or there is not enough equipment in storage.) ", e.getCause());
         }
     }
 
