@@ -8,6 +8,7 @@ import { environment } from 'src/env/environment';
 import { CompanyAdmin } from '../layout/model/companyAdmin.model';
 import { Contract } from './model/contract.model';
 import { Reservation } from '../client/model/reservation.model';
+import { Client } from '../client/model/client.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,9 @@ export class CompanyAdminService {
 
   getAdminsReservations(): Observable<Reservation[]>{
     return this.http.get<Reservation[]>(environment.apiHost +`reservations/getbyadmin`)
+  }
+
+  getUsersThatReserved(id: number): Observable<Client[]>{
+    return this.http.get<Client[]>(environment.apiHost+ `clients/byAdmin/`+id)
   }
 }

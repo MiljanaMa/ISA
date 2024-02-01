@@ -16,6 +16,7 @@ import { SimulatorMapComponent } from './simulator-map/simulator-map.component';
 import { ContractsComponent } from './contracts/contracts.component';
 import { AdminsReservationsComponent } from './admins-reservations/admins-reservations.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     LocationSimulatorComponent,
     SimulatorMapComponent,
     ContractsComponent,
-    AdminsReservationsComponent
+    AdminsReservationsComponent,
+    UserReservationsComponent
 
   ],
   imports: [

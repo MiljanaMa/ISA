@@ -10,6 +10,7 @@ import { CompanyAdminCreationComponent } from './company-admin-creation/company-
 import { CompanyMapComponent } from './map/map.component';
 import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { EquipmentSearchComponent } from './equipment-search/equipment-search.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { EquipmentSearchComponent } from './equipment-search/equipment-search.co
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSliderModule
+    MatSliderModule, 
+    RouterModule
   ],
   exports: [
     NavbarComponent,

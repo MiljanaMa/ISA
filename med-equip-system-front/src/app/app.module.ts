@@ -17,6 +17,7 @@ import { ScheduleModule, DayService, WeekService, MonthService } from '@syncfusi
 import { MatTabsModule } from '@angular/material/tabs';
 
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
     FullCalendarModule,
     ScheduleModule,
     MatTabsModule,
+    RouterModule
 
     
 

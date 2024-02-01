@@ -3,8 +3,11 @@ package medequipsystem.controller;
 import medequipsystem.domain.Client;
 import medequipsystem.domain.LoyaltyProgram;
 import medequipsystem.dto.ClientDTO;
+import medequipsystem.dto.CompanyDTO;
 import medequipsystem.dto.PasswordChangeDTO;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.*;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.comments.CommentLine;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -63,6 +69,13 @@ public class ClientController {
         if(client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
+    }
+
+    @GetMapping("/byAdmin/{id}")
+    public ResponseEntity<Set<ClientDTO>> getByAdmin(@PathVariable Long id){
+        Set<Client> clients = clientService.getByAdminId(id);
+        Set<ClientDTO> clientsDTO = clients.stream().map(ClientDTO::new).collect(Collectors.toSet());;
+        return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('CLIENT')")
