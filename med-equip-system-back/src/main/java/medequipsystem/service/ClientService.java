@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ClientService {
@@ -46,6 +47,10 @@ public class ClientService {
     public boolean hasPermissionToReserve(Long userId) {
         Client client = this.clientRepository.findByUserId(userId);
         return client.getPenaltyPoints() < 3;
+    }
+
+    public Set<Client> getByAdminId(Long id){
+        return this.clientRepository.findClientsByAdminId(id);
     }
 
     public Client getLogged(Principal loggedUser) {

@@ -21,7 +21,10 @@
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a href="/location-simulator">Location simulator</a></li>
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a href="/contracts">Contracts</a></li>
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a href="/adminsreservations">Reservations</a></li>
-      
+      <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a href="/company-profile-admin/{{companyId}}">Company profile</a></li>
+      <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_COMPADMIN'"><a [routerLink]="['/user-reservations', adminId]">Users that reserved</a></li>
+         
+
       <!--Clients-->
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_CLIENT'"><a href="/profile">Profile</a></li>
       <li *ngIf="currentUser && currentUser.role?.name === 'ROLE_CLIENT'"><a href="/reservations">Reservations</a></li>

@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CurrentUser } from 'src/app/auth/model/current-user.model';
 import { SystemAdmin } from 'src/app/system-admin/model/system-admin.model';
 import { ChangePasswordComponent } from 'src/app/system-admin/change-password/change-password.component';
+import { LayoutService } from '../layout.service';
+import { CompanyAdmin } from '../model/companyAdmin.model';
 
 
 
@@ -19,8 +21,10 @@ export class NavbarComponent implements OnInit{
   public systemAdmin: SystemAdmin | undefined;
   public isMainAdmin: boolean = false;
   public isInitPasswordChanged: boolean = false;
+  public companyId: Number|undefined; 
+  public adminId: Number|undefined; 
 
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(private authService: AuthService, private router: Router, private layoutService: LayoutService){}
 
   async ngOnInit(): Promise<void> {
     if (window.localStorage.getItem('jwt')) {
@@ -34,6 +38,12 @@ export class NavbarComponent implements OnInit{
   
         if (user.role?.name === 'ROLE_SYSADMIN') {
           this.getSystemAdmin(user.id);
+        }
+        else if(user.role?.name === 'ROLE_COMPADMIN'){
+          this.layoutService.getAdminOkByUserId(user.id).subscribe((response) => {
+            this.companyId = response.company.id;  
+            this.adminId = response.id; 
+          })
         }
       }
     });
