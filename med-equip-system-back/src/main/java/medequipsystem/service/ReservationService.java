@@ -12,6 +12,7 @@ import medequipsystem.domain.enums.ReservationStatus;
 import medequipsystem.repository.AppointmentRepository;
 import medequipsystem.repository.CompanyEquipmentRepository;
 import medequipsystem.repository.ReservationRepository;
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,8 @@ public class ReservationService {
             return reservationRepository.save(reservation);
         } catch (ObjectOptimisticLockingFailureException e) {
             throw new ObjectOptimisticLockingFailureException("Appointment is not available anymore", e.getCause());
+        } catch(OptimisticEntityLockException e){
+            throw new OptimisticEntityLockException("Da li radi", e.getMessage());
         } catch(Exception e){
             throw new Exception("Ooops problem (You've already tried to reserve this appointment or there is not enough equipment in storage.) ", e.getCause());
         }
@@ -210,18 +213,24 @@ public class ReservationService {
         this.reservationRepository.save(reservation);
     }
     @Transactional(readOnly = false)
-    public void take(Long reservationId) {
-        Reservation reservation = getById(reservationId);
-        CompanyEquipment ce;
-        for (ReservationItem ri : reservation.getReservationItems()) {
-            ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());
-            ;
-            ce.setReservedCount(ce.getReservedCount() - ri.getCount()); //oduzmi sa stanja rezervisanih
-            ce.setCount(ce.getCount() - ri.getCount()); //oduzmi sa stanja dostupnih
-            this.equipmentRepository.save(ce);
+    public void take(Long reservationId) throws Exception {
+        try{
+            Reservation reservation = getById(reservationId);
+            CompanyEquipment ce;
+            for (ReservationItem ri : reservation.getReservationItems()) {
+                ce = this.equipmentRepository.getReferenceById(ri.getEquipment().getId());
+                ;
+                ce.setReservedCount(ce.getReservedCount() - ri.getCount()); //oduzmi sa stanja rezervisanih
+                ce.setCount(ce.getCount() - ri.getCount()); //oduzmi sa stanja dostupnih
+                this.equipmentRepository.save(ce);
+            }
+            reservation.setStatus(ReservationStatus.TAKEN);
+            this.reservationRepository.save(reservation);
+
         }
-        reservation.setStatus(ReservationStatus.TAKEN);
-        this.reservationRepository.save(reservation);
+        catch(Exception e){
+            throw new Exception("Equipment is changed!");
+        }
     }
 
     public String processQRCode(MultipartFile file) {

@@ -11,7 +11,7 @@ status_mapping = {
     "start": Status.ACTIVE, 
     "invalid": Status.INVALID,
     "cancel": Status.CANCELLED,
-    "finish": Status.FINISH,
+    "finish": Status.INACTIVE
 }
 
 class Contract:

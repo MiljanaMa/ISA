@@ -29,8 +29,13 @@ public class AppointmentService {
     private int duration = 30;
 
     @Transactional(readOnly = false)
-    public Set<Appointment> getByCompany(Long id) {
-        return appointmentRepository.getByCompanyId(id);
+    public Set<Appointment> getByCompany(Long id) throws Exception {
+        try{
+            return appointmentRepository.getByCompanyId(id);
+        }
+        catch(Exception e){
+            throw new Exception("Appointment is changed");
+        }
     }
 
     public Appointment getById(Long id) {

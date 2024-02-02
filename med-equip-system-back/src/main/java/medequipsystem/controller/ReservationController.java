@@ -117,17 +117,11 @@ public class ReservationController {
 
     @PostMapping(value = "/take")
     @PreAuthorize("hasRole('COMPADMIN')")
-    public ResponseEntity<String> take(@RequestBody Long reservationId, Principal user) {
+    public ResponseEntity<String> take(@RequestBody Long reservationId, Principal user) throws Exception {
         Long adminId = userService.getByEmail(user.getName()).getId();
         CompanyAdmin companyAdmin = companyAdminService.getByUserId(adminId);
         Reservation reservation = this.reservationService.getById(reservationId);
         Client client = this.clientService.getById(reservation.getClient().getId());
-
-       // if(reservation.getAppointment().getCompanyAdmin().getId() != adminId)
-         //   return ResponseEntity.badRequest().body("{\"message\": \"Not authorized.\"}");
-
-        //if (reservation.status != ReservationStatus.TAKING_REQUESTED)
-        //    return ResponseEntity.ok().body("{\"message\": \"Selected reservation's status is not RESERVED.\"}");
 
         if (this.reservationService.isReservationExpired(reservation.getAppointment().getDate(), reservation.getAppointment().getEndTime())) {
             this.reservationService.updateStatus(reservation, ReservationStatus.EXPIRED);

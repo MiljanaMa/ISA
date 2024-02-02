@@ -53,16 +53,16 @@ public class ClientService {
         return this.clientRepository.findClientsByAdminId(id);
     }
 
-    public Client getLogged(Principal loggedUser) {
+    public Client getLogged(Principal loggedUser) throws Exception {
         User user = userRepository.findByEmail(loggedUser.getName());
         if (user == null)
-            new Exception("User not found");
+            throw new Exception("User not found");
 
         Client client = this.clientRepository.findByUserId(user.getId());
         if (client == null)
-            new Exception("Client not found");
+           throw  new Exception("Client not found");
         else if(client.getPenaltyPoints() > 3)
-            new Exception("You are not allowed, because of penalty points");
+            throw new Exception("You are not allowed, because of penalty points");
         return client;
     }
 

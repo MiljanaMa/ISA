@@ -42,7 +42,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/company/{id}")
-    public ResponseEntity<Set<AppointmentDTO>> getAppointmentsForCompany(@PathVariable Long id){
+    public ResponseEntity<Set<AppointmentDTO>> getAppointmentsForCompany(@PathVariable Long id) throws Exception {
         Set<Appointment> appointments = appointmentService.getByCompany(id);
         Set<AppointmentDTO> appointmentDTOS = (Set<AppointmentDTO>) new DtoUtils().convertToDtos(appointments, new AppointmentDTO());
 

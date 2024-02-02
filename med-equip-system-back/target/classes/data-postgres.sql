@@ -46,7 +46,7 @@ VALUES (5, 15, 'GOLD', 0, 400);
 
 --Company equipments
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
-VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 3, 1);
+VALUES (1, 10, 'Advanced diagnostic equipment', 'DiagnosX', 5000.00, 0, 1, 2, 1);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
 VALUES (2, 5, 'Life support systems for critical care', 'LifeGuard Pro', 12000.00, 1, 2, 0, 1);
 INSERT INTO public.company_equipments (id, count, description, name, price, type, company_id, reserved_count, version)
@@ -191,8 +191,8 @@ INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id, version)
 VALUES
     (1, '2023-12-20', '09:00', '10:30', 0, 1, 1),
-    (2, '2024-01-26', '13:00', '13:30', 0, 1, 1),
-    (3, '2023-12-20', '15:00', '15:30', 0, 1, 1);
+    (2, '2024-02-02', '10:00', '13:30', 0, 1, 1),
+    (3, '2024-02-02', '10:30', '23:30', 0, 1, 1);
 
 -- Appointments created by Admin 2
 INSERT INTO public.appointments(
@@ -214,7 +214,9 @@ INSERT INTO public.appointments(
     id, date, start_time, end_time, status, admin_id, version)
 VALUES
     (9, '2024-11-28', '10:00', '10:30', 1, 1, 1),
-    (10, '2024-11-29', '13:00', '13:30', 1, 1, 1);
+    (10, '2024-11-29', '13:00', '13:30', 1, 1, 1),
+    (11, '2023-10-29', '13:00', '13:30', 1, 1, 1),
+    (12, '2024-02-26', '13:00', '13:30', 1, 1, 1);
 
 
 --INSERT INTO public.reservations (id, status, client_id, appointment_id)
@@ -235,7 +237,15 @@ VALUES (2, 0, 2, 3);
 INSERT INTO public.reservations(
     id, status, appointment_id, client_id)
 VALUES
-    (3, 2, 3, 3);
+    (3, 0, 3, 3);
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES
+    (4, 2, 11, 3);
+INSERT INTO public.reservations(
+    id, status, appointment_id, client_id)
+VALUES
+    (5, 0, 12, 1);
 --Reservation items
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
@@ -246,3 +256,9 @@ VALUES (2, 5, 4, 2, 1200);
 INSERT INTO public.reservation_items(
     id, count, equipment_id, reservation_id, price)
 VALUES (3, 1, 1, 3, 345);
+INSERT INTO public.reservation_items(
+    id, count, equipment_id, reservation_id, price)
+VALUES (4, 1, 1, 4, 5000);
+INSERT INTO public.reservation_items(
+    id, count, equipment_id, reservation_id, price)
+VALUES (5, 1, 1, 5, 5000);

@@ -143,8 +143,10 @@ export class ReservationsComponent implements OnInit {
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'RESERVED');
     else if(this.filterType === 'EXPIRED')
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'EXPIRED');
-    else
+    else if(this.filterType === 'CANCELLED')
       this.filteredQrCodes = this.qrCodes.filter( q => q.status === 'CANCELLED');
+    else
+      this.filteredQrCodes = this.qrCodes.filter(q => q.status === 'TAKING_REQUESTED');
   }
 
 

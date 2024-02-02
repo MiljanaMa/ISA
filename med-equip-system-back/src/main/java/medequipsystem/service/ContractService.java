@@ -80,7 +80,7 @@ public class ContractService {
 
     }
 
-    @Scheduled(cron = "0 25 0 * * ?")
+    @Scheduled(cron = "0 6 11 * * ?")
     public void startDelivery() {
         for (Contract c : contractRepository.getByDateAndStatus(LocalDate.now().getDayOfMonth(), ContractStatus.INACTIVE)) {
             c.setStatus(ContractStatus.ACTIVE);
@@ -89,7 +89,7 @@ public class ContractService {
         }
     }
 
-    @Scheduled(cron = "40 25 0 * * ?")
+    @Scheduled(cron = "30 6 11 * * ?")
     public void endDelivery() {
         for (Contract c : contractRepository.getByDateAndStatus(LocalDate.now().getDayOfMonth(), ContractStatus.ACTIVE)) {
             c.setStatus(ContractStatus.INACTIVE);

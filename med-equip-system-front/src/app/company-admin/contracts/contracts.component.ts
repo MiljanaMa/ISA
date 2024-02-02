@@ -28,6 +28,7 @@ export class ContractsComponent implements OnInit {
       (data: Contract) => {
         contract = data;
         alert("Delivery is cancelled for this month");
+        this.getContracts();
       });
   }
   formatTime(time: any): String {

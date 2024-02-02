@@ -7,13 +7,14 @@ def callback_update(ch, method, properties, body):
     global contract_added_event 
   
     contract_added_event.wait()
+    
     contract = next((c for c in contracts if c.id == int(body)),None)
     contract.status = status_mapping[method.routing_key]
     inbox.append(["[x] Status of contract ID: "+str(int(body)) +" changed to " + status_mapping[method.routing_key].name, False])
+    
+    
     if not input_mode:
         refresh_display()
-    
-    contract_added_event.clear()
     
 
 def add_contract(auto = False):
@@ -29,7 +30,7 @@ def add_contract(auto = False):
         hospital = input("Enter hospital: ")
     else: 
         id = None 
-        date = '27'
+        date = '2'
         time = '12:12'
         equipment = 'SafetyKit Plus'
         total = 5 

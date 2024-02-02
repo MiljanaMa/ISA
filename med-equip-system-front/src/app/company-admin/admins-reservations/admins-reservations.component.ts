@@ -79,6 +79,7 @@ export class AdminsReservationsComponent implements OnInit {
     this.companyAdminService.giveReservation(reservation.id).subscribe(
       (data: { message: string }) => {
         console.log(data.message);
+        this.getAdminsReservations();
         alert(data.message);
       },
       error => {

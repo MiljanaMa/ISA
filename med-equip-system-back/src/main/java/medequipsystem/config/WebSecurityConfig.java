@@ -86,7 +86,6 @@ public class WebSecurityConfig {
                                         .antMatchers(HttpMethod.GET, "/api/companies/all")
                                         .antMatchers(HttpMethod.GET, "/api/companies/{id}")
                                         .antMatchers(HttpMethod.GET, "/api/startsending")
-
                 .antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico",
                         "/**/*.html", "/**/*.css", "/**/*.js");
 
