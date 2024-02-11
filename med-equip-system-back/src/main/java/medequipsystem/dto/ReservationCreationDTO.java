@@ -1,9 +1,11 @@
 package medequipsystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
+
 import java.util.Set;
 
-public class ReservationCreationDTO {
+public class ReservationCreationDTO implements DTOEntity {
         @JsonProperty("appointment")
         private AppointmentDTO appointment;
 

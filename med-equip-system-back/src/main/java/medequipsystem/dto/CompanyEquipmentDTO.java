@@ -3,12 +3,13 @@ package medequipsystem.dto;
 import medequipsystem.domain.Company;
 import medequipsystem.domain.CompanyEquipment;
 import medequipsystem.domain.enums.EquipmentType;
+import medequipsystem.mapper.MapperUtils.DTOEntity;
 import medequipsystem.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-public class CompanyEquipmentDTO {
+public class CompanyEquipmentDTO implements DTOEntity {
     private Long id;
     private String name;
     private EquipmentType type;
@@ -16,11 +17,12 @@ public class CompanyEquipmentDTO {
     private double price;
     private CompanyDTO company;
     private int count;
+    private int reservedCount;
 
     public CompanyEquipmentDTO() {
     }
 
-    public CompanyEquipmentDTO(Long id, String name, EquipmentType type, String description, double price, CompanyDTO company, int count) {
+    public CompanyEquipmentDTO(Long id, String name, EquipmentType type, String description, double price, CompanyDTO company, int count, int reservedCount) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -28,10 +30,10 @@ public class CompanyEquipmentDTO {
         this.price = price;
         this.company = company;
         this.count = count;
+        this.reservedCount = reservedCount;
     }
 
-    //@Autowired
-   // private CompanyRepository companyRepository;
+
     public CompanyEquipmentDTO(CompanyEquipment companyEquipment) {
         this.id = companyEquipment.getId();
         this.name = companyEquipment.getName();
@@ -46,6 +48,15 @@ public class CompanyEquipmentDTO {
 
         //this.company = companyEquipment.getCompany() != null ? new CompanyDTO(companyEquipment.getCompany()) : null;
         this.count = companyEquipment.getCount();
+        this.reservedCount = companyEquipment.getReservedCount();
+    }
+
+    public int getReservedCount() {
+        return reservedCount;
+    }
+
+    public void setReservedCount(int reservedCount) {
+        this.reservedCount = reservedCount;
     }
 
     public Long getId() {
@@ -114,6 +125,7 @@ public class CompanyEquipmentDTO {
         companyEquipment.setDescription(this.getDescription());
         companyEquipment.setPrice(this.getPrice());
         companyEquipment.setCount(this.getCount());
+        companyEquipment.setReservedCount(this.getReservedCount());
 
         if (this.getCompany() != null) {
             companyEquipment.setCompany(company);

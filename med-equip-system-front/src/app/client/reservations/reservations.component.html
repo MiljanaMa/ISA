@@ -1,0 +1,159 @@
+<mat-tab-group mat-vertical>
+    <mat-tab label="TAKEN">
+        <div class="sort-container">
+            <label for="sort">Sort by:</label>
+                          <select id="sort" class="sort" [(ngModel)]="sortType" (change)="onSortChange()">
+                              <option value="DATE" selected>DATE</option>
+                              <option value="PRICE">PRICE</option>
+                              <option value="DURATION">DURATION</option>
+                          </select>
+                          <select id="order" class="sort" [(ngModel)]="orderType" (change)="onSortChange()">
+                            <option value="DESC" selected>DESC</option>
+                            <option value="ASC">ASC</option>
+                        </select>
+          </div>
+        <table>
+            <tbody>
+                <tr *ngFor="let reservation of takenReservations">
+                    <td *ngFor="let item of reservation.reservationItems">
+                        <div class="equipment-card">
+                            <h3>{{ item.equipment.name }}</h3>
+                            <p>Type: {{ item.equipment.type }}</p>
+                            <p>Price: {{ item.equipment.price }}</p>
+                            <p>Description: {{ item.equipment.description }}</p>
+                            <p>Reserved count: {{ item.count }}</p>
+                            <p>Total price: {{ item.price }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="equipment-card">
+                            <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
+                            <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
+                            <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+  
+    <mat-tab label="RESERVED">
+        <table>
+            <tbody>
+                <tr *ngFor="let reservation of reservedReservations">
+                    <td *ngFor="let item of reservation.reservationItems">
+                        <div class="equipment-card">
+                            <h3>{{ item.equipment.name }}</h3>
+                            <p>Type: {{ item.equipment.type }}</p>
+                            <p>Price: {{ item.equipment.price }}</p>
+                            <p>Description: {{ item.equipment.description }}</p>
+                            <p>Reserved count: {{ item.count }}</p>
+                            <p>Total price: {{ item.price }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="equipment-card">
+                            <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
+                            <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
+                            <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                            <button class="primary" type="button" (click)="cancel(reservation)">CANCEL</button>
+                        </div>
+                       
+                    </td>
+                    <td>
+                        <div class="equipment-card">
+
+                            <button class="take-reservation-button" *ngIf="reservation.status === 'RESERVED'" type="button" (click)="requestTaking(reservation)">Request taking equipment</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+
+    <mat-tab label="REQUESTED TAKING">
+        <table>
+            <tbody>
+                <tr *ngFor="let reservation of requestedTakingReservations">
+                    <td *ngFor="let item of reservation.reservationItems">
+                        <div class="equipment-card">
+                            <h3>{{ item.equipment.name }}</h3>
+                            <p>Type: {{ item.equipment.type }}</p>
+                            <p>Price: {{ item.equipment.price }}</p>
+                            <p>Description: {{ item.equipment.description }}</p>
+                            <p>Reserved count: {{ item.count }}</p>
+                            <p>Total price: {{ item.price }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="equipment-card">
+                            <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
+                            <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
+                            <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+      
+    <mat-tab label="CANCELLED">
+        <table>
+            <tbody>
+                <tr *ngFor="let reservation of cancelledReservations">
+                    <td *ngFor="let item of reservation.reservationItems">
+                        <div class="equipment-card">
+                            <h3>{{ item.equipment.name }}</h3>
+                            <p>Type: {{ item.equipment.type }}</p>
+                            <p>Price: {{ item.equipment.price }}</p>
+                            <p>Description: {{ item.equipment.description }}</p>
+                            <p>Reserved count: {{ item.count }}</p>
+                            <p>Price: {{ item.price }}</p>
+                            <p>Total price: {{ item.price }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="equipment-card">
+                            <p>Date: {{ formatDate(reservation.appointment.date)  }}</p>
+                            <p>Starte time: {{ formatTime(reservation.appointment.startTime)  }}</p>
+                            <p>End time: {{ formatTime(reservation.appointment.endTime)  }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+  
+    <mat-tab label="QR CODE">
+        <div class="sort-container">
+            <label for="sort">Filter by:</label>
+                          <select id="sort" class="sort" [(ngModel)]="filterType" (change)="onFilterChange()">
+                              <option value="ANY" selected>ANY</option>
+                              <option value="TAKEN">TAKEN</option>
+                              <option value="CANCELLED">CANCELLED</option>
+                              <option value="RESERVED">RESERVED</option>
+                              <option value="EXPIRED">EXPIRED</option>
+                              <option value="TAKING_REQUESTED">TAKING REQUESTED</option>
+                          </select>
+          </div>
+        <div *ngFor="let qrCode of filteredQrCodes">
+            <img [src]="getQRCodeDataURL(qrCode)" alt="QR Code">
+          </div>
+    </mat-tab>
+
+    <mat-tab label="TAKE RESERVATION">
+        <div class="take-reservation-container">
+          <p class="take-reservation-message">Upload QR code to take reservation.</p>
+          <div class="upload-container">
+            <label for="qrCodeFile" class="custom-file-upload">
+              <input type="file" id="qrCodeFile" accept="image/*" (change)="onFileChange($event)">
+              Upload QR Code
+            </label>
+          </div>
+          <img *ngIf="uploadedImage" [src]="uploadedImage" alt="Uploaded QR Code" class="uploaded-image">
+          <button class="take-reservation-button" *ngIf="uploadedReservationId" (click)="requestTakingQR()">Request taking</button>
+        </div>
+      </mat-tab>
+      
+
+  </mat-tab-group>

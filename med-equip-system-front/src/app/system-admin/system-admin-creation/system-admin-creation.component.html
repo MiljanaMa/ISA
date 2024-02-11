@@ -1,0 +1,58 @@
+<div class="center">
+    <form [formGroup] = "adminForm" (ngSubmit)="register()" class="custom-form">
+        <h1>Create system admin</h1>
+        <table class="form-table">
+            <tr>
+                <td><label>Email: </label></td>
+                <td>
+                    <input type="email" formControlName="email" required/>             
+                </td>
+    
+            </tr>
+        
+            <tr>
+                <td><label>Password: </label></td>
+                <td><input type="password" formControlName="password" [type]="hide ? 'password' : 'text'" required/></td>
+                <td><mat-icon class="placeholder" (click)="isPasswordVisible()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon></td>
+            </tr>
+        
+            <tr>
+                <td><label>Password check: </label></td>
+                <td><input type="password" formControlName="passwordCheck" [type]="hideCheck ? 'password' : 'text'" required/></td>
+                <td><mat-icon class="placeholder" (click)="isPasswordCheckVisible()">{{hideCheck ? 'visibility_off' : 'visibility'}}</mat-icon></td>
+            </tr>
+        
+            <tr>
+                <td><label>First name: </label></td>
+                <td><input type="text" formControlName="firstName" required/></td>
+            </tr>
+        
+            <tr>
+                <td><label>Last name: </label></td>
+                <td><input type="text" formControlName="lastName" required/></td>
+            </tr>
+        
+            <tr>
+                <td><label>City: </label></td>
+                <td><input type="text" formControlName="city" required/></td>
+            </tr>
+        
+            <tr>
+                <td><label>Country: </label></td>
+                <td><input type="text" formControlName="country" required/></td>
+            </tr>
+        
+            <tr>
+                <td><label>Phone number: </label></td>
+                <td><input type="text" formControlName="phoneNumber" required/></td>
+            </tr>
+    
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                  <input type="submit" style="background-color: rgb(61, 61, 150); color: white;" value="SUBMIT" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+    

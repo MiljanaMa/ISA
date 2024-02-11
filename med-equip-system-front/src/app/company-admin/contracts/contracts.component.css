@@ -1,0 +1,38 @@
+.contract-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.contract-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.contract-card h3 {
+  margin-bottom: 5px;
+  color: #7149b1;
+  font-weight: bold;
+}
+
+.contract-card p {
+  margin: 0;
+  color: #3d3b3b;
+}
+.primary {
+  background-color: #7125c9;
+  /* Replace with your desired primary color */
+  color: #fff;
+  /* Text color */
+  border: none;
+  padding: 10px 20px;
+  /* Adjust padding as needed */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}

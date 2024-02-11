@@ -3,7 +3,11 @@ package medequipsystem.controller;
 import medequipsystem.domain.Client;
 import medequipsystem.domain.LoyaltyProgram;
 import medequipsystem.dto.ClientDTO;
+import medequipsystem.dto.CompanyDTO;
+import medequipsystem.dto.PasswordChangeDTO;
+import medequipsystem.mapper.MapperUtils.DtoUtils;
 import medequipsystem.service.*;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.comments.CommentLine;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -64,15 +71,21 @@ public class ClientController {
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
     }
 
+    @GetMapping("/byAdmin/{id}")
+    public ResponseEntity<Set<ClientDTO>> getByAdmin(@PathVariable Long id){
+        Set<Client> clients = clientService.getByAdminId(id);
+        Set<ClientDTO> clientsDTO = clients.stream().map(ClientDTO::new).collect(Collectors.toSet());;
+        return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/updatePassword")
-    // password is now hash value, checking the old password on the frontend doesn't make any sense
-    // now it works just when hash is entered as an old password on frontend, change this
-    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PLAKYYYYYYYYYYYYYYYYYYYYYYYY
-    // something wrong when password changes - it goes craazyy
-    public ResponseEntity<ClientDTO> updatePassword(@RequestBody String password, Principal user) {
+    public ResponseEntity<ClientDTO> updatePassword(@RequestBody PasswordChangeDTO passwords, Principal user) {
         Long userId = userService.getByEmail(user.getName()).getId();
-        Client client = clientService.updatePassword(userId, password);
+        boolean isOldPasswordCorrect = clientService.checkPassword(userId, passwords.getOldPassword());
+        if(!isOldPasswordCorrect)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Client client = clientService.updatePassword(userId, passwords.getNewPassword());
         if(client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -96,8 +109,8 @@ ADD THIS SHIT
                 "<html>" +
                 "<body>" +
                 "<p>You have succesfully confirmed your email address and activated your account.</p>" +
-                "<p>Here is the link to your profile: </p>" +
-                "<a href= \"http://localhost:4200/profile/" + userId + "\">Go to Profile</a>" +
+                "<p>Here is the link to login page: </p>" +
+                "<a href= \"http://localhost:4200/login" + userId + "\">Go to Login</a>" +
                 "</body>" +
                 "</html>";
     }

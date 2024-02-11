@@ -66,6 +66,7 @@ public class WebSecurityConfig {
         http.authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/foo").permitAll()
+                .antMatchers("/socket/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils,  userDetailsService()), BasicAuthenticationFilter.class);
@@ -80,9 +81,11 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
 
         return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login")
-                                         .antMatchers(HttpMethod.POST, "/api/auth/register")
+                                        .antMatchers(HttpMethod.POST, "/api/auth/register")
+                                        .antMatchers(HttpMethod.GET, "/api/auth/confirm")
                                         .antMatchers(HttpMethod.GET, "/api/companies/all")
-
+                                        .antMatchers(HttpMethod.GET, "/api/companies/{id}")
+                                        .antMatchers(HttpMethod.GET, "/api/startsending")
                 .antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico",
                         "/**/*.html", "/**/*.css", "/**/*.js");
 

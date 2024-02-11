@@ -27,9 +27,6 @@ public class Client {
     @Column(name = "points", nullable = true)
     private int points;
 
-    @Column(name = "email_confirmed", nullable = false)
-    private boolean emailConfirmed;
-
     public Client(){}
 
     public Long getId() {
@@ -79,14 +76,4 @@ public class Client {
     public void setPoints(int points) {
         this.points = points;
     }
-
-    public boolean isEmailConfirmed() {
-        return emailConfirmed;
-    }
-
-    public void setEmailConfirmed(boolean emailConfirmed) {
-        this.emailConfirmed = emailConfirmed;
-    }
-
-
 }

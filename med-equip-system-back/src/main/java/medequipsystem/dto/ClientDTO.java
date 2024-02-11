@@ -1,7 +1,6 @@
 package medequipsystem.dto;
 
 import medequipsystem.domain.Client;
-import medequipsystem.domain.Role;
 
 public class ClientDTO {
 

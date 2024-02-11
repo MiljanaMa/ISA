@@ -1,7 +1,7 @@
 import { CompanyAdmin } from './companyAdmin.model';
 import { Location } from './location.model';
-import { CompanyEquipment } from '../../feature-modules/company/model/companyEquipment.model';
-import { Appointment } from '../../feature-modules/company/model/appointment.model';
+import { CompanyEquipment } from './equipment.model';
+import { Appointment } from '../../client/model/appointment.model';
 export interface Company {
     id: number;
     name: string;

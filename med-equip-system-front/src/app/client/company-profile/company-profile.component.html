@@ -1,0 +1,106 @@
+<div>
+    <div *ngIf="companyId && !reservationMode" class="content-container">
+
+        <div class="company-details">
+            <div class="company-info">
+                <h2>
+                    <ng-container>
+                        {{ company?.name }}
+                    </ng-container>
+                </h2>
+                <p>
+                    <ng-container>
+                        <b>Average Rate:</b> {{ company?.averageRate }}
+                    </ng-container>
+                </p>
+
+                <p>
+                    <ng-container>
+                        <b>Description:</b> {{ company?.description }}
+                    </ng-container>
+                </p>
+                <p><b>Location:</b> {{ company?.location?.street }} {{ company?.location?.streetNumber }}, {{
+                    company?.location?.city }}, {{ company?.location?.country }}</p>
+
+            </div>
+            <div class="map-container">
+                <app-company-map [companyLocation]="company?.location" *ngIf="company?.location">
+                </app-company-map>
+
+            </div>
+        </div>
+
+
+
+        <div>
+            <button *ngIf="currentUser?.role?.name === 'ROLE_CLIENT'" (click)="changeReservationMode(true)">Finish
+                reservation</button>
+
+            <div class="search-container">
+                <input type="text" placeholder="Search by name" class="search-input" [(ngModel)]="inputSearch">
+
+                <label for="typeFilter">Filter by Type:</label>
+                <select id="typeFilter" class="filter-input" [(ngModel)]="inputType">
+                    <option value="" selected>Any</option>
+                    <option value="DIAGNOSTIC">Diagnostic</option>
+                    <option value="LIFE_SUPPORT">Life Support</option>
+                    <option value="LABORATORY">Laboratory</option>
+                    <option value="SURGICAL">Surgical</option>
+                    <option value="OTHER">Other</option>
+                </select>
+
+                <br>
+                <label for="priceFilter">Filter by Min Price:</label>
+                <input type="number" placeholder="Enter minimum price" class="filter-input" [(ngModel)]="inputPrice">
+
+                <button class="primary" type="button" (click)="searchEquipments()">Search</button>
+                <button class="primary" type="button" (click)="clearSearch()">Clear</button>
+            </div>
+
+            <h3><b>Equipment:</b></h3>
+            <div class="equipment-container">
+                <div *ngFor="let equipment of filteredEquipments" class="equipment-card">
+                    <h3>{{ equipment.name }}</h3>
+                    <p>Type: {{ equipment.type }}</p>
+                    <p>Price: {{ equipment.price }}</p>
+                    <p>Description: {{ equipment.description }}</p>
+                    <p>Available: {{ equipment.count }}</p>
+                    <button (click)="addToReservation(equipment)" *ngIf="currentUser?.role?.name === 'ROLE_CLIENT'">Add
+                        to reservation</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3><b>Appointments:</b></h3>
+            <table mat-table [dataSource]="appointmentsDataSource">
+                <!-- Define columns for Appointments -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let appointment"> {{ formatDate(appointment.date) }} </td>
+                </ng-container>
+                <ng-container matColumnDef="startTime">
+                    <th mat-header-cell *matHeaderCellDef> Start Time </th>
+                    <td mat-cell *matCellDef="let appointment"> {{ formatTime(appointment.startTime) }} </td>
+                </ng-container>
+                <ng-container matColumnDef="endTime">
+                    <th mat-header-cell *matHeaderCellDef> End Time </th>
+                    <td mat-cell *matCellDef="let appointment"> {{ formatTime(appointment.endTime)}} </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let appointment"> {{ appointment.status }} </td>
+                </ng-container>
+
+                <!-- Set column definitions -->
+                <tr mat-header-row *matHeaderRowDef="['date', 'startTime', 'endTime', 'status']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['date', 'startTime', 'endTime', 'status']"></tr>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="reservationMode">
+        <xp-reservation-creation [reservationItems]="reservationItems" [company]="company"
+            [availableAppointments]="availableAppointments" (itemsUpdated)="itemsUpdated($event)"
+            (reservationModeChanged)="changeReservationMode($event)"></xp-reservation-creation>
+    </div>
+</div>

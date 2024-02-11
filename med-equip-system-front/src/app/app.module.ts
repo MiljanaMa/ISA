@@ -7,9 +7,17 @@ import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './infrastructure/material/material.module';
 import { CompanyModule } from './feature-modules/company/company.module';
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './auth/interceptor/token-interceptor';
 import { ClientModule } from './client/client.module';
+import { SystemAdminModule } from './system-admin/system-admin.module';
+import { CompanyAdminModule } from './company-admin/company-admin.module';
+import { ScheduleModule, DayService, WeekService, MonthService } from '@syncfusion/ej2-angular-schedule';
+import { MatTabsModule } from '@angular/material/tabs';
+
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -24,8 +32,17 @@ import { ClientModule } from './client/client.module';
     MaterialModule, 
     CompanyModule,
     AuthModule,
-    ClientModule
+    ClientModule,
+    SystemAdminModule,
+    CompanyAdminModule,
+    FullCalendarModule,
+    ScheduleModule,
+    MatTabsModule,
+    RouterModule
 
+    
+
+    
   ],
   providers: [
     {
